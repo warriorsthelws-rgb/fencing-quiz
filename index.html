@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#111318">
+  <title>펜싱 규칙 & 판정 퀴즈</title>
+  <meta name="description" content="플러레 공격권(우선권) 규칙 설명과 실제 경기 영상으로 풀어보는 심판 판정 퀴즈">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🤺%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a href="#/" class="brand">
+      <span class="brand-icon">🤺</span>
+      <span class="brand-text">펜싱 규칙 &amp; 퀴즈</span>
+    </a>
+    <nav class="topnav" id="topnav">
+      <a href="#/rules/basic" data-nav="rules">규칙 설명</a>
+      <a href="#/quiz" data-nav="quiz">판정 퀴즈</a>
+    </nav>
+  </header>
+
+  <main id="app" class="app" aria-live="polite"></main>
+
+  <footer class="footer">
+    <p>규칙 요약은 FIE 기술규정(플러레 관례 조항)을 바탕으로 한 학습용 정리입니다. 실제 대회에서는 심판의 판정이 우선합니다.</p>
+    <p>퀴즈 영상은 유튜브에 공개된 FIE 국제대회 중계 영상을 사용하며, 판정 기준은 <a href="https://actions.quarte-riposte.com/" target="_blank" rel="noopener">Quarte-Riposte Actions</a>의 검증된(verified) 판정을 참고했습니다.</p>
+  </footer>
+
+  <!-- 하단 탭바 (모바일) -->
+  <nav class="tabbar" id="tabbar">
+    <a href="#/" data-nav="home"><span class="tab-ico">🏠</span><span>홈</span></a>
+    <a href="#/rules/basic" data-nav="rules"><span class="tab-ico">📖</span><span>규칙</span></a>
+    <a href="#/quiz" data-nav="quiz"><span class="tab-ico">🎯</span><span>퀴즈</span></a>
+  </nav>
+
+  <script src="js/rules-data.js"></script>
+  <script src="js/calls.js"></script>
+  <script src="js/situations.js"></script>
+  <script src="js/questions.js"></script>
+  <script src="js/app.js"></script>
+  <script src="https://www.youtube.com/iframe_api" async></script>
+</body>
+</html>
