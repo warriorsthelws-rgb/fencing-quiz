@@ -21,8 +21,8 @@
 
   const LEVELS = {
     1: { name: '초급', ico: '🌱', desc: '아딱·빠라드-리뽀스트·꽁딱처럼 판정이 명확한 동작. 심판과 커뮤니티가 거의 일치한 클립.', tag: '입문 1년차' },
-    2: { name: '중급', ico: '⚔️', desc: '린느, 르미즈, 준비 동작 중 공격 등 규칙을 알아야 보이는 동작.', tag: '선수·심판 지망' },
-    3: { name: '상급', ico: '🏆', desc: '심판들끼리도 갈리는 동작과 시뮬따네. 0.5배속으로 팔꿈치를 보세요.', tag: '국제 심판 수준' },
+    2: { name: '중급', ico: '⚔️', desc: '양쪽 불이 모두 켜진 장면만. 린느, 르미즈, 준비 동작 중 공격 등 규칙을 알아야 보이는 동작.', tag: '선수·심판 지망' },
+    3: { name: '상급', ico: '🏆', desc: '양쪽 불이 모두 켜진 장면 중 심판들끼리도 갈리는 동작과 시뮬따네. 0.5배속으로 팔꿈치를 보세요.', tag: '국제 심판 수준' },
   };
 
   /* ---------- 라우터 ---------- */
@@ -203,7 +203,7 @@
             <div class="c-desc">${LEVELS[l].desc}</div>
           </button>`).join('')}
       </div>
-      <p style="margin-top:16px;font-size:13.5px;color:var(--muted)">정답은 <strong>실제 경기에서 심판이 내린 판정</strong>입니다. 난이도는 그 판정과 커뮤니티 투표의 일치율, 동작의 종류(린느·르미즈·시뮬따네 등)를 기준으로 나눴습니다. 상급에서는 심판 판정에 동의하지 않는 사람이 더 많은 장면도 있어요.</p>`;
+      <p style="margin-top:16px;font-size:13.5px;color:var(--muted)">정답은 <strong>실제 경기에서 심판이 내린 판정</strong>입니다. 초급에는 한쪽 불만 켜진 명확한 장면도 있지만, <strong>중급·상급은 양쪽 불(색불 또는 흰불)이 모두 켜져 심판이 공격권을 판정해야 했던 장면만</strong> 나옵니다. 난이도는 판정과 커뮤니티 투표의 일치율, 동작의 종류로 나눴고, 상급에는 심판 판정에 동의하지 않는 사람이 더 많은 장면도 있어요.</p>`;
     $app.querySelectorAll('[data-level]').forEach((b) => b.addEventListener('click', () => navigate(`#/quiz/play?w=${w}&lv=${b.dataset.level}`)));
   }
 
@@ -539,6 +539,10 @@
 
     function buildResultHTML(item, side, call, correct, sideOk) {
       const a = item.answer;
+      const LAMP = { red: '🔴', green: '🟢', white: '⚪', off: '⚫' };
+      const lampChip = item.lights
+        ? `<span class="chip" title="터치 순간 심판기 불">${LAMP[item.lights.L] || '⚫'} ${LAMP[item.lights.R] || '⚫'} ${item.lights.L !== 'off' && item.lights.R !== 'off' ? '양쪽 불' : (item.lights.L !== 'off' ? '왼쪽만' : '오른쪽만')}</span>`
+        : '';
       const ansChips = a.side === 'S'
         ? `<span class="chip">🤝 양쪽 무효 — 시뮬따네</span>`
         : `<span class="chip ${a.side}">${a.side === 'L' ? '◀ 왼쪽' : '오른쪽 ▶'} 점수</span><span class="chip">${CALLS[a.call].ko} <small style="color:var(--muted)">${CALLS[a.call].fr}</small></span>`;
@@ -581,7 +585,7 @@
         <div class="result ${correct ? 'ok' : 'ng'}">
           <div class="r-title">${correct ? '정답입니다! 🎉' : '틀렸습니다ㅜㅜ'}</div>
           <div class="r-sub">${sub}</div>
-          <div class="r-answer">심판 판정: ${ansChips}</div>
+          <div class="r-answer">심판 판정: ${ansChips}${lampChip}</div>
           <div class="explain">
             <h4>🗣️ 심판 판정 문장</h4>
             <p>"${refPhrase(item)}"</p>

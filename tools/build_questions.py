@@ -121,9 +121,20 @@ def check_embeddable(video_ids):
     return {v for v in video_ids if cache.get(v) == 200}
 
 
+def load_lights():
+    """tools/lights.json (detect_lights.py 결과): {qid: {"L": "red|white|off", "R": "green|white|off"}}"""
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "lights.json")
+    try:
+        return json.load(open(path, encoding="utf-8"))
+    except Exception:
+        return {}
+
+
 def main():
     data = json.load(open(SRC, encoding="utf-8"))
+    lights = load_lights()
     out = []
+    dropped_single = 0
     for rec in data.values():
         side, call = parse_verified(rec.get("verified") or "")
         if not side:
@@ -151,10 +162,25 @@ def main():
             print("skip (side disagreement)", rec["id"], rec["verified"], side_agree, votes)
             continue
         situation, alt = situation_for(side, call, L, R, N, votes)
+        level = level_for(agree if agree is not None else 0, side_agree if side_agree is not None else 0, votes, call)
+        # 불(램프) 정보: 중급·상급은 양쪽 불이 켜진(공격권 판정이 실제로 필요한) 장면만.
+        # 한쪽 불만 켜진 장면은 초급으로, 그중 판정 해석이 갈린 것(일치율 < 60%)은 제외.
+        lt = lights.get(f"qr{rec['id']}") or {}
+        lights_lr = {"L": lt.get("L"), "R": lt.get("R")} if lt.get("L") and lt.get("R") else None
+        two_lights = bool(lights_lr and lights_lr["L"] != "off" and lights_lr["R"] != "off")
+        if lights_lr is None:
+            print("skip (lights unknown)", rec["id"], rec["verified"])
+            continue
+        if not two_lights:
+            if (agree or 0) < 60:
+                dropped_single += 1
+                continue
+            level = 1
         out.append({
             "id": f"qr{rec['id']}",
             "weapon": "foil",
-            "level": level_for(agree if agree is not None else 0, side_agree if side_agree is not None else 0, votes, call),
+            "level": level,
+            "lights": lights_lr,
             "video": {"id": vid, "start": t, "end": end},
             "answer": {"side": side, "call": None if side == "S" else call},
             "situation": situation,
@@ -187,6 +213,7 @@ def main():
     lines.append("   - video    : { id: 유튜브 영상 ID, start: 시작 초, end: 끝 초 } — 심판 판정 직전에 끝나도록")
     lines.append("   - answer   : { side: 'L' | 'R' | 'S'(시뮬따네·무효), call: 'attack'|'counter'|'riposte'|'remise'|'line'|null }")
     lines.append("   - left/right : 왼쪽/오른쪽 선수 이름, event: 대회명")
+    lines.append("   - lights   : 터치 순간 불 { L: 'red'|'white'|'off', R: 'green'|'white'|'off' } — 중급·상급은 양쪽 불 켜진 장면만")
     lines.append("   - situation: 장면 상황 분류 (clean | opp-<call> | same-<call> | opp-simul | any-<call>) — calls.js 의 SITUATIONS 키")
     lines.append("   - alt      : 심판 판정 외에 가장 많았던 해석 { side, call, pct }")
     lines.append("   - agree    : 커뮤니티 투표가 심판 판정(누구+동작)과 일치한 비율(%), sideAgree: '누구 점수인지'만 일치한 비율, votes: 투표 수")
@@ -205,6 +232,8 @@ def main():
     print("written", OUT, len(out), "questions")
     print("levels:", Counter(x["level"] for x in out))
     print("calls:", Counter((x["answer"]["call"] or "simul") for x in out))
+    print("dropped single-light with low agreement:", dropped_single)
+    print("lights by level:", sorted(Counter((x["level"], "two" if x["lights"]["L"] != "off" and x["lights"]["R"] != "off" else "single") for x in out).items()))
     print("situations:", sorted(Counter(((x["answer"]["call"] or "simultaneous"), x["situation"]) for x in out).items()))
 
 
