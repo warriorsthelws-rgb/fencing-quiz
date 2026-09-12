@@ -59,8 +59,16 @@ python tools/scrape_quarte_riposte.py tools/qr_actions.json 1 12500 300 4
 ```
 
 ```bash
+python tools/detect_lights.py js/questions.js tools/lights.json
+```
+
+```bash
 python tools/build_questions.py tools/qr_actions.json
 ```
+
+`detect_lights.py` 는 각 클립의 터치 전후 5초를 유튜브에서 받아(yt-dlp) 중계 그래픽의 심판기 불 표시를 읽습니다
+(`pip install yt-dlp imageio-ffmpeg pillow numpy`). **중급·상급에는 양쪽 불이 모두 켜진 장면만** 들어가고,
+한쪽 불만 켜진 장면은 초급으로 갑니다. 불 정보가 없는 문제는 제외됩니다.
 
 ## 앞으로
 

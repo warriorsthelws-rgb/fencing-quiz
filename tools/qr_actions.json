@@ -5245,5 +5245,104 @@
    0,
    0
   ]
+ },
+ "4407": {
+  "id": "4407",
+  "yt": "https://www.youtube.com/watch?v=dy3GTBt0gSk&t=291",
+  "tour": "2018 Bonn Löwe von Bonn",
+  "src": "/storage/bout/dy3GTBt0gSk/combined/299.mp4",
+  "left": "Bonn MATSUYAMA, Kyosuke",
+  "right": "HA, Taegyu",
+  "verified": "Riposte from the the Right",
+  "votes": 95,
+  "L": [
+   1,
+   2,
+   2,
+   2,
+   0,
+   0,
+   0
+  ],
+  "R": [
+   18,
+   0,
+   28,
+   36,
+   0,
+   1,
+   0
+  ],
+  "N": 0,
+  "cards": [
+   6,
+   1
+  ]
+ },
+ "6179": {
+  "id": "6179",
+  "yt": "https://www.youtube.com/watch?v=HQIMqyFaTgk&t=149",
+  "tour": "2018 Anaheim, California Absolute Fencing Gear® Grand Prix",
+  "src": "/storage/bout/HQIMqyFaTgk/combined/157.mp4",
+  "left": "Grand Prix JOPPICH, Peter",
+  "right": "MEPSTEAD, Marcus",
+  "verified": "Attack from the the Left",
+  "votes": 313,
+  "L": [
+   285,
+   9,
+   7,
+   1,
+   0,
+   0,
+   3
+  ],
+  "R": [
+   5,
+   1,
+   0,
+   0,
+   0,
+   0,
+   1
+  ],
+  "N": 1,
+  "cards": [
+   1,
+   0
+  ]
+ },
+ "3247": {
+  "id": "3247",
+  "yt": "https://www.youtube.com/watch?v=SQRduNQEkEg&t=393",
+  "tour": "2017 Leipzig Championnats du Monde",
+  "src": "/storage/bout/SQRduNQEkEg/combined/401.mp4",
+  "left": "Leipzig Championnats du Monde SAFIN, Timur",
+  "right": "GAGANIDZE, Luka",
+  "verified": "Attack from the the Right",
+  "votes": 26,
+  "L": [
+   7,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "R": [
+   15,
+   0,
+   0,
+   0,
+   0,
+   0,
+   1
+  ],
+  "N": 3,
+  "cards": [
+   0,
+   0
+  ]
  }
 }
