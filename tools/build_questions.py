@@ -184,6 +184,9 @@ def main():
                 continue
             # 후보 모드: 불 정보가 없어도 포함 (detect_lights.py 입력용)
             lights_lr = {"L": None, "R": None}
+        elif lights_lr["L"] == "off" and lights_lr["R"] == "off":
+            print("skip (no lights detected)", rec["id"], rec["verified"])
+            continue
         elif not two_lights:
             if (agree or 0) < 60:
                 dropped_single += 1
