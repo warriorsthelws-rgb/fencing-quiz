@@ -5,6 +5,14 @@ qr_actions.json (Quarte-Riposte Actions 사이트에서 수집한 '검증된' �
 사용법:
   python tools/build_questions.py tools/qr_actions.json            # 유튜브 임베드 가능 여부까지 확인
   python tools/build_questions.py tools/qr_actions.json --no-embed-check
+  python tools/build_questions.py tools/qr_actions.json --candidates --out /tmp/candidates.js
+      # 불 정보가 아직 없는 클립도 포함한 후보 목록 → detect_lights.py 의 입력으로 사용
+
+전체 파이프라인 (문제 추가 시):
+  1) python tools/scrape_quarte_riposte.py tools/qr_actions.json 1 12500 300 4
+  2) python tools/build_questions.py tools/qr_actions.json --candidates --out candidates.js
+  3) python tools/detect_lights.py candidates.js tools/lights.json
+  4) python tools/build_questions.py tools/qr_actions.json
 
 각 문제는 유튜브 영상 ID + 시작/끝 초 + 심판 판정(누구/무슨 동작) + 커뮤니티 일치율로 구성됩니다.
 난이도(level)는 일치율과 동작 종류로 자동 분류하며, 생성된 questions.js 는 손으로 수정해도 됩니다.
@@ -13,6 +21,8 @@ import json, re, sys, os, html
 
 SRC = sys.argv[1]
 OUT = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "js", "questions.js")
+if "--out" in sys.argv:
+    OUT = sys.argv[sys.argv.index("--out") + 1]
 
 CALL_MAP = {"Attack": "attack", "Counter Attack": "counter", "Riposte": "riposte", "Remise": "remise", "Line": "line"}
 CALL_IDX = {"attack": 0, "counter": 1, "riposte": 2, "remise": 3, "line": 4, "unknown": 5, "simultaneous": 6}
@@ -169,9 +179,12 @@ def main():
         lights_lr = {"L": lt.get("L"), "R": lt.get("R")} if lt.get("L") and lt.get("R") else None
         two_lights = bool(lights_lr and lights_lr["L"] != "off" and lights_lr["R"] != "off")
         if lights_lr is None:
-            print("skip (lights unknown)", rec["id"], rec["verified"])
-            continue
-        if not two_lights:
+            if "--candidates" not in sys.argv:
+                print("skip (lights unknown)", rec["id"], rec["verified"])
+                continue
+            # 후보 모드: 불 정보가 없어도 포함 (detect_lights.py 입력용)
+            lights_lr = {"L": None, "R": None}
+        elif not two_lights:
             if (agree or 0) < 60:
                 dropped_single += 1
                 continue
@@ -233,7 +246,7 @@ def main():
     print("levels:", Counter(x["level"] for x in out))
     print("calls:", Counter((x["answer"]["call"] or "simul") for x in out))
     print("dropped single-light with low agreement:", dropped_single)
-    print("lights by level:", sorted(Counter((x["level"], "two" if x["lights"]["L"] != "off" and x["lights"]["R"] != "off" else "single") for x in out).items()))
+    print("lights by level:", sorted(Counter((x["level"], "two" if x["lights"]["L"] not in ("off", None) and x["lights"]["R"] not in ("off", None) else ("unknown" if x["lights"]["L"] is None else "single")) for x in out).items()))
     print("situations:", sorted(Counter(((x["answer"]["call"] or "simultaneous"), x["situation"]) for x in out).items()))
 
 

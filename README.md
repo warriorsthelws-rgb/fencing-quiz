@@ -59,7 +59,11 @@ python tools/scrape_quarte_riposte.py tools/qr_actions.json 1 12500 300 4
 ```
 
 ```bash
-python tools/detect_lights.py js/questions.js tools/lights.json
+python tools/build_questions.py tools/qr_actions.json --candidates --out candidates.js
+```
+
+```bash
+python tools/detect_lights.py candidates.js tools/lights.json
 ```
 
 ```bash
