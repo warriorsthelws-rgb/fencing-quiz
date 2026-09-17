@@ -100,6 +100,16 @@
   }
 
   /* ---------- 규칙 페이지 ---------- */
+  // 섹션 참고 영상 (유튜브 임베드, 화면에 보일 때 로드)
+  function renderVideos(videos) {
+    if (!videos || !videos.length) return '';
+    return `<div class="vids"><div class="vids-h">🎬 참고 영상</div><div class="vids-grid">${videos.map((v) => `
+      <figure class="vid">
+        <div class="vid-frame"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/${esc(v.id)}${v.start ? `?start=${v.start}` : ''}" title="${esc(v.title)}" allow="accelerometer; encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+        <figcaption><a href="https://www.youtube.com/watch?v=${esc(v.id)}" target="_blank" rel="noopener">${esc(v.title)}</a>${v.note ? `<span>${esc(v.note)}</span>` : ''}</figcaption>
+      </figure>`).join('')}</div></div>`;
+  }
+
   let tocObserver = null;
   function renderRules(key, params) {
     const page = RULES[key] || RULES.basic;
@@ -124,6 +134,7 @@
             <section class="card rule-section" id="sec-${s.id}">
               <h2><span class="num">${i + 1}</span>${esc(s.title)}</h2>
               ${s.html}
+              ${renderVideos(s.videos)}
             </section>`).join('')}
           <div class="card" style="margin-top:16px;text-align:center">
             <p style="margin-bottom:10px">${key === 'basic' ? '기본이 정리됐다면' : '심화까지 읽었다면'}</p>

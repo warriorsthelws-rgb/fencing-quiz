@@ -34,6 +34,10 @@ const RULES = {
     sections: [
       {
         id: 'weapons',
+        videos: [
+          { id: 'Ri6SqzQwRlQ', title: '펜싱, 플뢰레·에페·사브르가 뭐지? (YTN)', note: '세 종목 차이를 2분에' },
+          { id: 'gLlQa1q6-5I', title: '국가대표 남현희·박상영이 알려주는 플뢰레 (대한체육회TV)', note: '' }
+        ],
         title: '펜싱 3종목, 그리고 플러레',
         html: `
 <p>펜싱은 <span class="term">플러레(Fleuret)</span>, <span class="term">에페(Épée)</span>, <span class="term">사브르(Sabre)</span> 세 종목으로 나뉩니다. 종목마다 <strong>유효면(찌를 수 있는 부위)</strong>과 <strong>공격권(우선권) 규칙의 유무</strong>가 다릅니다.</p>
@@ -49,6 +53,9 @@ const RULES = {
       },
       {
         id: 'target',
+        videos: [
+          { id: 'F82FaW2xjpM', title: 'What Is The Target Area In Foil Fencing? (영어)', note: '유효면 설명' }
+        ],
         title: '유효면과 불(램프)',
         html: `
 <div class="target-fig">
@@ -73,6 +80,10 @@ const RULES = {
       },
       {
         id: 'row',
+        videos: [
+          { id: 'pPJXuqiqIL0', title: 'Right Of Way with Race Imboden (영어)', note: '올림픽 메달리스트가 설명하는 공격권' },
+          { id: 'q-zjifkD_1M', title: 'Fencing Right of Way (영어)', note: '' }
+        ],
         title: '공격권(우선권)이란?',
         html: `
 <p><span class="term">공격권(Right of Way / Priorité)</span>은 "양쪽이 동시에 찔렀을 때 <strong>누구의 점수로 인정할 것인가</strong>"를 정하는 규칙입니다. 핵심 원칙은 딱 하나입니다.</p>
@@ -88,6 +99,9 @@ const RULES = {
       },
       {
         id: 'attack',
+        videos: [
+          { id: '689-qUF5mBw', title: '공격이 최고의 방어! 펜싱의 모든 것 (YTN 사이언스)', note: '' }
+        ],
         title: '아딱(공격) — 공격이 성립하려면',
         html: `
 <p><span class="term">아딱 <span class="fr">Attaque</span></span>은 <strong>먼저 시작한 공격 동작</strong>입니다. 그런데 "먼저 앞으로 나갔다"가 곧 공격은 아닙니다. 규정상 공격으로 인정받으려면 다음 조건이 필요합니다.</p>
@@ -106,6 +120,10 @@ const RULES = {
       },
       {
         id: 'parry',
+        videos: [
+          { id: 'fd7ZafNDdoU', title: 'The 8 Guards/Parries (영어)', note: '8가지 빠라드' },
+          { id: 'x2opCqqtG1U', title: 'Foil - Beat Attack vs Parry Riposte (USA Fencing 심판 교육)', note: '바뜨망 아딱과 빠라드 리뽀스트 구분' }
+        ],
         title: '빠라드 → 리뽀스트 (막고 되받기)',
         html: `
 <p><span class="term">빠라드 <span class="fr">Parade</span></span>는 상대의 공격을 칼로 막아 <strong>공격선에서 벗어나게</strong> 하는 동작입니다. 빠라드에 성공하면 <strong>공격권이 넘어옵니다.</strong> 그 직후에 하는 찌르기가 <span class="term">리뽀스트 <span class="fr">Riposte</span></span>입니다.</p>
@@ -124,6 +142,10 @@ const RULES = {
       },
       {
         id: 'counter',
+        videos: [
+          { id: '3HKMERf3fWs', title: 'Lightning Quick Foil Counterattack (쇼츠)', note: '꽁딱이 점수가 되는 장면' },
+          { id: '0nKmu0Km59w', title: 'Watch out for the counter attack (쇼츠)', note: '' }
+        ],
         title: '꽁뜨르 아딱(꽁딱) — 반격',
         html: `
 <p><span class="term">꽁뜨르 아딱 <span class="fr">Contre-attaque</span></span>, 흔히 <span class="term">꽁딱</span>이라고 부르는 동작은 <strong>상대가 공격하는 도중에 막지 않고 찌르는 것</strong>입니다. 상대 공격이 올바르게 진행 중이라면 꽁딱은 <strong>공격권이 없습니다.</strong> 둘 다 맞으면 공격한 쪽 점수입니다.</p>
@@ -142,6 +164,9 @@ const RULES = {
       },
       {
         id: 'simul',
+        videos: [
+          { id: '0RBWpYllMrk', title: 'Advanced Calls - Foil Referee Video Exam (Olympic Foil)', note: '전부 양쪽 불. 시뮬따네 포함, 설명란에 정답' }
+        ],
         title: '시뮬따네(동시 공격) — 둘 다 무효',
         html: `
 <p>양쪽이 <strong>같은 순간에 공격을 착상하고 실행</strong>해서 둘 다 맞으면 <span class="term">시뮬따네 <span class="fr">Simultané</span></span>입니다. 이때는 <strong>양쪽 모두 점수 없이</strong> 제자리에서 다시 시작합니다.</p>
@@ -153,6 +178,9 @@ const RULES = {
       },
       {
         id: 'referee',
+        videos: [
+          { id: 'jrKxpzzRU4o', title: 'Kleibrink vs Imboden - FIE 심판 해설 (영어)', note: '국제 심판이 한 경기를 판정별로 해설' }
+        ],
         title: '심판의 판정 순서와 용어',
         html: `
 <p>심판은 다음 순서로 경기를 진행합니다. 용어는 프랑스어를 그대로 씁니다.</p>
@@ -185,6 +213,10 @@ const RULES = {
       },
       {
         id: 'checklist',
+        videos: [
+          { id: '_7LYRZf6V2o', title: 'Basic Calls - Foil Referee Video Exam', note: '초급 판정 시험 13문제, 설명란에 정답' },
+          { id: 'oQwjJgKQvhU', title: 'Basic Calls Part 2', note: '' }
+        ],
         title: '초급 판정 체크리스트',
         html: `
 <p>양쪽 불이 켜졌을 때 아래 순서로 스스로 물어보세요.</p>
@@ -207,6 +239,12 @@ const RULES = {
     sections: [
       {
         id: 'line',
+        videos: [
+          { id: '0k7OPX8Sgdk', title: 'Point in Line Compilation (Olympic Foil)', note: '린느 판정 모음' },
+          { id: 'X5oBhWy69cM', title: 'Point in Line Compilation 2', note: '' },
+          { id: 'xIeBRQHFJDg', title: 'Point in Line Calls Part 4', note: '' },
+          { id: 'abi5e7c33OI', title: 'foil right of way "line" (14초)', note: '린느가 인정될까?' }
+        ],
         title: '린느 (뽀앙 앙 린느)',
         html: `
 <p><span class="term">린느 <span class="fr">Pointe en ligne</span></span>는 <strong>팔을 완전히 펴고 포인트가 상대의 유효면을 계속 위협하는 자세</strong>입니다. 상대가 공격을 <strong>시작하기 전</strong>에 이 자세가 확립되어 있으면, 린느 쪽이 <strong>우선권</strong>을 가집니다.</p>
@@ -232,6 +270,11 @@ const RULES = {
       },
       {
         id: 'prep',
+        videos: [
+          { id: '5x8UpFVdS5Q', title: 'Attack in Prep with FIE Referee Chris Lennon (영어)', note: '아딱 오 프레파라시옹 집중 해설' },
+          { id: '0AUBmQ2-hT0', title: 'Attack on Prep - 성공 클립 모음', note: '' },
+          { id: 'v7FtylNqzsM', title: 'Attack on Prep - 실패 클립 모음', note: '' }
+        ],
         title: '프레파라시옹과 아딱 오 프레파라시옹',
         html: `
 <p><span class="term">프레파라시옹 <span class="fr">Préparation</span></span>은 공격을 하기 위한 <strong>준비 동작</strong>입니다. 팔을 굽힌 채 전진하기, 칼을 찾으려 흔들기, 페인트로 상대 반응 보기 등이 모두 준비 동작입니다. <strong>준비 동작은 공격이 아니므로 공격권이 없습니다.</strong></p>
@@ -314,6 +357,10 @@ const RULES = {
       },
       {
         id: 'blade',
+        videos: [
+          { id: 'zaNL7YqzLR0', title: 'Blade Contact: Beginner Foil Refereeing Exam 3', note: '칼 접촉 판정 시험' },
+          { id: 'x2opCqqtG1U', title: 'Foil - Beat Attack vs Parry Riposte', note: '' }
+        ],
         title: '칼 접촉: 바뜨망인가, 빠라드인가',
         html: `
 <p>양쪽 불이 켜지기 직전에 <strong>칼이 부딪혔다면</strong> 판정은 "그 접촉이 <strong>누구의 동작</strong>이었나"로 갈립니다.</p>
@@ -334,6 +381,9 @@ const RULES = {
       },
       {
         id: 'simul-adv',
+        videos: [
+          { id: '0RBWpYllMrk', title: 'Advanced Calls - 2019/2020 Foil Referee Video Exam', note: '양쪽 불 31문제, 설명란에 정답' }
+        ],
         title: '시뮬따네 vs 더블 뚜슈 — 어떻게 가르나',
         html: `
 <p>양쪽이 맞았을 때 결과는 둘 중 하나입니다.</p>
@@ -362,6 +412,9 @@ const RULES = {
       },
       {
         id: 'misc',
+        videos: [
+          { id: '11p4BKtdPr4', title: 'Fencers Getting Carded Compilation', note: '카드 사례 모음' }
+        ],
         title: '플레슈·꼬르 아 꼬르·경계선·카드',
         html: `
 <ul>
@@ -375,6 +428,9 @@ const RULES = {
       },
       {
         id: 'adv-checklist',
+        videos: [
+          { id: 'jrKxpzzRU4o', title: 'Kleibrink vs Imboden - FIE 심판 해설', note: '' }
+        ],
         title: '상급 판정 체크리스트',
         html: `
 <div class="flow">
