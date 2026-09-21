@@ -74,6 +74,20 @@ python tools/build_questions.py tools/qr_actions.json
 (`pip install yt-dlp imageio-ffmpeg pillow numpy`). **중급·상급에는 양쪽 불이 모두 켜진 장면만** 들어가고,
 한쪽 불만 켜진 장면은 초급으로 갑니다. 불 정보가 없는 문제는 제외됩니다.
 
+## 사이트에서 직접 고치기 (편집 모드)
+
+페이지 맨 아래 **✏️ 편집 모드**를 켜면:
+- 규칙 페이지: 섹션마다 **"이 섹션 글 편집"** → 본문을 그 자리에서 고치고 **적용**
+- 퀴즈: 정답 확인 후 해설 아래 **"이 문제 편집"** → 난이도 / 이 문제 전용 해설 → **적용**
+- 하단 바의 **GitHub에 저장** → `js/overrides.js` 에 커밋되고 1~2분 뒤 사이트에 반영
+
+처음 저장할 때 GitHub 토큰을 한 번 물어봅니다 (이 브라우저에만 저장):
+github.com → Settings → Developer settings → Personal access tokens → **Fine-grained** → Generate:
+Repository access = `fencing-quiz` 만, Permissions = **Contents: Read and write**.
+
+수정본은 `js/overrides.js` 에만 쌓이므로 `build_questions.py` 로 문제를 다시 생성해도 지워지지 않습니다.
+파일을 직접 편집해도 됩니다.
+
 ## 앞으로
 
 - 에페 / 사브르 종목 추가 (`weapon` 필드만 바꾸면 됨)

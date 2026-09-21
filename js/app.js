@@ -25,6 +25,62 @@
     3: { name: '상급', ico: '🏆', desc: '양쪽 불이 모두 켜진 장면 중 심판들끼리도 갈리는 동작과 시뮬따네. 0.5배속으로 팔꿈치를 보세요.', tag: '국제 심판 수준' },
   };
 
+  /* ---------- 편집 모드 (수정본은 js/overrides.js 에 GitHub API로 저장) ---------- */
+  const GH_REPO = 'warriorsthelws-rgb/fencing-quiz';
+  const OV = (typeof OVERRIDES !== 'undefined') ? OVERRIDES : { rules: {}, questions: {} };
+  OV.rules = OV.rules || {}; OV.questions = OV.questions || {};
+  let editMode = false, dirty = 0;
+  try { editMode = localStorage.getItem('fq_edit') === '1'; } catch (e) { /* noop */ }
+  QUESTIONS.forEach((q) => Object.assign(q, OV.questions[q.id] || {}));
+
+  function markDirty() { dirty++; renderEditBar(); }
+  function renderEditBar() {
+    let bar = document.getElementById('edit-bar');
+    if (!editMode) { if (bar) bar.remove(); return; }
+    if (!bar) { bar = el('<div id="edit-bar" class="edit-bar"></div>'); document.body.appendChild(bar); }
+    bar.innerHTML = `<span>✏️ 편집 모드${dirty ? ` · 변경 ${dirty}건` : ''}</span>
+      <button class="btn btn-primary" id="edit-save" ${dirty ? '' : 'disabled'}>GitHub에 저장</button>
+      <button class="btn" id="edit-off">끄기</button>`;
+    bar.querySelector('#edit-save').addEventListener('click', saveOverrides);
+    bar.querySelector('#edit-off').addEventListener('click', () => toggleEdit(false));
+  }
+  function toggleEdit(on) {
+    editMode = on;
+    try { localStorage.setItem('fq_edit', on ? '1' : '0'); } catch (e) { /* noop */ }
+    renderEditBar(); render();
+  }
+  document.getElementById('edit-toggle').addEventListener('click', (e) => { e.preventDefault(); toggleEdit(!editMode); });
+
+  async function saveOverrides() {
+    let token = '';
+    try { token = localStorage.getItem('fq_gh_token') || ''; } catch (e) { /* noop */ }
+    if (!token) {
+      token = prompt('GitHub 개인 액세스 토큰을 붙여넣으세요.\n(github.com → Settings → Developer settings → Fine-grained tokens, 이 저장소의 Contents: Read and write 권한)\n이 브라우저에만 저장됩니다.') || '';
+      if (!token) return;
+      try { localStorage.setItem('fq_gh_token', token.trim()); } catch (e) { /* noop */ }
+    }
+    const headers = { Authorization: `Bearer ${token.trim()}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' };
+    const api = `https://api.github.com/repos/${GH_REPO}/contents/js/overrides.js`;
+    const btn = document.getElementById('edit-save'); if (btn) { btn.disabled = true; btn.textContent = '저장 중…'; }
+    try {
+      const cur = await fetch(api, { headers }).then((r) => (r.ok ? r.json() : null));
+      const content = "/* 사이트의 '편집 모드'에서 저장한 수정본. 직접 고쳐도 됩니다.\n" +
+        '   rules.<basic|advanced>.<섹션id> = 섹션 본문 HTML (원본 rules-data.js 대신 사용)\n' +
+        '   questions.<문제id> = { level: 1|2|3, explain: "이 문제 전용 해설" }   (questions.js 재생성해도 유지됨) */\n' +
+        `const OVERRIDES = ${JSON.stringify(OV, null, 1)};\n`;
+      const body = { message: `편집 모드: 수정 ${dirty}건`, content: btoa(unescape(encodeURIComponent(content))), branch: 'main' };
+      if (cur && cur.sha) body.sha = cur.sha;
+      const r = await fetch(api, { method: 'PUT', headers, body: JSON.stringify(body) });
+      if (!r.ok) throw new Error(`${r.status} ${(await r.json()).message || ''}`);
+      dirty = 0; renderEditBar();
+      alert('저장했습니다. 1~2분 뒤 사이트에 반영됩니다.');
+    } catch (err) {
+      if (/40[13]/.test(String(err))) { try { localStorage.removeItem('fq_gh_token'); } catch (e) { /* noop */ } }
+      alert('저장 실패: ' + err.message + (/40[13]/.test(String(err)) ? '\n토큰을 다시 확인하세요 (다음 저장 때 다시 물어봅니다).' : ''));
+      renderEditBar();
+    }
+  }
+
   /* ---------- 라우터 ---------- */
   function currentPath() {
     const raw = location.hash.replace(/^#/, '') || '/';
@@ -133,7 +189,8 @@
           ${page.sections.map((s, i) => `
             <section class="card rule-section" id="sec-${s.id}">
               <h2><span class="num">${i + 1}</span>${esc(s.title)}</h2>
-              ${s.html}
+              <div class="sec-body" data-id="${s.id}">${(OV.rules[page.key] || {})[s.id] || s.html}</div>
+              ${editMode ? `<div class="edit-tools"><button class="btn" data-edit="${s.id}">✏️ 이 섹션 글 편집</button><button class="btn btn-primary hidden" data-done="${s.id}">✅ 적용</button>${(OV.rules[page.key] || {})[s.id] ? `<button class="btn" data-reset="${s.id}">↩ 원본으로</button>` : ''}</div>` : ''}
               ${renderVideos(s.videos)}
             </section>`).join('')}
           <div class="card" style="margin-top:16px;text-align:center">
@@ -145,6 +202,23 @@
           </div>
         </div>
       </div>`;
+
+    // 편집 모드: 섹션 본문을 contenteditable 로 열고, 적용 시 오버라이드에 저장
+    if (editMode) {
+      $app.querySelectorAll('[data-edit]').forEach((b) => b.addEventListener('click', () => {
+        const body = document.querySelector(`.sec-body[data-id="${b.dataset.edit}"]`);
+        body.contentEditable = 'true'; body.classList.add('editing'); body.focus();
+        b.classList.add('hidden'); $app.querySelector(`[data-done="${b.dataset.edit}"]`).classList.remove('hidden');
+      }));
+      $app.querySelectorAll('[data-done]').forEach((b) => b.addEventListener('click', () => {
+        const body = document.querySelector(`.sec-body[data-id="${b.dataset.done}"]`);
+        (OV.rules[page.key] = OV.rules[page.key] || {})[b.dataset.done] = body.innerHTML;
+        markDirty(); renderRules(key, { s: b.dataset.done });
+      }));
+      $app.querySelectorAll('[data-reset]').forEach((b) => b.addEventListener('click', () => {
+        delete OV.rules[page.key][b.dataset.reset]; markDirty(); renderRules(key, { s: b.dataset.reset });
+      }));
+    }
 
     // 섹션 하이라이트 (스크롤 관찰)
     if (tocObserver) tocObserver.disconnect();
@@ -496,6 +570,13 @@
 
       const res = document.getElementById('result-area');
       res.innerHTML = buildResultHTML(item, side, call, correct, sideOk);
+      const apply = res.querySelector('#eq-apply');
+      if (apply) apply.addEventListener('click', () => {
+        const o = { level: Number(res.querySelector('#eq-level').value) };
+        const ex = res.querySelector('#eq-explain').value.trim(); if (ex) o.explain = ex;
+        OV.questions[item.id] = o; item.level = o.level; item.explain = ex || undefined;
+        markDirty(); apply.textContent = '적용됨 ✓';
+      });
       renderCover('ended');
 
       const next = document.getElementById('next-bar');
@@ -572,7 +653,7 @@
       const explainBlock = sit
         ? `<div class="explain">
             <h4>📖 이 장면: ${esc(fillTpl(sit.title, item))}</h4>
-            <p>${esc(fillTpl(sit.explain, item))}</p>
+            <p>${esc(item.explain || fillTpl(sit.explain, item))}</p>
             ${altLine}
             <p class="watch"><strong>🔍 0.5배속으로 볼 것</strong> — ${esc(fillTpl(sit.watch, item))}</p>
             <p style="margin-top:6px"><a href="${info.link}" style="color:var(--info);font-weight:700">${info.ko} 규칙 설명 보기 →</a></p>
@@ -590,6 +671,12 @@
         if (tip) whyNot = `<div class="explain"><h4>💭 ${esc(ro(mine))} 보였다면</h4><p>${tip}</p></div>`;
       }
       const note = item.note ? `<div class="explain"><h4>📝 이 장면 메모</h4><p>${item.note}</p></div>` : '';
+      const editForm = editMode ? `<div class="explain edit-q">
+            <h4>✏️ 이 문제 편집 <small style="color:var(--muted)">${esc(item.id)}</small></h4>
+            <label>난이도 <select id="eq-level">${[1, 2, 3].map((l) => `<option value="${l}" ${item.level === l ? 'selected' : ''}>${LEVELS[l].name}</option>`).join('')}</select></label>
+            <label>해설 (비우면 자동 해설)<textarea id="eq-explain" rows="5">${esc(item.explain || '')}</textarea></label>
+            <button class="btn btn-primary" id="eq-apply">적용</button>
+          </div>` : '';
       const agree = typeof item.agree === 'number' ? `<span class="meter">커뮤니티 일치율 <i><b style="width:${item.agree}%"></b></i> ${item.agree}%${item.votes ? ` (${item.votes}표)` : ''}</span>` : '';
 
       return `
@@ -604,6 +691,7 @@
           ${explainBlock}
           ${whyNot}
           ${note}
+          ${editForm}
           <div class="r-foot">
             ${agree}
             ${item.left && item.right ? `<span>${esc(item.left)} vs ${esc(item.right)}</span>` : ''}
@@ -661,4 +749,5 @@
 
   /* ---------- 시작 ---------- */
   render();
+  renderEditBar();
 })();

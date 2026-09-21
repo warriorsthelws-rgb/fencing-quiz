@@ -426,3 +426,12 @@ tr:last-child td { border-bottom: 0; }
 .vid figcaption a { color: var(--text); font-weight: 700; text-decoration: none; }
 .vid figcaption span { color: var(--muted); }
 @media (min-width: 768px) { .vids-grid { grid-template-columns: 1fr 1fr; } }
+
+/* 편집 모드 */
+.edit-bar { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(var(--tabbar-h) + 10px); z-index: 60; display: flex; gap: 8px; align-items: center; padding: 8px 12px; background: var(--brand); color: #fff; border-radius: 999px; box-shadow: 0 8px 24px rgba(0,0,0,.35); font-size: 13px; font-weight: 700; white-space: nowrap; }
+.edit-bar .btn { padding: 6px 12px; font-size: 13px; }
+@media (min-width: 768px) { .edit-bar { bottom: 16px; } }
+.edit-tools { display: flex; gap: 8px; margin-top: 10px; }
+.sec-body.editing { outline: 2px dashed var(--accent); outline-offset: 6px; border-radius: 8px; }
+.edit-q label { display: block; margin: 8px 0; font-weight: 700; }
+.edit-q select, .edit-q textarea { display: block; width: 100%; margin-top: 4px; font: inherit; padding: 8px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--text); }
