@@ -435,3 +435,19 @@ tr:last-child td { border-bottom: 0; }
 .sec-body.editing { outline: 2px dashed var(--accent); outline-offset: 6px; border-radius: 8px; }
 .edit-q label { display: block; margin: 8px 0; font-weight: 700; }
 .edit-q select, .edit-q textarea { display: block; width: 100%; margin-top: 4px; font: inherit; padding: 8px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--text); }
+
+/* ---------- 모바일 퀴즈 화면 ---------- */
+.quiz-video-card { padding: 12px; }
+@media (max-width: 767px) {
+  .hero .btn-row .btn { flex: 1 1 100%; }                   /* 홈 버튼 풀폭 */
+  .in-quiz .footer { display: none; }                       /* 퀴즈 중 푸터 숨김 */
+  .quiz-video-card { margin: 0 -16px; padding: 0 0 8px; border-radius: 0; border-left: 0; border-right: 0; }
+  .quiz-video-card .video-wrap { border-radius: 0; }        /* 영상을 화면 폭에 꽉 채움 */
+  .quiz-video-card .side-label, .quiz-video-card .replay-bar { padding: 0 14px; }
+  .quiz-video-card.stuck { position: sticky; top: 56px; z-index: 20; box-shadow: 0 8px 16px -8px rgba(0,0,0,.4); }
+  .quiz-head .q-no { font-size: 16px; }
+  .quiz-head .q-meta { font-size: 12px; text-align: right; }
+  .side-btn { padding: 16px 8px; font-size: 17px; }
+  .reason-btn { padding: 12px 6px; }
+  .reason-btn .r-ko { font-size: 15px; }
+}

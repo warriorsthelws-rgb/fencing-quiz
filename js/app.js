@@ -99,6 +99,7 @@
   function render() {
     const { path, params } = currentPath();
     updateNav(path);
+    document.body.classList.toggle('in-quiz', path.startsWith('/quiz/play'));
     if (!path.startsWith('/quiz/play')) Quiz.leaveView();
 
     if (path === '/') renderHome();
@@ -372,14 +373,13 @@
       // 화면을 새로 그리면 이전 플레이어(iframe)는 DOM에서 사라지므로 함께 버림
       if (player) { try { player.destroy(); } catch (e) { /* noop */ } player = null; playerReady = false; }
       $app.innerHTML = `
-        <div class="stepper"><span>① 플러레</span> › <span>② ${LEVELS[session.level].name}</span> › <span class="on">③ 퀴즈</span></div>
         <div class="quiz-head">
           <div class="q-no" id="q-no"></div>
           <div class="q-meta" id="q-meta"></div>
         </div>
         <div class="progress"><i id="q-bar" style="width:0%"></i></div>
 
-        <div class="card" style="padding:12px">
+        <div class="card quiz-video-card stuck" id="video-card">
           <div class="video-wrap" id="video-wrap">
             <div id="yt-player"></div>
             <div class="video-shield" id="video-shield"></div>
@@ -402,7 +402,8 @@
       desiredRate = 1;
 
       document.getElementById('q-no').textContent = `문제 ${session.index + 1} / ${session.list.length}`;
-      document.getElementById('q-meta').textContent = item.event || '';
+      document.getElementById('q-meta').textContent = `${LEVELS[session.level].name} · ${item.event || ''}`;
+      document.getElementById('video-card').classList.add('stuck');
       document.getElementById('q-bar').style.width = `${(session.index / session.list.length) * 100}%`;
       document.getElementById('result-area').innerHTML = '';
       document.getElementById('next-bar').innerHTML = '';
@@ -457,7 +458,7 @@
         q.played = true;
         renderCover('ended');
         renderReplayBar();
-        if (!q.side && !q.done) renderAnswerPanel();
+        if (!q.side && !q.done) { renderAnswerPanel(); scrollBelowVideo(document.getElementById('answer-panel')); }
       }
     }
 
@@ -483,6 +484,15 @@
         player.loadVideoById({ videoId: item.video.id, startSeconds: item.video.start, endSeconds: item.video.end });
       } catch (err) { renderCover('error'); }
       renderReplayBar();
+    }
+
+    // 모바일에서 영상 카드가 상단에 고정되므로, 그 아래로 요소가 오도록 스크롤
+    function scrollBelowVideo(target) {
+      if (!target) return;
+      const card = document.getElementById('video-card');
+      const stuck = card && getComputedStyle(card).position === 'sticky';
+      target.style.scrollMarginTop = `${(stuck ? card.offsetHeight : 0) + 64}px`;
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     function hideCover() {
@@ -582,7 +592,7 @@
       if (side === 'S') { finish('S', null); return; }
       q.side = side;
       renderAnswerPanel();
-      document.getElementById('answer-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      scrollBelowVideo(document.getElementById('answer-panel'));
     }
 
     function pickCall(call) {
@@ -608,6 +618,7 @@
           ${call ? `<span class="picked-side" style="background:var(--surface-2);color:var(--text);border:1px solid var(--line)">${CALLS[call].ko}</span>` : ''}
         </div>`;
 
+      document.getElementById('video-card').classList.remove('stuck');
       const res = document.getElementById('result-area');
       res.innerHTML = buildResultHTML(item, side, call, correct, sideOk);
       const apply = res.querySelector('#eq-apply');
