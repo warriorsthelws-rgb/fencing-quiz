@@ -47,7 +47,8 @@
   function toggleEdit(on) {
     editMode = on;
     try { localStorage.setItem('fq_edit', on ? '1' : '0'); } catch (e) { /* noop */ }
-    renderEditBar(); render();
+    renderEditBar();
+    if (!currentPath().path.startsWith('/quiz/play')) render();
   }
   document.getElementById('edit-toggle').addEventListener('click', (e) => { e.preventDefault(); toggleEdit(!editMode); });
 
@@ -359,6 +360,9 @@
         $app.innerHTML = `<div class="card empty">이 난이도에는 아직 문제가 없어요.<br><a class="btn" style="margin-top:12px" href="#/quiz/level">난이도 다시 고르기</a></div>`;
         return;
       }
+      const answered = new Set(session.answers.map((a) => a.id));
+      while (session.index < session.list.length && answered.has(session.list[session.index].id)) session.index++;
+      if (session.index >= session.list.length) { navigate('#/quiz/result'); return; }
       buildSkeleton();
       showQuestion();
     }
@@ -607,7 +611,9 @@
       const sideOk = side === a.side;
       const correct = sideOk && (a.side === 'S' || call === a.call);
       q.done = true;
-      session.answers.push({ id: item.id, side, call, correct, sideOk });
+      const ans = { id: item.id, side, call, correct, sideOk };
+      const dup = session.answers.findIndex((a) => a.id === item.id);
+      if (dup >= 0) session.answers[dup] = ans; else session.answers.push(ans);  // 화면이 다시 그려져 재채점돼도 중복 집계 안 함
       markSeen(item.id);
 
       const panel = document.getElementById('answer-panel');
@@ -717,7 +723,7 @@
       const explainBlock = sit
         ? `<div class="explain">
             <h4>📖 이 장면: ${esc(fillTpl(sit.title, item))}</h4>
-            <p>${esc(item.explain || fillTpl(sit.explain, item))}</p>
+            <p>${esc(item.explain || (fillTpl(sit.explain, item) + (sit.explain2 && item.lights && item.lights.L !== 'off' && item.lights.R !== 'off' ? ' ' + fillTpl(sit.explain2, item) : '')))}</p>
             <p class="watch"><strong>🔍 0.5배속으로 볼 것</strong> — ${esc(fillTpl(sit.watch, item))}</p>
             <p style="margin-top:6px"><a href="${info.link}" style="color:var(--info);font-weight:700">${info.ko} 규칙 설명 보기 →</a></p>
           </div>`
