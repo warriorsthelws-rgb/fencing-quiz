@@ -14,7 +14,7 @@
   const el = (html) => { const t = document.createElement('template'); t.innerHTML = html.trim(); return t.content.firstElementChild; };
   const shuffle = (arr) => { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
   const SIDE_KO = { L: '왼쪽', R: '오른쪽', S: '무효(시뮬따네)' };
-  const SIDE_FR = { L: '왼쪽', R: '오른쪽' };  // 판정 문장용 (국제 대회 용어 고슈/드와뜨 대신 한국어)
+  const SIDE_FR = { L: '(왼쪽)', R: '(오른쪽)' };  // 판정 문장용: 방향은 괄호로 표시
   const other = (s) => (s === 'L' ? 'R' : 'L');
   // 조사 '로/으로' 자동 선택 (받침 유무)
   const ro = (w) => { const c = w.charCodeAt(w.length - 1); if (c < 0xac00 || c > 0xd7a3) return w + '로'; const jong = (c - 0xac00) % 28; return w + (jong === 0 || jong === 8 ? '로' : '으로'); };
@@ -31,14 +31,14 @@
   OV.rules = OV.rules || {}; OV.questions = OV.questions || {};
   let editMode = false, dirty = 0;
   try { editMode = localStorage.getItem('fq_edit') === '1'; } catch (e) { /* noop */ }
-  QUESTIONS.forEach((q) => Object.assign(q, OV.questions[q.id] || {}));
+  function applyQuestionOverrides() { QUESTIONS.forEach((q) => Object.assign(q, OV.questions[q.id] || {})); }
 
   function markDirty() { dirty++; renderEditBar(); }
   function renderEditBar() {
     let bar = document.getElementById('edit-bar');
     if (!editMode) { if (bar) bar.remove(); return; }
     if (!bar) { bar = el('<div id="edit-bar" class="edit-bar"></div>'); document.body.appendChild(bar); }
-    bar.innerHTML = `<span>✏️ 편집 모드${dirty ? ` · 변경 ${dirty}건` : ''}</span>
+    bar.innerHTML = `<span>✏️ 편집 모드${dirty ? ` · <b style="color:var(--accent)">저장 안 된 변경 ${dirty}건</b>` : ''}</span>
       <button class="btn btn-primary" id="edit-save" ${dirty ? '' : 'disabled'}>GitHub에 저장</button>
       <button class="btn" id="edit-off">끄기</button>`;
     bar.querySelector('#edit-save').addEventListener('click', saveOverrides);
@@ -621,13 +621,8 @@
       document.getElementById('video-card').classList.remove('stuck');
       const res = document.getElementById('result-area');
       res.innerHTML = buildResultHTML(item, side, call, correct, sideOk);
-      const apply = res.querySelector('#eq-apply');
-      if (apply) apply.addEventListener('click', () => {
-        const o = { level: Number(res.querySelector('#eq-level').value) };
-        const ex = res.querySelector('#eq-explain').value.trim(); if (ex) o.explain = ex;
-        OV.questions[item.id] = o; item.level = o.level; item.explain = ex || undefined;
-        markDirty(); apply.textContent = '적용됨 ✓';
-      });
+      const rerender = () => { res.innerHTML = buildResultHTML(item, side, call, correct, sideOk); bindEditForm(res, item, rerender); };
+      bindEditForm(res, item, rerender);
       renderCover('ended');
 
       const next = document.getElementById('next-bar');
@@ -664,6 +659,21 @@
         .replace(/(오른쪽|왼쪽)가/g, '$1이').replace(/(오른쪽|왼쪽)는/g, '$1은').replace(/(오른쪽|왼쪽)를/g, '$1을').replace(/(오른쪽|왼쪽)로/g, '$1으로');
     }
 
+    // 문제 편집 폼: 적용 → 오버라이드 기록 + 화면 즉시 갱신
+    function bindEditForm(res, item, rerender) {
+      const apply = res.querySelector('#eq-apply');
+      if (!apply) return;
+      apply.addEventListener('click', () => {
+        const o = { level: Number(res.querySelector('#eq-level').value) };
+        const ex = res.querySelector('#eq-explain').value.trim(); if (ex) o.explain = ex;
+        const cm = res.querySelector('#eq-comment').value.trim(); if (cm) o.comment = cm;
+        OV.questions[item.id] = o; item.level = o.level; item.explain = ex || undefined; item.comment = cm || undefined;
+        markDirty();
+        const y = window.scrollY; rerender(); window.scrollTo({ top: y, behavior: 'instant' });
+        const a2 = res.querySelector('#eq-apply'); if (a2) a2.textContent = '적용됨 ✓ (저장은 하단 바)';
+      });
+    }
+
     function refPhrase(item) {
       const sit = situationFor(item);
       if (sit && sit.phrase) return fillTpl(sit.phrase, item);
@@ -698,14 +708,10 @@
 
       const info = a.side === 'S' ? CALLS.simultaneous : CALLS[a.call];
       const sit = situationFor(item);
-      const altLine = item.alt && item.alt.call
-        ? `<p class="alt-line">이 장면을 <strong>${ro((item.alt.side ? SIDE_KO[item.alt.side] + ' ' : '') + (item.alt.call === 'simultaneous' ? '시뮬따네' : CALLS[item.alt.call].ko))}</strong> 본 사람도 ${item.alt.pct}%였어요. 심판 판정과 갈린 이유가 이 장면의 핵심입니다.</p>`
-        : '';
       const explainBlock = sit
         ? `<div class="explain">
             <h4>📖 이 장면: ${esc(fillTpl(sit.title, item))}</h4>
             <p>${esc(item.explain || fillTpl(sit.explain, item))}</p>
-            ${altLine}
             <p class="watch"><strong>🔍 0.5배속으로 볼 것</strong> — ${esc(fillTpl(sit.watch, item))}</p>
             <p style="margin-top:6px"><a href="${info.link}" style="color:var(--info);font-weight:700">${info.ko} 규칙 설명 보기 →</a></p>
           </div>`
@@ -726,7 +732,9 @@
             <h4>✏️ 이 문제 편집 <small style="color:var(--muted)">${esc(item.id)}</small></h4>
             <label>난이도 <select id="eq-level">${[1, 2, 3].map((l) => `<option value="${l}" ${item.level === l ? 'selected' : ''}>${LEVELS[l].name}</option>`).join('')}</select></label>
             <label>해설 (비우면 자동 해설)<textarea id="eq-explain" rows="5">${esc(item.explain || '')}</textarea></label>
+            <label>코멘트 — 이 문제에서 고칠 점 메모 (화면에는 안 보임, 나중에 Claude가 읽고 반영)<textarea id="eq-comment" rows="3">${esc(item.comment || '')}</textarea></label>
             <button class="btn btn-primary" id="eq-apply">적용</button>
+            <span style="font-size:12.5px;color:var(--muted);margin-left:8px">적용 후 하단 바의 "GitHub에 저장"을 눌러야 남습니다</span>
           </div>` : '';
       const agree = typeof item.agree === 'number' ? `<span class="meter">커뮤니티 일치율 <i><b style="width:${item.agree}%"></b></i> ${item.agree}%${item.votes ? ` (${item.votes}표)` : ''}</span>` : '';
 
@@ -737,7 +745,7 @@
           <div class="r-answer">심판 판정: ${ansChips}${lampChip}</div>
           <div class="explain">
             <h4>🗣️ 심판 판정 문장</h4>
-            <p>"${refPhrase(item)}"</p>
+            <p class="phrase-text">"${esc(refPhrase(item)).replace(/\((오른쪽|왼쪽)\)/g, '<span class="dir">($1)</span>')}"</p>
           </div>
           ${explainBlock}
           ${whyNot}
@@ -799,6 +807,14 @@
   })();
 
   /* ---------- 시작 ---------- */
-  render();
-  renderEditBar();
+  // overrides.js 는 캐시를 건너뛰고 항상 최신본을 받음 (편집 모드 저장 직후에도 바로 반영되도록)
+  (async () => {
+    try {
+      const r = await fetch(`js/overrides.js?_=${Date.now()}`, { cache: 'no-store' });
+      if (r.ok) { const fresh = new Function(`${await r.text()}; return OVERRIDES;`)(); Object.assign(OV, fresh); OV.rules = OV.rules || {}; OV.questions = OV.questions || {}; }
+    } catch (e) { /* file:// 등에서는 정적 overrides.js 사용 */ }
+    applyQuestionOverrides();
+    render();
+    renderEditBar();
+  })();
 })();
