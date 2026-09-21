@@ -222,7 +222,7 @@ def main():
             if g and len(keep) < EASY_CAP:
                 keep.add(g.pop(0)["id"])
     for x in easy:
-        if x["id"] not in keep:
+        if x["id"] not in keep or x["answer"]["call"] == "line":  # 린느는 초급에서 제외
             x["level"] = 2
     print("easy kept:", len(keep), "promoted to level 2:", len(easy) - len(keep))
 

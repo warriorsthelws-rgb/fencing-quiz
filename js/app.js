@@ -341,7 +341,7 @@
     }
 
     function start(weapon, level) {
-      const pool = QUESTIONS.filter((x) => x.weapon === weapon && x.level === level);
+      const pool = QUESTIONS.filter((x) => x.weapon === weapon && x.level === level && (level > 1 || x.answer.call !== 'line'));
       const list = pickSet(pool, SET_SIZE);
       // 초급: 말빠레(빠라드 불충분) 장면을 가능하면 한 문제 넣기 — 초급에 없으면 중급에서 빌려옴
       if (level === 1 && list.length && !list.some((x) => x.situation === 'opp-riposte')) {
@@ -579,7 +579,7 @@
         panel.innerHTML = `
           <h3>② <span class="picked-side ${q.side}">${SIDE_KO[q.side]}</span> 점수인 이유는?</h3>
           <div class="reason-grid">
-            ${CALL_ORDER.map((k) => `<button class="reason-btn" data-call="${k}"><span class="r-ko">${CALLS[k].ko}</span><span class="r-fr">${CALLS[k].fr}</span></button>`).join('')}
+            ${CALL_ORDER.filter((k) => session.level > 1 || k !== 'line').map((k) => `<button class="reason-btn" data-call="${k}"><span class="r-ko">${CALLS[k].ko}</span><span class="r-fr">${CALLS[k].fr}</span></button>`).join('')}
           </div>
           <p style="margin:10px 0 0;font-size:13px;color:var(--muted)"><a href="#" id="reset-side" style="color:var(--info);font-weight:700">← 불 다시 고르기</a></p>`;
         panel.querySelectorAll('[data-call]').forEach((b) => b.addEventListener('click', () => pickCall(b.dataset.call)));
