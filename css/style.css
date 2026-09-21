@@ -455,3 +455,14 @@ tr:last-child td { border-bottom: 0; }
 /* 심판 판정 문장: 동작은 굵게, 방향(괄호)은 연하게 */
 .phrase-text { font-size: 16.5px; font-weight: 800; color: var(--text); line-height: 1.7; }
 .phrase-text .dir { font-weight: 500; color: var(--muted); font-size: 14px; }
+
+/* 전체 문제 검토 */
+.review-card { margin-top: 12px; }
+.rv-head { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 12.5px; color: var(--muted); }
+.rv-head .c-tag { position: static; }
+.rv-no { font-weight: 900; color: var(--text); font-size: 15px; }
+.rv-players { font-size: 14px; margin-top: 6px; }
+.rv-clip .video-wrap { margin: 8px 0; }
+.rv-filter { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.rv-filter a { text-decoration: none; padding: 7px 12px; border-radius: 999px; font-size: 13px; font-weight: 700; background: var(--surface); border: 1px solid var(--line); color: var(--text-2); }
+.rv-filter a.active { background: var(--accent); color: var(--accent-ink); border-color: transparent; }

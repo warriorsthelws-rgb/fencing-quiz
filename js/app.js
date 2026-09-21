@@ -109,6 +109,7 @@
     else if (path === '/quiz/level') renderLevelSelect(params);
     else if (path === '/quiz/play') Quiz.enterView(params);
     else if (path === '/quiz/result') Quiz.renderResult();
+    else if (path === '/review') Quiz.renderReview(params);
     else renderHome();
 
     if (!path.startsWith('/rules')) window.scrollTo({ top: 0, behavior: 'instant' });
@@ -702,15 +703,39 @@
       }
     }
 
-    function buildResultHTML(item, side, call, correct, sideOk) {
+    const LAMP = { red: '🔴', green: '🟢', white: '⚪', off: '⚫' };
+    function answerChips(item) {
       const a = item.answer;
-      const LAMP = { red: '🔴', green: '🟢', white: '⚪', off: '⚫' };
       const lampChip = item.lights
         ? `<span class="chip" title="터치 순간 심판기 불">${LAMP[item.lights.L] || '⚫'} ${LAMP[item.lights.R] || '⚫'} ${item.lights.L !== 'off' && item.lights.R !== 'off' ? '양쪽 불' : (item.lights.L !== 'off' ? '왼쪽만' : '오른쪽만')}</span>`
         : '';
-      const ansChips = a.side === 'S'
+      const ans = a.side === 'S'
         ? `<span class="chip">🤝 양쪽 무효 — 시뮬따네</span>`
         : `<span class="chip ${a.side}">${a.side === 'L' ? '◀ 왼쪽' : '오른쪽 ▶'} 점수</span><span class="chip">${CALLS[a.call].ko} <small style="color:var(--muted)">${CALLS[a.call].fr}</small></span>`;
+      return ans + lampChip;
+    }
+    function explainText(item) {
+      const sit = situationFor(item);
+      if (item.explain) return item.explain;
+      if (!sit) return (item.answer.side === 'S' ? CALLS.simultaneous : CALLS[item.answer.call]).explain;
+      const two = item.lights && item.lights.L !== 'off' && item.lights.R !== 'off';
+      return fillTpl(sit.explain, item) + (sit.explain2 && two ? ' ' + fillTpl(sit.explain2, item) : '');
+    }
+    function editFormHTML(item) {
+      return `<div class="explain edit-q">
+            <h4>✏️ 이 문제 편집 <small style="color:var(--muted)">${esc(item.id)}</small></h4>
+            <label>난이도 <select id="eq-level">${[1, 2, 3].map((l) => `<option value="${l}" ${item.level === l ? 'selected' : ''}>${LEVELS[l].name}</option>`).join('')}</select></label>
+            <label>해설 (비우면 자동 해설)<textarea id="eq-explain" rows="5">${esc(item.explain || '')}</textarea></label>
+            <label>코멘트 — 이 문제에서 고칠 점 메모 (화면에는 안 보임, 나중에 Claude가 읽고 반영)<textarea id="eq-comment" rows="3">${esc(item.comment || '')}</textarea></label>
+            <button class="btn btn-primary" id="eq-apply">적용</button>
+            <span style="font-size:12.5px;color:var(--muted);margin-left:8px">적용 후 하단 바의 "GitHub에 저장"을 눌러야 남습니다</span>
+          </div>`;
+    }
+
+    function buildResultHTML(item, side, call, correct, sideOk) {
+      const a = item.answer;
+      const ansChips = answerChips(item);
+      const lampChip = '';
 
       let sub;
       if (correct) sub = a.side === 'S' ? '동시 공격을 정확히 잡아냈어요.' : `${SIDE_KO[a.side]} 선수의 ${CALLS[a.call].ko}! 심판 판정과 같아요.`;
@@ -723,7 +748,7 @@
       const explainBlock = sit
         ? `<div class="explain">
             <h4>📖 이 장면: ${esc(fillTpl(sit.title, item))}</h4>
-            <p>${esc(item.explain || (fillTpl(sit.explain, item) + (sit.explain2 && item.lights && item.lights.L !== 'off' && item.lights.R !== 'off' ? ' ' + fillTpl(sit.explain2, item) : '')))}</p>
+            <p>${esc(explainText(item))}</p>
             <p class="watch"><strong>🔍 0.5배속으로 볼 것</strong> — ${esc(fillTpl(sit.watch, item))}</p>
             <p style="margin-top:6px"><a href="${info.link}" style="color:var(--info);font-weight:700">${info.ko} 규칙 설명 보기 →</a></p>
           </div>`
@@ -740,14 +765,7 @@
         if (tip) whyNot = `<div class="explain"><h4>💭 ${esc(ro(mine))} 보였다면</h4><p>${tip}</p></div>`;
       }
       const note = item.note ? `<div class="explain"><h4>📝 이 장면 메모</h4><p>${item.note}</p></div>` : '';
-      const editForm = editMode ? `<div class="explain edit-q">
-            <h4>✏️ 이 문제 편집 <small style="color:var(--muted)">${esc(item.id)}</small></h4>
-            <label>난이도 <select id="eq-level">${[1, 2, 3].map((l) => `<option value="${l}" ${item.level === l ? 'selected' : ''}>${LEVELS[l].name}</option>`).join('')}</select></label>
-            <label>해설 (비우면 자동 해설)<textarea id="eq-explain" rows="5">${esc(item.explain || '')}</textarea></label>
-            <label>코멘트 — 이 문제에서 고칠 점 메모 (화면에는 안 보임, 나중에 Claude가 읽고 반영)<textarea id="eq-comment" rows="3">${esc(item.comment || '')}</textarea></label>
-            <button class="btn btn-primary" id="eq-apply">적용</button>
-            <span style="font-size:12.5px;color:var(--muted);margin-left:8px">적용 후 하단 바의 "GitHub에 저장"을 눌러야 남습니다</span>
-          </div>` : '';
+      const editForm = editMode ? editFormHTML(item) : '';
 
       return `
         <div class="result ${correct ? 'ok' : 'ng'}">
@@ -814,7 +832,78 @@
       session = null;
     }
 
-    return { enterView, leaveView, renderResult };
+    // ----- 전체 문제 모아보기 (검토용): 난이도 필터, 클립 인라인 재생, 바로 편집 -----
+    function renderReview(params) {
+      leaveView();
+      const lv = Number(params.lv) || 0;
+      const only = params.only || '';
+      let list = QUESTIONS.filter((x) => !lv || x.level === lv);
+      if (only === 'edited') list = list.filter((x) => OV.questions[x.id]);
+      if (only === 'comment') list = list.filter((x) => x.comment);
+      const counts = [0, 1, 2, 3].map((l) => QUESTIONS.filter((x) => !l || x.level === l).length);
+      const link = (l, o) => `#/review?lv=${l}${o ? `&only=${o}` : ''}`;
+      $app.innerHTML = `
+        <h1 style="font-size:22px">🗂 전체 문제 검토 <small style="font-size:14px;color:var(--muted)">${list.length}개</small></h1>
+        <div class="rv-filter">
+          ${[0, 1, 2, 3].map((l) => `<a href="${link(l, only)}" class="${lv === l ? 'active' : ''}">${l ? LEVELS[l].name : '전체'} ${counts[l]}</a>`).join('')}
+          <a href="${link(lv, only === 'edited' ? '' : 'edited')}" class="${only === 'edited' ? 'active' : ''}">수정본만</a>
+          <a href="${link(lv, only === 'comment' ? '' : 'comment')}" class="${only === 'comment' ? 'active' : ''}">코멘트만</a>
+        </div>
+        <div id="review-list">${list.map((item, i) => reviewCardHTML(item, i)).join('')}</div>`;
+      list.forEach((item) => bindReviewCard(item));
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+
+    function reviewCardHTML(item, i) {
+      const sit = situationFor(item);
+      const ov = OV.questions[item.id];
+      return `
+        <div class="card review-card" id="rv-${item.id}">
+          <div class="rv-head">
+            <span class="rv-no">${i + 1}</span>
+            <span class="c-tag">${LEVELS[item.level].name}</span>
+            <span class="rv-meta">${esc(item.id)} · ${esc(item.event || '')}</span>
+            ${ov ? `<span class="c-tag" style="background:var(--ok-bg);color:var(--ok)">수정본${ov.done ? ' ✓반영' : ''}</span>` : ''}
+            ${item.comment ? `<span class="c-tag" style="background:var(--info-bg);color:var(--info)">💬 코멘트</span>` : ''}
+          </div>
+          <div class="rv-players"><b style="color:var(--left)">◀ ${esc(item.left || '왼쪽')}</b> vs <b style="color:var(--right)">${esc(item.right || '오른쪽')} ▶</b></div>
+          <div class="r-answer" style="margin:8px 0">${answerChips(item)}</div>
+          <div class="rv-clip" data-clip="${item.id}"></div>
+          <div class="btn-row" style="margin:8px 0">
+            <button class="btn" data-play="${item.id}">▶ 클립 보기</button>
+            <a class="btn" target="_blank" rel="noopener" href="${esc(ytLink(item))}">유튜브 ↗</a>
+            <button class="btn" data-edit="${item.id}">✏️ 편집</button>
+          </div>
+          <p class="phrase-text" style="font-size:15px">"${esc(refPhrase(item)).replace(/\((오른쪽|왼쪽)\)/g, '<span class="dir">($1)</span>')}"</p>
+          ${sit ? `<p style="margin:0 0 4px;font-weight:800">📖 ${esc(fillTpl(sit.title, item))}</p>` : ''}
+          <p style="color:var(--text-2);font-size:14.5px;margin:0">${esc(explainText(item))}</p>
+          ${item.comment ? `<p style="margin:8px 0 0;font-size:13.5px;color:var(--info)">💬 ${esc(item.comment)}</p>` : ''}
+          <div class="rv-edit"></div>
+        </div>`;
+    }
+
+    function bindReviewCard(item) {
+      const card = document.getElementById('rv-' + item.id);
+      if (!card) return;
+      card.querySelector('[data-play]').addEventListener('click', () => {
+        const box = card.querySelector('.rv-clip');
+        box.innerHTML = `<div class="video-wrap"><iframe src="https://www.youtube-nocookie.com/embed/${esc(item.video.id)}?start=${item.video.start}&end=${item.video.end}&autoplay=1&rel=0" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>`;
+      });
+      card.querySelector('[data-edit]').addEventListener('click', () => {
+        const box = card.querySelector('.rv-edit');
+        if (box.innerHTML) { box.innerHTML = ''; return; }
+        box.innerHTML = editFormHTML(item);
+        if (!editMode) { editMode = true; try { localStorage.setItem('fq_edit', '1'); } catch (e) { /* noop */ } renderEditBar(); }
+        const rerender = () => {
+          const idx = Number(card.querySelector('.rv-no').textContent) - 1;
+          card.outerHTML = reviewCardHTML(item, idx);
+          bindReviewCard(item);
+        };
+        bindEditForm(box, item, rerender);
+      });
+    }
+
+    return { enterView, leaveView, renderResult, renderReview };
   })();
 
   /* ---------- 시작 ---------- */
