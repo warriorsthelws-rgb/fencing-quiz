@@ -661,6 +661,12 @@
 
     // 문제 편집 폼: 적용 → 오버라이드 기록 + 화면 즉시 갱신
     function bindEditForm(res, item, rerender) {
+      const open = res.querySelector('#eq-open');
+      if (open) open.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (!editMode) { editMode = true; try { localStorage.setItem('fq_edit', '1'); } catch (err) { /* noop */ } renderEditBar(); rerender(); }
+        const form = res.querySelector('.edit-q'); if (form) form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
       const apply = res.querySelector('#eq-apply');
       if (!apply) return;
       apply.addEventListener('click', () => {
@@ -736,7 +742,6 @@
             <button class="btn btn-primary" id="eq-apply">적용</button>
             <span style="font-size:12.5px;color:var(--muted);margin-left:8px">적용 후 하단 바의 "GitHub에 저장"을 눌러야 남습니다</span>
           </div>` : '';
-      const agree = typeof item.agree === 'number' ? `<span class="meter">커뮤니티 일치율 <i><b style="width:${item.agree}%"></b></i> ${item.agree}%${item.votes ? ` (${item.votes}표)` : ''}</span>` : '';
 
       return `
         <div class="result ${correct ? 'ok' : 'ng'}">
@@ -752,10 +757,10 @@
           ${note}
           ${editForm}
           <div class="r-foot">
-            ${agree}
             ${item.left && item.right ? `<span>${esc(item.left)} vs ${esc(item.right)}</span>` : ''}
             <a href="${esc(ytLink(item))}" target="_blank" rel="noopener">원본 영상(유튜브) ↗</a>
             ${item.source ? `<a href="${esc(item.source)}" target="_blank" rel="noopener">판정 출처 ↗</a>` : ''}
+            <a href="#" id="eq-open">✏️ 문제 편집</a>
           </div>
         </div>`;
     }
