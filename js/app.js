@@ -21,7 +21,7 @@
 
   const LEVELS = {
     1: { name: '초급', ico: '🌱', desc: '아딱·빠라드-리뽀스트·꽁딱처럼 판정이 명확한 동작. 심판과 커뮤니티가 거의 일치한 클립.', tag: '입문 1년차' },
-    2: { name: '중급', ico: '⚔️', desc: '양쪽 불이 모두 켜진 장면만. 린느, 르미즈, 준비 동작 중 공격 등 규칙을 알아야 보이는 동작.', tag: '선수·심판 지망' },
+    2: { name: '중급', ico: '⚔️', desc: '초급보다 판정이 갈리는 장면. 준비 동작 중 공격, 말빠레, 르미즈 등 규칙을 알아야 보이는 동작. (베타)', tag: '선수·심판 지망' },
     3: { name: '상급', ico: '🏆', desc: '양쪽 불이 모두 켜진 장면 중 심판들끼리도 갈리는 동작과 시뮬따네. 0.5배속으로 팔꿈치를 보세요.', tag: '국제 심판 수준' },
   };
 
@@ -288,8 +288,23 @@
             <div class="c-desc">${LEVELS[l].desc}</div>
           </button>`).join('')}
       </div>
-      <p style="margin-top:16px;font-size:13.5px;color:var(--muted)">정답은 <strong>실제 경기에서 심판이 내린 판정</strong>입니다. 초급에는 한쪽 불만 켜진 명확한 장면도 있지만, <strong>중급·상급은 양쪽 불(색불 또는 흰불)이 모두 켜져 심판이 공격권을 판정해야 했던 장면만</strong> 나옵니다. 난이도는 판정과 커뮤니티 투표의 일치율, 동작의 종류로 나눴고, 상급에는 심판 판정에 동의하지 않는 사람이 더 많은 장면도 있어요.</p>`;
-    $app.querySelectorAll('[data-level]').forEach((b) => b.addEventListener('click', () => navigate(`#/quiz/play?w=${w}&lv=${b.dataset.level}`)));
+      <p style="margin-top:16px;font-size:13.5px;color:var(--muted)">정답은 <strong>실제 경기에서 심판이 내린 판정</strong>입니다. 초급은 아딱·꽁딱·빠라드 리뽀스트·르미즈가 골고루 나오는 명확한 장면 100개, <strong>상급은 양쪽 불(색불 또는 흰불)이 모두 켜져 심판이 공격권을 판정해야 했던 장면만</strong> 나옵니다. 난이도는 판정과 커뮤니티 투표의 일치율, 동작의 종류로 나눴고, 상급에는 심판 판정에 동의하지 않는 사람이 더 많은 장면도 있어요.</p>`;
+    $app.querySelectorAll('[data-level]').forEach((b) => b.addEventListener('click', () => {
+      const lv = Number(b.dataset.level);
+      if (lv === 1) { navigate(`#/quiz/play?w=${w}&lv=1`); return; }
+      // 중급·상급은 베타: 자동 분류·해설이 부정확할 수 있음을 먼저 알림
+      $app.innerHTML = `
+        <div class="card" style="max-width:560px;margin:0 auto">
+          <h2 style="font-size:20px">🧪 ${LEVELS[lv].name}은 베타 버전이에요</h2>
+          <p style="color:var(--text-2)">정답은 실제 심판 판정이지만, <strong>난이도 분류와 해설은 투표 분포로 자동 생성</strong>한 것이라 장면에 따라 부정확할 수 있습니다. 클립이 심판 손동작 직전에 정확히 안 끊기는 경우도 있어요.</p>
+          <p style="color:var(--text-2)">이상한 문제는 정답 확인 후 <strong>✏️ 편집 모드</strong>로 난이도·해설을 고칠 수 있습니다.</p>
+          <div class="btn-row">
+            <button class="btn btn-primary btn-lg" id="beta-go">알겠어요, 시작</button>
+            <a class="btn btn-lg" href="#/quiz/level?w=${w}">돌아가기</a>
+          </div>
+        </div>`;
+      $app.querySelector('#beta-go').addEventListener('click', () => navigate(`#/quiz/play?w=${w}&lv=${lv}`));
+    }));
   }
 
   /* =====================================================
@@ -308,9 +323,31 @@
     // YouTube API 준비 콜백 (전역)
     window.onYouTubeIframeAPIReady = () => { if (pendingCreate) { const f = pendingCreate; pendingCreate = null; f(); } };
 
+    // 본 문제 기록 (다시 방문하면 안 본 문제부터)
+    const seenKey = 'fq_seen';
+    const loadSeen = () => { try { return new Set(JSON.parse(localStorage.getItem(seenKey) || '[]')); } catch (e) { return new Set(); } };
+    const markSeen = (id) => { try { const s = loadSeen(); s.add(id); localStorage.setItem(seenKey, JSON.stringify([...s])); } catch (e) { /* noop */ } };
+
+    // 동작 종류(아딱/꽁딱/리뽀스트…)별로 번갈아 뽑아 한 세트에 다양하게 섞고, 안 본 문제를 먼저 씁니다.
+    function pickSet(pool, n) {
+      const seen = loadSeen();
+      const groups = {};
+      shuffle(pool).forEach((x) => { const k = x.answer.call || 'S'; (groups[k] = groups[k] || []).push(x); });
+      Object.values(groups).forEach((g) => g.sort((a, b) => (seen.has(a.id) ? 1 : 0) - (seen.has(b.id) ? 1 : 0)));
+      const keys = shuffle(Object.keys(groups)); const out = [];
+      while (out.length < n && keys.some((k) => groups[k].length)) keys.forEach((k) => { if (out.length < n && groups[k].length) out.push(groups[k].shift()); });
+      return out;
+    }
+
     function start(weapon, level) {
       const pool = QUESTIONS.filter((x) => x.weapon === weapon && x.level === level);
-      session = { weapon, level, list: shuffle(pool).slice(0, SET_SIZE), index: 0, answers: [] };
+      const list = pickSet(pool, SET_SIZE);
+      // 초급: 말빠레(빠라드 불충분) 장면을 가능하면 한 문제 넣기 — 초급에 없으면 중급에서 빌려옴
+      if (level === 1 && list.length && !list.some((x) => x.situation === 'opp-riposte')) {
+        const mp = shuffle(QUESTIONS.filter((x) => x.weapon === weapon && x.situation === 'opp-riposte' && x.level <= 2 && !list.includes(x)))[0];
+        if (mp) { const i = list.findIndex((x) => x.answer.call === 'attack' && x.situation === 'clean'); list[i >= 0 ? i : list.length - 1] = mp; }
+      }
+      session = { weapon, level, list: shuffle(list), index: 0, answers: [] };
     }
 
     function enterView(params) {
@@ -332,6 +369,8 @@
     }
 
     function buildSkeleton() {
+      // 화면을 새로 그리면 이전 플레이어(iframe)는 DOM에서 사라지므로 함께 버림
+      if (player) { try { player.destroy(); } catch (e) { /* noop */ } player = null; playerReady = false; }
       $app.innerHTML = `
         <div class="stepper"><span>① 플러레</span> › <span>② ${LEVELS[session.level].name}</span> › <span class="on">③ 퀴즈</span></div>
         <div class="quiz-head">
@@ -559,6 +598,7 @@
       const correct = sideOk && (a.side === 'S' || call === a.call);
       q.done = true;
       session.answers.push({ id: item.id, side, call, correct, sideOk });
+      markSeen(item.id);
 
       const panel = document.getElementById('answer-panel');
       panel.innerHTML = `

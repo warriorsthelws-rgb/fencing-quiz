@@ -210,6 +210,22 @@ def main():
             "source": f"https://actions.quarte-riposte.com/?id={rec['id']}&results=true",
         })
 
+    # 초급은 동작 종류별로 번갈아 가며 가장 명확한(일치율 높은) 100개만 남기고, 나머지는 중급으로 올림
+    EASY_CAP = 100
+    easy = [x for x in out if x["level"] == 1]
+    groups = {}
+    for x in sorted(easy, key=lambda x: (-(x["agree"] or 0), -(x["sideAgree"] or 0), -x["votes"])):
+        groups.setdefault(x["answer"]["call"] or "S", []).append(x)
+    keep = set()
+    while len(keep) < EASY_CAP and any(groups.values()):
+        for g in list(groups.values()):
+            if g and len(keep) < EASY_CAP:
+                keep.add(g.pop(0)["id"])
+    for x in easy:
+        if x["id"] not in keep:
+            x["level"] = 2
+    print("easy kept:", len(keep), "promoted to level 2:", len(easy) - len(keep))
+
     if "--no-embed-check" not in sys.argv:
         ok_videos = check_embeddable(sorted({x["video"]["id"] for x in out}))
         before = len(out)

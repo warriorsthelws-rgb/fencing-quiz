@@ -212,6 +212,55 @@ const RULES = {
 <p>손동작도 함께 씁니다. 공격한 쪽을 가리키며 앞으로 미는 손짓(아딱), 손바닥으로 막는 시늉(빠라드), 두 손을 나란히 드는 동작(시뮬따네) 등입니다. 영상 퀴즈에서 심판의 손을 보면 판정을 알 수 있으니, 이 사이트의 클립은 심판 판정 직전에 끝납니다.</p>`
       },
       {
+        id: 'signals',
+        title: '심판처럼 말하기 — 판정 문장과 손 신호',
+        html: `
+<p>심판은 "알트!" 뒤에 <strong>① 무슨 일이 있었는지 순서대로 말하고 → ② 결론(뚜슈/무효) → ③ 점수</strong>를 선언합니다. 말과 손 신호를 동시에 씁니다. 국내 대회에서도 프랑스어 용어를 그대로 쓰고, 설명이 필요하면 한국어를 덧붙입니다.</p>
+<h3>판정 문장의 뼈대</h3>
+<div class="flow">
+  <div class="step"><span class="n">1</span><div><b>알트!</b> — 동작을 멈춤. 손을 들어 올림.</div></div>
+  <div class="step"><span class="n">2</span><div><b>재구성</b> — 먼저 일어난 동작부터 "누가 + 무엇을". 예: "아딱 드와뜨(오른쪽 공격), 빠라드 리뽀스트 고슈(왼쪽이 막고 되받음)". 실패한 동작에는 "노"를 붙임: "아딱 드와뜨 노(공격 실패)".</div></div>
+  <div class="step"><span class="n">3</span><div><b>결론</b> — "뚜슈 고슈(왼쪽 유효)" / "빠 드 뚜슈(점수 없음)" / "농 발라블(무효면)" / "시뮬따네".</div></div>
+  <div class="step"><span class="n">4</span><div><b>점수</b> — 점수 쪽 손을 들고 "점수 고슈, 원-제로(1:0)". 그리고 "앙 가르드, 프레? 알레!"</div></div>
+</div>
+<h3>자주 쓰는 문장 모음</h3>
+<div class="table-wrap"><table>
+  <thead><tr><th>상황</th><th>심판 문장</th><th>뜻</th></tr></thead>
+  <tbody>
+    <tr><td>단독 공격 성공</td><td>아딱 드와뜨, 뚜슈.</td><td>오른쪽 공격, 유효</td></tr>
+    <tr><td>공격 vs 꽁딱</td><td>아딱 고슈, 꽁뜨르 아딱 드와뜨, 뚜슈 고슈.</td><td>왼쪽 공격 우선, 오른쪽 반격 무시</td></tr>
+    <tr><td>막고 되받기</td><td>아딱 드와뜨, 빠라드 리뽀스트 고슈, 뚜슈 고슈.</td><td>왼쪽 리뽀스트 점수</td></tr>
+    <tr><td>말빠레</td><td>아딱 드와뜨, 빠라드 고슈 말 빠레, 뚜슈 드와뜨.</td><td>빠라드 불충분, 공격 유효</td></tr>
+    <tr><td>공격 실패 후 반격</td><td>아딱 고슈 노, 리뽀스트(아딱) 드와뜨, 뚜슈 드와뜨.</td><td>왼쪽 공격 빗나감</td></tr>
+    <tr><td>린느</td><td>린느 드와뜨, 아딱 고슈 당 라 린느, 뚜슈 드와뜨.</td><td>린느 안으로 공격</td></tr>
+    <tr><td>준비 동작 중 공격</td><td>프레파라시옹 고슈, 아딱 드와뜨, 뚜슈 드와뜨.</td><td>왼쪽은 준비 동작이었음</td></tr>
+    <tr><td>르미즈</td><td>아딱 드와뜨, 빠라드 고슈, 리뽀스트 고슈 노(지연), 르미즈 드와뜨, 뚜슈 드와뜨.</td><td>리뽀스트 늦음</td></tr>
+    <tr><td>동시 공격</td><td>시뮬따네, 빠 드 뚜슈.</td><td>양쪽 무효</td></tr>
+    <tr><td>무효면</td><td>아딱 드와뜨, 농 발라블. (알트)</td><td>흰 불, 점수 없음</td></tr>
+  </tbody>
+</table></div>
+<h3>손 신호</h3>
+<p>FIE 규정 부록에 표준 신호가 있습니다. 심판은 판정 문장을 말하면서 <strong>동작이 일어난 순서대로</strong> 손으로 다시 그려 보입니다. 아래는 가장 많이 쓰는 신호입니다.</p>
+<div class="table-wrap"><table>
+  <thead><tr><th>신호</th><th>동작</th><th>의미</th></tr></thead>
+  <tbody>
+    <tr><td><strong>알트</strong></td><td>한 손을 위로 듦</td><td>경기 중단</td></tr>
+    <tr><td><strong>아딱</strong></td><td>공격한 선수 쪽 팔을 상대 방향으로 <strong>수평으로 쭉 폄</strong> (손바닥 아래)</td><td>공격 인정</td></tr>
+    <tr><td><strong>빠라드</strong></td><td>막은 선수 쪽 팔을 굽혀 손을 세워 <strong>막는 시늉</strong></td><td>막기 인정</td></tr>
+    <tr><td><strong>리뽀스트</strong></td><td>빠라드 신호에 이어 그 팔을 반대편으로 폄</td><td>되받기</td></tr>
+    <tr><td><strong>꽁뜨르 아딱</strong></td><td>반격한 쪽 팔을 상대 방향으로 짧게 찌르듯 폄 (아딱보다 작게)</td><td>반격 — 보통 우선권 없음</td></tr>
+    <tr><td><strong>린느</strong></td><td>린느 선수 쪽 팔을 상대 방향으로 <strong>곧게 고정</strong></td><td>포인트 인 라인 인정</td></tr>
+    <tr><td><strong>르미즈</strong></td><td>공격 신호 뒤 같은 팔을 다시 앞으로 <strong>한 번 더 밀어냄</strong></td><td>다시 찌름</td></tr>
+    <tr><td><strong>아딱 노 / 짧음</strong></td><td>손바닥을 아래로 하고 좌우로 짧게 흔듦</td><td>공격 실패·미달</td></tr>
+    <tr><td><strong>뚜슈</strong></td><td>점수 얻은 선수 쪽 손을 <strong>위로 듦</strong></td><td>유효, 점수</td></tr>
+    <tr><td><strong>농 발라블</strong></td><td>손바닥을 아래로 하고 몸 앞에서 좌우로 흔듦</td><td>무효면(흰 불)</td></tr>
+    <tr><td><strong>시뮬따네</strong></td><td><strong>양손을 동시에</strong> 같은 높이로 폄</td><td>동시 공격, 무효</td></tr>
+    <tr><td><strong>경고/카드</strong></td><td>해당 선수를 가리키고 노란/빨간 카드 제시</td><td>페널티</td></tr>
+  </tbody>
+</table></div>
+<div class="callout tip"><span class="ct">연습법</span>퀴즈에서 정답을 확인한 뒤 나오는 <strong>"심판 판정 문장"</strong>을 소리 내어 읽고, 손으로 순서대로 그려 보세요. 참고 영상의 심판 손을 보면 문장과 신호가 1:1로 맞아떨어집니다.</div>`
+      },
+      {
         id: 'checklist',
         videos: [
           { id: '_7LYRZf6V2o', title: 'Basic Calls - Foil Referee Video Exam', note: '초급 판정 시험 13문제, 설명란에 정답' },
