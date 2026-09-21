@@ -109,7 +109,6 @@
     else if (path === '/quiz/level') renderLevelSelect(params);
     else if (path === '/quiz/play') Quiz.enterView(params);
     else if (path === '/quiz/result') Quiz.renderResult();
-    else if (path === '/review') Quiz.renderReview(params);
     else renderHome();
 
     if (!path.startsWith('/rules')) window.scrollTo({ top: 0, behavior: 'instant' });
@@ -291,6 +290,12 @@
             <div class="c-desc">${LEVELS[l].desc}</div>
           </button>`).join('')}
       </div>
+      <div class="card" style="margin-top:14px">
+        <h3 style="font-size:16px;margin-bottom:6px">🗂 난이도별 전체 모아보기 <small style="color:var(--muted);font-weight:600">검토용 · 전부 순서대로, 이어서 풀기 가능</small></h3>
+        <div class="btn-row">
+          ${[1, 2, 3].map((l) => `<a class="btn" href="#/quiz/play?w=${w}&lv=${l}&all=1">${LEVELS[l].name} 전체 ${counts[l - 1]}문제</a>`).join('')}
+        </div>
+      </div>
       <p style="margin-top:16px;font-size:13.5px;color:var(--muted)">정답은 <strong>실제 경기에서 심판이 내린 판정</strong>입니다. 초급은 아딱·꽁딱·빠라드 리뽀스트·르미즈가 골고루 나오는 명확한 장면 100개, <strong>상급은 양쪽 불(색불 또는 흰불)이 모두 켜져 심판이 공격권을 판정해야 했던 장면만</strong> 나옵니다. 난이도는 판정과 커뮤니티 투표의 일치율, 동작의 종류로 나눴고, 상급에는 심판 판정에 동의하지 않는 사람이 더 많은 장면도 있어요.</p>`;
     $app.querySelectorAll('[data-level]').forEach((b) => b.addEventListener('click', () => {
       const lv = Number(b.dataset.level);
@@ -342,8 +347,15 @@
       return out;
     }
 
-    function start(weapon, level) {
+    const posKey = (level) => `fq_all_pos_${level}`;
+    function start(weapon, level, all) {
       const pool = QUESTIONS.filter((x) => x.weapon === weapon && x.level === level && (level > 1 || x.answer.call !== 'line'));
+      if (all) {
+        // 난이도별 전체 모아보기(검토용): 전부, 고정된 순서로. 마지막 위치부터 이어서.
+        let pos = 0; try { pos = Number(localStorage.getItem(posKey(level))) || 0; } catch (e) { /* noop */ }
+        session = { weapon, level, all: true, list: pool.slice(), index: pos < pool.length ? pos : 0, answers: [] };
+        return;
+      }
       const list = pickSet(pool, SET_SIZE);
       // 초급: 말빠레(빠라드 불충분) 장면을 가능하면 한 문제 넣기 — 초급에 없으면 중급에서 빌려옴
       if (level === 1 && list.length && !list.some((x) => x.situation === 'opp-riposte')) {
@@ -356,7 +368,9 @@
     function enterView(params) {
       const weapon = params.w || 'foil';
       const level = Number(params.lv) || 1;
-      if (!session || session.weapon !== weapon || session.level !== level || session.index >= session.list.length) start(weapon, level);
+      const all = params.all === '1';
+      if (params.restart === '1') { try { localStorage.removeItem(posKey(level)); } catch (e) { /* noop */ } session = null; }
+      if (!session || session.weapon !== weapon || session.level !== level || !!session.all !== all || session.index >= session.list.length) start(weapon, level, all);
       if (session.list.length === 0) {
         $app.innerHTML = `<div class="card empty">이 난이도에는 아직 문제가 없어요.<br><a class="btn" style="margin-top:12px" href="#/quiz/level">난이도 다시 고르기</a></div>`;
         return;
@@ -407,12 +421,18 @@
       desiredRate = 1;
 
       document.getElementById('q-no').textContent = `문제 ${session.index + 1} / ${session.list.length}`;
-      document.getElementById('q-meta').textContent = `${LEVELS[session.level].name} · ${item.event || ''}`;
+      document.getElementById('q-meta').textContent = `${LEVELS[session.level].name}${session.all ? ' 전체' : ''} · ${item.event || ''}`;
       document.getElementById('video-card').classList.add('stuck');
       document.getElementById('q-bar').style.width = `${(session.index / session.list.length) * 100}%`;
       document.getElementById('result-area').innerHTML = '';
       document.getElementById('next-bar').innerHTML = '';
       document.getElementById('replay-bar').innerHTML = '';
+      if (session.all) {
+        try { localStorage.setItem(posKey(session.level), String(session.index)); } catch (e) { /* noop */ }
+        const nb = document.getElementById('next-bar');
+        nb.innerHTML = `<button class="btn" id="btn-skip">건너뛰기 →</button><a class="btn" href="#/quiz/play?w=${session.weapon}&lv=${session.level}&all=1&restart=1">처음부터</a>`;
+        nb.querySelector('#btn-skip').addEventListener('click', () => { session.index++; if (session.index >= session.list.length) navigate('#/quiz/result'); else showQuestion(); });
+      }
       renderCover('initial');
       renderAnswerPanel();
 
@@ -797,6 +817,7 @@
       const pct = Math.round((ok / n) * 100);
       const msg = pct === 100 ? '완벽해요! 국제 심판 해도 되겠는데요? 🏆' : pct >= 80 ? '훌륭해요! 판정 감각이 좋아요 👏' : pct >= 50 ? '좋아요. 틀린 문제의 해설을 다시 읽어 보세요 📖' : '아직 헷갈리죠? 규칙 설명을 읽고 다시 도전! 💪';
       const byId = Object.fromEntries(QUESTIONS.map((x) => [x.id, x]));
+      if (session.all) { try { localStorage.removeItem(posKey(session.level)); } catch (e) { /* noop */ } }
       $app.innerHTML = `
         <div class="card score-hero">
           <div style="font-size:13px;color:var(--muted);font-weight:700">플러레 · ${LEVELS[session.level].name}</div>
@@ -832,78 +853,7 @@
       session = null;
     }
 
-    // ----- 전체 문제 모아보기 (검토용): 난이도 필터, 클립 인라인 재생, 바로 편집 -----
-    function renderReview(params) {
-      leaveView();
-      const lv = Number(params.lv) || 0;
-      const only = params.only || '';
-      let list = QUESTIONS.filter((x) => !lv || x.level === lv);
-      if (only === 'edited') list = list.filter((x) => OV.questions[x.id]);
-      if (only === 'comment') list = list.filter((x) => x.comment);
-      const counts = [0, 1, 2, 3].map((l) => QUESTIONS.filter((x) => !l || x.level === l).length);
-      const link = (l, o) => `#/review?lv=${l}${o ? `&only=${o}` : ''}`;
-      $app.innerHTML = `
-        <h1 style="font-size:22px">🗂 전체 문제 검토 <small style="font-size:14px;color:var(--muted)">${list.length}개</small></h1>
-        <div class="rv-filter">
-          ${[0, 1, 2, 3].map((l) => `<a href="${link(l, only)}" class="${lv === l ? 'active' : ''}">${l ? LEVELS[l].name : '전체'} ${counts[l]}</a>`).join('')}
-          <a href="${link(lv, only === 'edited' ? '' : 'edited')}" class="${only === 'edited' ? 'active' : ''}">수정본만</a>
-          <a href="${link(lv, only === 'comment' ? '' : 'comment')}" class="${only === 'comment' ? 'active' : ''}">코멘트만</a>
-        </div>
-        <div id="review-list">${list.map((item, i) => reviewCardHTML(item, i)).join('')}</div>`;
-      list.forEach((item) => bindReviewCard(item));
-      window.scrollTo({ top: 0, behavior: 'instant' });
-    }
-
-    function reviewCardHTML(item, i) {
-      const sit = situationFor(item);
-      const ov = OV.questions[item.id];
-      return `
-        <div class="card review-card" id="rv-${item.id}">
-          <div class="rv-head">
-            <span class="rv-no">${i + 1}</span>
-            <span class="c-tag">${LEVELS[item.level].name}</span>
-            <span class="rv-meta">${esc(item.id)} · ${esc(item.event || '')}</span>
-            ${ov ? `<span class="c-tag" style="background:var(--ok-bg);color:var(--ok)">수정본${ov.done ? ' ✓반영' : ''}</span>` : ''}
-            ${item.comment ? `<span class="c-tag" style="background:var(--info-bg);color:var(--info)">💬 코멘트</span>` : ''}
-          </div>
-          <div class="rv-players"><b style="color:var(--left)">◀ ${esc(item.left || '왼쪽')}</b> vs <b style="color:var(--right)">${esc(item.right || '오른쪽')} ▶</b></div>
-          <div class="r-answer" style="margin:8px 0">${answerChips(item)}</div>
-          <div class="rv-clip" data-clip="${item.id}"></div>
-          <div class="btn-row" style="margin:8px 0">
-            <button class="btn" data-play="${item.id}">▶ 클립 보기</button>
-            <a class="btn" target="_blank" rel="noopener" href="${esc(ytLink(item))}">유튜브 ↗</a>
-            <button class="btn" data-edit="${item.id}">✏️ 편집</button>
-          </div>
-          <p class="phrase-text" style="font-size:15px">"${esc(refPhrase(item)).replace(/\((오른쪽|왼쪽)\)/g, '<span class="dir">($1)</span>')}"</p>
-          ${sit ? `<p style="margin:0 0 4px;font-weight:800">📖 ${esc(fillTpl(sit.title, item))}</p>` : ''}
-          <p style="color:var(--text-2);font-size:14.5px;margin:0">${esc(explainText(item))}</p>
-          ${item.comment ? `<p style="margin:8px 0 0;font-size:13.5px;color:var(--info)">💬 ${esc(item.comment)}</p>` : ''}
-          <div class="rv-edit"></div>
-        </div>`;
-    }
-
-    function bindReviewCard(item) {
-      const card = document.getElementById('rv-' + item.id);
-      if (!card) return;
-      card.querySelector('[data-play]').addEventListener('click', () => {
-        const box = card.querySelector('.rv-clip');
-        box.innerHTML = `<div class="video-wrap"><iframe src="https://www.youtube-nocookie.com/embed/${esc(item.video.id)}?start=${item.video.start}&end=${item.video.end}&autoplay=1&rel=0" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>`;
-      });
-      card.querySelector('[data-edit]').addEventListener('click', () => {
-        const box = card.querySelector('.rv-edit');
-        if (box.innerHTML) { box.innerHTML = ''; return; }
-        box.innerHTML = editFormHTML(item);
-        if (!editMode) { editMode = true; try { localStorage.setItem('fq_edit', '1'); } catch (e) { /* noop */ } renderEditBar(); }
-        const rerender = () => {
-          const idx = Number(card.querySelector('.rv-no').textContent) - 1;
-          card.outerHTML = reviewCardHTML(item, idx);
-          bindReviewCard(item);
-        };
-        bindEditForm(box, item, rerender);
-      });
-    }
-
-    return { enterView, leaveView, renderResult, renderReview };
+    return { enterView, leaveView, renderResult };
   })();
 
   /* ---------- 시작 ---------- */
