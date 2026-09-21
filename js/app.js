@@ -14,7 +14,7 @@
   const el = (html) => { const t = document.createElement('template'); t.innerHTML = html.trim(); return t.content.firstElementChild; };
   const shuffle = (arr) => { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
   const SIDE_KO = { L: '왼쪽', R: '오른쪽', S: '무효(시뮬따네)' };
-  const SIDE_FR = { L: '고슈', R: '드와뜨' };
+  const SIDE_FR = { L: '왼쪽', R: '오른쪽' };  // 판정 문장용 (국제 대회 용어 고슈/드와뜨 대신 한국어)
   const other = (s) => (s === 'L' ? 'R' : 'L');
   // 조사 '로/으로' 자동 선택 (받침 유무)
   const ro = (w) => { const c = w.charCodeAt(w.length - 1); if (c < 0xac00 || c > 0xd7a3) return w + '로'; const jong = (c - 0xac00) % 28; return w + (jong === 0 || jong === 8 ? '로' : '으로'); };
