@@ -1,6 +1,6 @@
 /* 사이트의 '편집 모드'에서 저장한 수정본. 직접 고쳐도 됩니다.
    rules.<basic|advanced>.<섹션id> = 섹션 본문 HTML (원본 rules-data.js 대신 사용)
-   questions.<문제id> = { level: 1|2|3, explain: "이 문제 전용 해설", comment: "고칠 점 메모", done: true(반영됨) }   (questions.js 재생성해도 유지됨) */
+   questions.<문제id> = { level: 1|2|3, explain: "이 문제 전용 해설" }   (questions.js 재생성해도 유지됨) */
 const OVERRIDES = {
  "rules": {},
  "questions": {
@@ -31,6 +31,10 @@ const OVERRIDES = {
    "level": 1,
    "comment": "어느 쪽의 잘못이라고도 할 수 없으므로 점\n잘못이라는 표현 보다 어느 쪽의 공격권도 아니므로 라는 표현으로 정정",
    "done": true
+  },
+  "qr8548": {
+   "level": 1,
+   "comment": "아딱 오페르임 이 내용 포함"
   }
  }
 };
