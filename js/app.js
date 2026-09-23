@@ -385,7 +385,7 @@
     function leaveView() {
       if (player) { try { player.destroy(); } catch (e) { /* noop */ } }
       player = null; playerReady = false; pendingCreate = null; q = null;
-      clearTimeout(ytFailedTimer);
+      clearTimeout(ytFailedTimer); clearInterval(endTimer); clearTimeout(preTimer);
     }
 
     function buildSkeleton() {
@@ -417,7 +417,8 @@
 
     function showQuestion() {
       const item = current();
-      q = { played: false, started: false, side: null, done: false, rate: 1, replays: 0, wantPlay: null };
+      clearInterval(endTimer); clearTimeout(preTimer);
+      q = { played: false, started: false, side: null, done: false, rate: 1, replays: 0, wantPlay: null, buffered: false, prebuffering: false };
       desiredRate = 1;
 
       document.getElementById('q-no').textContent = `문제 ${session.index + 1} / ${session.list.length}`;
@@ -436,9 +437,7 @@
       renderCover('initial');
       renderAnswerPanel();
 
-      ensurePlayer(() => {
-        try { player.cueVideoById({ videoId: item.video.id, startSeconds: item.video.start, endSeconds: item.video.end }); } catch (e) { /* noop */ }
-      });
+      ensurePlayer(() => prebuffer(item));
       window.scrollTo({ top: 0, behavior: 'instant' });
     }
 
@@ -468,13 +467,58 @@
     }
     let pendingCue = null;
 
+    // 클릭 전에 영상을 미리 받아 두면 재생 버튼을 눌렀을 때 바로 시작됩니다.
+    // (유튜브는 cue 상태에서는 거의 버퍼링하지 않으므로, 음소거로 잠깐 재생했다가 멈춰 둡니다)
+    function prebuffer(item) {
+      if (!player || !playerReady) return;
+      q.buffered = false; q.prebuffering = true;
+      try {
+        player.mute();
+        player.loadVideoById({ videoId: item.video.id, startSeconds: item.video.start, endSeconds: item.video.end });
+      } catch (e) { q.prebuffering = false; return; }
+      // 브라우저가 자동 재생을 막으면 PLAYING 이 오지 않으므로, 버퍼링만 시키고 시간이 지나면 준비 완료로 처리
+      clearTimeout(preTimer);
+      preTimer = setTimeout(() => { if (q && q.prebuffering) endPrebuffer(); }, 1800);
+    }
+
+    let preTimer = null;
+    function endPrebuffer() {
+      clearTimeout(preTimer);
+      q.prebuffering = false; q.buffered = true;
+      try { player.pauseVideo(); player.seekTo(current().video.start, true); } catch (e) { /* noop */ }
+      if (q.wantPlay != null) { const r = q.wantPlay; q.wantPlay = null; playClip(r); }
+    }
+
+    // 클립 끝 감시: endSeconds 가 되감기 후 무시되는 경우가 있어 직접 확인합니다.
+    let endTimer = null;
+    function watchEnd() {
+      clearInterval(endTimer);
+      endTimer = setInterval(() => {
+        if (!q || !player || !playerReady) { clearInterval(endTimer); return; }
+        let t = 0;
+        try { t = player.getCurrentTime(); } catch (e) { return; }
+        if (t >= current().video.end - 0.05) { clearInterval(endTimer); try { player.pauseVideo(); } catch (e) { /* noop */ } finishClip(); }
+      }, 100);
+    }
+
+    function finishClip() {
+      if (!q || !q.started) return;
+      q.started = false;
+      q.played = true;
+      renderCover('ended');
+      renderReplayBar();
+      if (!q.side && !q.done) { renderAnswerPanel(); scrollBelowVideo(document.getElementById('answer-panel')); }
+    }
+
     function onPlayerState(e) {
       if (window.DEBUG_YT) (window.__ytlog = window.__ytlog || []).push([Date.now() % 100000, e.data, session && session.index]);
       if (!q) return;
       const S = window.YT.PlayerState;
+      if (e.data === S.PLAYING && q.prebuffering) { endPrebuffer(); return; }  // 자동 재생이 됐으면 바로 멈춰 둠
       if (e.data === S.PLAYING) {
         q.started = true;
         hideCover();
+        watchEnd();
         try { if (player.getPlaybackRate() !== desiredRate) player.setPlaybackRate(desiredRate); } catch (err) { /* noop */ }
       } else if (e.data === S.ENDED) {
         // cueVideoById 직후에도 ENDED(0)가 한 번 잘못 발생하므로, 실제로 재생이 시작됐던 경우만 처리
@@ -500,13 +544,16 @@
         if (cover) cover.innerHTML = `<div class="vc-title"><span class="spinner" style="vertical-align:middle"></span>영상 준비 중…</div>`;
         return;
       }
+      if (q.prebuffering) { q.wantPlay = rate; return; }  // 버퍼링 끝나는 즉시 재생
       desiredRate = rate;
       q.rate = rate;
       if (q.played) q.replays++;
       hideCover();
       try {
+        player.unMute();
         player.setPlaybackRate(rate);
-        player.loadVideoById({ videoId: item.video.id, startSeconds: item.video.start, endSeconds: item.video.end });
+        if (q.buffered) { player.seekTo(item.video.start, true); player.playVideo(); }
+        else player.loadVideoById({ videoId: item.video.id, startSeconds: item.video.start, endSeconds: item.video.end });
       } catch (err) { renderCover('error'); }
       renderReplayBar();
     }
