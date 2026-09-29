@@ -730,6 +730,7 @@
       const opKo = a.side === 'S' ? '' : SIDE_KO[other(a.side)];
       const altKo = item.alt && item.alt.side ? SIDE_KO[item.alt.side] : (a.side === 'S' ? '한쪽' : opKo);
       return String(text).replace(/\{me\}/g, me).replace(/\{op\}/g, op).replace(/\{meKo\}/g, meKo).replace(/\{opKo\}/g, opKo).replace(/\{altKo\}/g, altKo)
+        .replace(/\s+(\[(?:오른손|왼손)\])/g, '$1').replace(/\s{2,}/g, ' ')
         // '오른쪽/왼쪽' 뒤 조사 교정 (받침 있음)
         .replace(/(오른쪽|왼쪽)가/g, '$1이').replace(/(오른쪽|왼쪽)는/g, '$1은').replace(/(오른쪽|왼쪽)를/g, '$1을').replace(/(오른쪽|왼쪽)로/g, '$1으로');
     }
@@ -762,16 +763,18 @@
 
     function refPhrase(item) {
       const sit = situationFor(item);
+      const two = item.lights && item.lights.L !== 'off' && item.lights.R !== 'off';
+      if (sit && sit.phrase2 && two) return fillTpl(sit.phrase2, item);
       if (sit && sit.phrase) return fillTpl(sit.phrase, item);
       const a = item.answer;
-      if (a.side === 'S') return '시뮬따네, 빠 드 뚜슈. (양쪽 무효)';
+      if (a.side === 'S') return '아딱, 아딱, 시뮬따네, 빠 드 뚜슈.';
       const me = SIDE_FR[a.side], op = SIDE_FR[other(a.side)];
       switch (a.call) {
         case 'attack': return `아딱 ${me}, 뚜슈 ${me}.`;
-        case 'counter': return `아딱 ${op} 노(또는 프레파라시옹), 꽁뜨르 아딱 ${me}, 뚜슈 ${me}.`;
-        case 'riposte': return `아딱 ${op}, 빠라드 리뽀스트 ${me}, 뚜슈 ${me}.`;
-        case 'remise': return `아딱 ${me}, 빠라드 ${op}(리뽀스트 지연), 르미즈 ${me}, 뚜슈 ${me}.`;
-        case 'line': return `린느 ${me}, 아딱 ${op} 당 라 린느, 뚜슈 ${me}.`;
+        case 'counter': return `아딱 ${op} 노, 꽁뜨르 아딱 ${me}, 뚜슈 ${me}.`;
+        case 'riposte': return `아딱 ${op} 노, 빠라드 리뽀스트 ${me}, 뚜슈 ${me}.`;
+        case 'remise': return `아딱 ${me}, 빠라드 ${op}, 리뽀스트 ${op} 노, 르미즈 ${me}, 뚜슈 ${me}.`;
+        case 'line': return `린느 ${me}, 아딱 ${op} 노 당 라 린느, 린느 뚜슈 ${me}.`;
         default: return '';
       }
     }
