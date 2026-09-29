@@ -14,7 +14,8 @@
   const el = (html) => { const t = document.createElement('template'); t.innerHTML = html.trim(); return t.content.firstElementChild; };
   const shuffle = (arr) => { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
   const SIDE_KO = { L: '왼쪽', R: '오른쪽', S: '무효(시뮬따네)' };
-  const SIDE_FR = { L: '(왼쪽)', R: '(오른쪽)' };  // 판정 문장용: 방향은 괄호로 표시
+  // 판정 문장용: 심판은 방향을 말하지 않고 그 선수 쪽 손을 듭니다
+  const SIDE_FR = { L: '[왼손]', R: '[오른손]' };
   const other = (s) => (s === 'L' ? 'R' : 'L');
   // 조사 '로/으로' 자동 선택 (받침 유무)
   const ro = (w) => { const c = w.charCodeAt(w.length - 1); if (c < 0xac00 || c > 0xd7a3) return w + '로'; const jong = (c - 0xac00) % 28; return w + (jong === 0 || jong === 8 ? '로' : '으로'); };
@@ -754,6 +755,11 @@
       });
     }
 
+    // "아딱 [오른손], 뚜슈 [오른손]." → 아딱[오른손] 형태로 다듬고 손 표시를 따로 꾸밈
+    function phraseHTML(item) {
+      return '"' + esc(refPhrase(item)).replace(/\s+(\[(?:오른손|왼손)\])/g, '<span class="dir">$1</span>') + '"';
+    }
+
     function refPhrase(item) {
       const sit = situationFor(item);
       if (sit && sit.phrase) return fillTpl(sit.phrase, item);
@@ -841,7 +847,8 @@
           <div class="r-answer">심판 판정: ${ansChips}${lampChip}</div>
           <div class="explain">
             <h4>🗣️ 심판 판정 문장</h4>
-            <p class="phrase-text">"${esc(refPhrase(item)).replace(/\((오른쪽|왼쪽)\)/g, '<span class="dir">($1)</span>')}"</p>
+            <p class="phrase-text">${phraseHTML(item)}</p>
+            <p class="phrase-legend">심판은 <strong>방향을 말하지 않고</strong> 그 선수 쪽 손을 듭니다. <span class="dir">[왼손]</span> = ◀ ${esc(item.left || '왼쪽 선수')} · <span class="dir">[오른손]</span> = ${esc(item.right || '오른쪽 선수')} ▶</p>
           </div>
           ${explainBlock}
           ${whyNot}

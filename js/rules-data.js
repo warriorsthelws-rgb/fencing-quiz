@@ -95,7 +95,7 @@ const RULES = {
   <div class="step"><span class="n">3</span><div><b>되받아치기(리뽀스트)</b> — 막은 직후 바로 찌르면 그 찌르기가 우선권을 가집니다.</div></div>
   <div class="step"><span class="n">4</span><div><b>공격 실패(아딱 노)</b> — 공격이 빗나가거나 짧으면 공격권이 사라지고, 상대가 새로 공격할 수 있습니다.</div></div>
 </div>
-<p>심판은 "알트!" 이후 이 흐름을 말로 <strong>재구성(분석)</strong>해서 판정을 내립니다. 예: <em>"아딱 오른쪽(오른쪽 공격), 빠라드 리뽀스트 왼쪽(왼쪽이 막고 되받음), 뚜슈. 점수 왼쪽."</em></p>`
+<p>심판은 "알트!" 이후 이 흐름을 말로 <strong>재구성(분석)</strong>해서 판정을 내립니다. 예: <em>"아딱[오른손], 빠라드 리뽀스트[왼손], 뚜슈[왼손]"</em>. 심판은 <strong>"오른쪽"이라고 말하지 않고</strong> 오른손을 들어 오른쪽 선수를 가리킵니다.</p>`
       },
       {
         id: 'attack',
@@ -114,15 +114,15 @@ const RULES = {
 <div class="phrase">
   <div class="p-row"><span class="p-who L">왼쪽</span><span>팔을 펴며 마르셰-팡뜨로 공격 시작</span></div>
   <div class="p-row"><span class="p-who R">오른쪽</span><span>막지 않고 그대로 팔을 펴서 같이 찌름 (꽁딱)</span></div>
-  <div class="p-row"><span class="p-who J">심판</span><span class="p-res">"아딱 왼쪽, 뚜슈." → 왼쪽 점수</span></div>
+  <div class="p-row"><span class="p-who J">심판</span><span class="p-res">"아딱[왼손], 뚜슈[왼손]" → 왼쪽 점수</span></div>
 </div>
-<p>공격의 종류: <span class="term">직접 공격</span>(그대로 찌르기), <span class="term">데가제</span>(상대 칼 밑으로 돌려 찌르기), <span class="term">꾸뻬</span>(상대 칼 위로 넘겨 찌르기), <span class="term">복합 공격</span>(페인트 후 찌르기), <span class="term">바뜨망 아딱</span>(상대 칼을 치고 찌르기) 등이 있지만, 판정에서 중요한 것은 종류보다 <strong>"누가 먼저 올바르게 시작했나"</strong>입니다.</p>`
+<p>공격의 종류: <span class="term">직접 공격</span>(그대로 찌르기), <span class="term">데가제</span>(상대 칼 밑으로 돌려 찌르기), <span class="term">꾸뻬</span>(상대 칼 위로 넘겨 찌르기), <span class="term">복합 공격</span>(페인트 후 찌르기), <span class="term">빠떼 아딱</span>(상대 칼을 치고 찌르기) 등이 있지만, 판정에서 중요한 것은 종류보다 <strong>"누가 먼저 올바르게 시작했나"</strong>입니다.</p>`
       },
       {
         id: 'parry',
         videos: [
           { id: 'fd7ZafNDdoU', title: 'The 8 Guards/Parries (영어)', note: '8가지 빠라드' },
-          { id: 'x2opCqqtG1U', title: 'Foil - Beat Attack vs Parry Riposte (USA Fencing 심판 교육)', note: '바뜨망 아딱과 빠라드 리뽀스트 구분' }
+          { id: 'x2opCqqtG1U', title: 'Foil - Beat Attack vs Parry Riposte (USA Fencing 심판 교육)', note: '빠떼 아딱과 빠라드 리뽀스트 구분' }
         ],
         title: '빠라드 → 리뽀스트 (막고 되받기)',
         html: `
@@ -136,7 +136,7 @@ const RULES = {
   <div class="p-row"><span class="p-who R">오른쪽</span><span>팡뜨로 공격</span></div>
   <div class="p-row"><span class="p-who L">왼쪽</span><span>4번(꺄르트) 빠라드로 막고 바로 리뽀스트</span></div>
   <div class="p-row"><span class="p-who R">오른쪽</span><span>막힌 뒤에도 계속 밀어 넣어 같이 불이 켜짐 (르미즈)</span></div>
-  <div class="p-row"><span class="p-who J">심판</span><span class="p-res">"아딱 오른쪽, 빠라드 리뽀스트 왼쪽, 뚜슈." → 왼쪽 점수</span></div>
+  <div class="p-row"><span class="p-who J">심판</span><span class="p-res">"아딱[오른손], 빠라드 리뽀스트[왼손], 뚜슈[왼손]" → 왼쪽 점수</span></div>
 </div>
 <div class="callout tip"><span class="ct">보는 요령</span>양쪽 불이 켜졌을 때 <strong>칼이 부딪히는 소리·순간</strong>이 있었다면 "누가 막았는가"를 먼저 보세요. 공격하던 쪽의 칼이 밀려났다면 막은 쪽의 리뽀스트가 점수입니다.</div>`
       },
@@ -158,7 +158,7 @@ const RULES = {
 <div class="phrase">
   <div class="p-row"><span class="p-who L">왼쪽</span><span>팔 펴며 팡뜨 공격</span></div>
   <div class="p-row"><span class="p-who R">오른쪽</span><span>뒤로 빠지며 팔만 펴서 찌름 (꽁딱) — 양쪽 불</span></div>
-  <div class="p-row"><span class="p-who J">심판</span><span class="p-res">"아딱 왼쪽, 꽁뜨르 아딱 오른쪽, 뚜슈 왼쪽." → 왼쪽 점수</span></div>
+  <div class="p-row"><span class="p-who J">심판</span><span class="p-res">"아딱[왼손], 꽁뜨르 아딱[오른손], 뚜슈[왼손]" → 왼쪽 점수</span></div>
 </div>
 <div class="callout warn"><span class="ct">초보자가 가장 많이 틀리는 판정</span>"내가 먼저 맞췄는데 왜 상대 점수?" — 플러레에서는 <strong>먼저 닿은 것</strong>이 아니라 <strong>먼저 올바르게 공격을 시작한 것</strong>이 기준입니다. 이것이 에페와 가장 다른 점입니다.</div>`
       },
@@ -204,9 +204,9 @@ const RULES = {
 <h3>판정 문장 읽는 법</h3>
 <p>심판은 <strong>"누가 무엇을 했는지"를 순서대로</strong> 말하고 마지막에 결과를 말합니다.</p>
 <div class="phrase">
-  <div class="p-row"><span class="p-who J">심판</span><span>"아딱 오른쪽(오른쪽 공격), 빠라드 리뽀스트 왼쪽(왼쪽이 막고 되받음), <span class="p-res">뚜슈 왼쪽</span>."</span></div>
-  <div class="p-row"><span class="p-who J">심판</span><span>"아딱 왼쪽 노(왼쪽 공격 실패), 리뽀스트 오른쪽, <span class="p-res">뚜슈 오른쪽</span>."</span></div>
-  <div class="p-row"><span class="p-who J">심판</span><span>"린느 오른쪽(오른쪽 린느), 아딱 왼쪽 당 라 린느(왼쪽이 린느 안으로 공격), <span class="p-res">뚜슈 오른쪽</span>."</span></div>
+  <div class="p-row"><span class="p-who J">심판</span><span>"아딱[오른손], 빠라드 리뽀스트[왼손], <span class="p-res">뚜슈[왼손]</span>"</span></div>
+  <div class="p-row"><span class="p-who J">심판</span><span>"아딱[왼손] 노, 리뽀스트[오른손], <span class="p-res">뚜슈[오른손]</span>"</span></div>
+  <div class="p-row"><span class="p-who J">심판</span><span>"린느[오른손], 아딱[왼손] 당 라 린느, <span class="p-res">뚜슈[오른손]</span>"</span></div>
 </div>
 <p>손동작도 함께 씁니다. 공격한 쪽을 가리키며 앞으로 미는 손짓(아딱), 손바닥으로 막는 시늉(빠라드), 두 손을 나란히 드는 동작(시뮬따네) 등입니다. 영상 퀴즈에서 심판의 손을 보면 판정을 알 수 있으니, 이 사이트의 클립은 심판 판정 직전에 끝납니다.</p>`
       },
@@ -218,24 +218,24 @@ const RULES = {
 <h3>판정 문장의 뼈대</h3>
 <div class="flow">
   <div class="step"><span class="n">1</span><div><b>알트!</b> — 동작을 멈춤. 손을 들어 올림.</div></div>
-  <div class="step"><span class="n">2</span><div><b>재구성</b> — 먼저 일어난 동작부터 "누가 + 무엇을". 예: "아딱 오른쪽(오른쪽 공격), 빠라드 리뽀스트 왼쪽(왼쪽이 막고 되받음)". 실패한 동작에는 "노"를 붙임: "아딱 오른쪽 노(공격 실패)".</div></div>
-  <div class="step"><span class="n">3</span><div><b>결론</b> — "뚜슈 왼쪽(왼쪽 유효)" / "빠 드 뚜슈(점수 없음)" / "농 발라블(무효면)" / "시뮬따네".</div></div>
-  <div class="step"><span class="n">4</span><div><b>점수</b> — 점수 쪽 손을 들고 "점수 왼쪽, 원-제로(1:0)". 그리고 "앙 가르드, 프레? 알레!"</div></div>
+  <div class="step"><span class="n">2</span><div><b>재구성</b> — 일어난 동작을 순서대로 말하면서, <strong>동작마다 그 선수 쪽 손을 듭니다.</strong> 예: "아딱[오른손], 빠라드 리뽀스트[왼손]". 실패한 동작에는 "노"를 붙입니다: "아딱[오른손] 노".</div></div>
+  <div class="step"><span class="n">3</span><div><b>결론</b> — "뚜슈[왼손]"(왼손을 들며) / "빠 드 뚜슈"(양손 아래) / "농 발라블"(손바닥 좌우로) / "시뮬따네"(양손 동시).</div></div>
+  <div class="step"><span class="n">4</span><div><b>점수</b> — 점수 쪽 손을 든 채 점수를 부릅니다("원-제로"). 그리고 "앙 가르드, 프레? 알레!"</div></div>
 </div>
 <h3>자주 쓰는 문장 모음</h3>
 <div class="table-wrap"><table>
   <thead><tr><th>상황</th><th>심판 문장</th><th>뜻</th></tr></thead>
   <tbody>
-    <tr><td>단독 공격 성공</td><td>아딱 오른쪽, 뚜슈.</td><td>오른쪽 공격, 유효</td></tr>
-    <tr><td>공격 vs 꽁딱</td><td>아딱 왼쪽, 꽁뜨르 아딱 오른쪽, 뚜슈 왼쪽.</td><td>왼쪽 공격 우선, 오른쪽 반격 무시</td></tr>
-    <tr><td>막고 되받기</td><td>아딱 오른쪽, 빠라드 리뽀스트 왼쪽, 뚜슈 왼쪽.</td><td>왼쪽 리뽀스트 점수</td></tr>
-    <tr><td>말빠레</td><td>아딱 오른쪽, 빠라드 왼쪽 말 빠레, 뚜슈 오른쪽.</td><td>빠라드 불충분, 공격 유효</td></tr>
-    <tr><td>공격 실패 후 반격</td><td>아딱 왼쪽 노, 리뽀스트(아딱) 오른쪽, 뚜슈 오른쪽.</td><td>왼쪽 공격 빗나감</td></tr>
-    <tr><td>린느</td><td>린느 오른쪽, 아딱 왼쪽 당 라 린느, 뚜슈 오른쪽.</td><td>린느 안으로 공격</td></tr>
-    <tr><td>준비 동작 중 공격</td><td>프레파라시옹 왼쪽, 아딱 오른쪽, 뚜슈 오른쪽.</td><td>왼쪽은 준비 동작이었음</td></tr>
-    <tr><td>르미즈</td><td>아딱 오른쪽, 빠라드 왼쪽, 리뽀스트 왼쪽 노(지연), 르미즈 오른쪽, 뚜슈 오른쪽.</td><td>리뽀스트 늦음</td></tr>
+    <tr><td>단독 공격 성공</td><td>아딱<b>[오른손]</b>, 뚜슈<b>[오른손]</b></td><td>오른쪽 공격, 유효</td></tr>
+    <tr><td>공격 vs 꽁딱</td><td>아딱<b>[왼손]</b>, 꽁뜨르 아딱<b>[오른손]</b>, 뚜슈<b>[왼손]</b></td><td>왼쪽 공격 우선, 오른쪽 반격 무시</td></tr>
+    <tr><td>막고 되받기</td><td>아딱<b>[오른손]</b>, 빠라드 리뽀스트<b>[왼손]</b>, 뚜슈<b>[왼손]</b></td><td>왼쪽 리뽀스트 점수</td></tr>
+    <tr><td>말빠레</td><td>아딱<b>[오른손]</b>, 빠라드<b>[왼손]</b> 말 빠레, 뚜슈<b>[오른손]</b></td><td>빠라드 불충분, 공격 유효</td></tr>
+    <tr><td>공격 실패 후 반격</td><td>아딱<b>[왼손]</b> 노, 리뽀스트<b>[오른손]</b>, 뚜슈<b>[오른손]</b></td><td>왼쪽 공격 빗나감</td></tr>
+    <tr><td>린느</td><td>린느<b>[오른손]</b>, 아딱<b>[왼손]</b> 당 라 린느, 뚜슈<b>[오른손]</b></td><td>린느 안으로 공격</td></tr>
+    <tr><td>준비 동작 중 공격</td><td>프레파라시옹<b>[왼손]</b>, 아딱<b>[오른손]</b>, 뚜슈<b>[오른손]</b></td><td>왼쪽은 준비 동작이었음</td></tr>
+    <tr><td>르미즈</td><td>아딱<b>[오른손]</b>, 빠라드<b>[왼손]</b>, 리뽀스트<b>[왼손]</b> 노, 르미즈<b>[오른손]</b>, 뚜슈<b>[오른손]</b></td><td>리뽀스트 늦음</td></tr>
     <tr><td>동시 공격</td><td>시뮬따네, 빠 드 뚜슈.</td><td>양쪽 무효</td></tr>
-    <tr><td>무효면</td><td>아딱 오른쪽, 농 발라블. (알트)</td><td>흰 불, 점수 없음</td></tr>
+    <tr><td>무효면</td><td>아딱<b>[오른손]</b>, 농 발라블</td><td>흰 불, 점수 없음</td></tr>
   </tbody>
 </table></div>
 <h3>손 신호</h3>
@@ -305,7 +305,7 @@ const RULES = {
         title: '린느 (뽀앙 앙 린느)',
         html: `
 <p><span class="term">린느 <span class="fr">Pointe en ligne</span></span>는 <strong>팔을 완전히 펴고 포인트가 상대의 유효면을 계속 위협하는 자세</strong>입니다. 상대가 공격을 <strong>시작하기 전</strong>에 이 자세가 확립되어 있으면, 린느 쪽이 <strong>우선권</strong>을 가집니다.</p>
-<div class="callout key"><span class="ct">규정의 핵심</span>상대가 린느 상태일 때 공격하려면 <strong>먼저 상대의 칼을 쳐내야(바뜨망·프리즈 드 페르)</strong> 합니다. 칼을 쳐내지 않고 그냥 들어가서 둘 다 맞으면 <strong>린느 쪽 점수</strong>입니다. 심판은 <em>"린느 오른쪽, 아딱 왼쪽 당 라 린느(린느 안으로 공격), 뚜슈 오른쪽"</em>라고 판정합니다.</div>
+<div class="callout key"><span class="ct">규정의 핵심</span>상대가 린느 상태일 때 공격하려면 <strong>먼저 상대의 칼을 쳐내야(빠떼·프리즈 드 페르)</strong> 합니다. 칼을 쳐내지 않고 그냥 들어가서 둘 다 맞으면 <strong>린느 쪽 점수</strong>입니다. 심판은 <em>"린느[오른손], 아딱[왼손] 당 라 린느, 뚜슈[오른손]"</em>이라고 판정합니다.</div>
 <h3>린느가 인정되는 조건</h3>
 <ul>
   <li><strong>팔이 완전히 펴져</strong> 있고, 포인트가 <strong>유효면</strong>을 향해야 합니다. 팔이 굽어 있거나 포인트가 하늘·바닥·팔을 향하면 린느가 아닙니다.</li>
@@ -314,14 +314,14 @@ const RULES = {
 </ul>
 <h3>린느를 깨는 방법과 데로브망</h3>
 <ul>
-  <li>공격자가 <strong>바뜨망(치기)이나 프리즈 드 페르(잡기)</strong>로 상대 칼을 공격선 밖으로 밀어내면 공격권이 공격자에게 넘어옵니다. <strong>살짝 스치는 것으로는 부족</strong>합니다.</li>
-  <li>린느 쪽이 칼을 돌려 상대의 바뜨망을 <strong>피하면(데로브망 <span class="fr">Dérobement</span>)</strong> 린느는 그대로 유지되고, 공격자가 그대로 들어가 둘 다 맞으면 린느 쪽 점수입니다.</li>
+  <li>공격자가 <strong>빠떼(치기)이나 프리즈 드 페르(잡기)</strong>로 상대 칼을 공격선 밖으로 밀어내면 공격권이 공격자에게 넘어옵니다. <strong>살짝 스치는 것으로는 부족</strong>합니다.</li>
+  <li>린느 쪽이 칼을 돌려 상대의 빠떼을 <strong>피하면(데로브망 <span class="fr">Dérobement</span>)</strong> 린느는 그대로 유지되고, 공격자가 그대로 들어가 둘 다 맞으면 린느 쪽 점수입니다.</li>
   <li>칼을 쳐낸 뒤 린느 쪽이 <strong>막지 않고 다시 팔을 펴서</strong> 같이 맞으면, 공격자 점수입니다.</li>
 </ul>
 <div class="phrase">
   <div class="p-row"><span class="p-who R">오른쪽</span><span>팔을 펴고 린느 확립, 뒤로 물러나며 유지</span></div>
-  <div class="p-row"><span class="p-who L">왼쪽</span><span>칼을 찾으려 바뜨망 시도 → 오른쪽이 데로브망으로 피함 → 왼쪽 그대로 팡뜨</span></div>
-  <div class="p-row"><span class="p-who J">심판</span><span class="p-res">"린느 오른쪽, 아딱 왼쪽 당 라 린느, 뚜슈 오른쪽." → 오른쪽 점수</span></div>
+  <div class="p-row"><span class="p-who L">왼쪽</span><span>칼을 찾으려 빠떼 시도 → 오른쪽이 데로브망으로 피함 → 왼쪽 그대로 팡뜨</span></div>
+  <div class="p-row"><span class="p-who J">심판</span><span class="p-res">"린느[오른손], 아딱[왼손] 당 라 린느, 뚜슈[오른손]" → 오른쪽 점수</span></div>
 </div>
 <div class="callout warn"><span class="ct">실전 판정의 어려움</span>린느는 심판마다 엄격함이 다릅니다. "팔이 충분히 펴졌는가", "공격 시작보다 먼저였는가"를 두고 판정이 갈립니다. 국제 대회에서는 <strong>팔이 완전히 펴지고 포인트가 안정된 경우</strong>에만 린느를 인정하는 경향이 강합니다. 조금이라도 늦거나 팔이 굽으면 꽁딱으로 봅니다.</div>`
       },
@@ -339,7 +339,7 @@ const RULES = {
 <div class="phrase">
   <div class="p-row"><span class="p-who L">왼쪽</span><span>팔을 굽힌 채 마르셰로 밀고 들어옴 (준비)</span></div>
   <div class="p-row"><span class="p-who R">오른쪽</span><span>왼쪽이 아직 팔을 펴기 전에 팔을 펴며 팡뜨 → 왼쪽도 뒤늦게 팔을 펴 둘 다 맞음</span></div>
-  <div class="p-row"><span class="p-who J">심판</span><span class="p-res">"아딱 오른쪽(오 프레파라시옹), 뚜슈 오른쪽." → 오른쪽 점수</span></div>
+  <div class="p-row"><span class="p-who J">심판</span><span class="p-res">"아딱[오른손] 오 프레파라시옹, 뚜슈[오른손]" → 오른쪽 점수</span></div>
 </div>
 <h3>판정 포인트: 팔이 먼저인가, 발이 먼저인가</h3>
 <ul>
@@ -365,7 +365,7 @@ const RULES = {
   <div class="p-row"><span class="p-who L">왼쪽</span><span>팡뜨 공격 → 오른쪽이 뒤로 빠져 포인트가 짧게 빗나감 (아딱 노)</span></div>
   <div class="p-row"><span class="p-who R">오른쪽</span><span>공격이 끝난 뒤 팔을 펴며 팡뜨 (새 공격)</span></div>
   <div class="p-row"><span class="p-who L">왼쪽</span><span>팡뜨 자세에서 팔을 다시 뻗어 같이 맞음 (르미즈)</span></div>
-  <div class="p-row"><span class="p-who J">심판</span><span class="p-res">"아딱 왼쪽 노, 아딱(리뽀스트) 오른쪽, 뚜슈 오른쪽." → 오른쪽 점수</span></div>
+  <div class="p-row"><span class="p-who J">심판</span><span class="p-res">"아딱[왼손] 노, 아딱(리뽀스트)[오른손], 뚜슈[오른손]" → 오른쪽 점수</span></div>
 </div>
 <div class="callout tip"><span class="ct">흰 불이 켜졌다면</span>무효면(팔·다리·마스크)을 찌르면 흰 불이 켜지고 <strong>동작이 즉시 멈춥니다.</strong> 그 이후의 찌르기는 모두 무효라서, "아딱 노"와는 다릅니다. 예: 공격이 팔을 찔러 흰 불 → 그 뒤 상대의 리뽀스트가 몸통에 들어가도 점수 없음.</div>`
       },
@@ -392,7 +392,7 @@ const RULES = {
   <div class="p-row"><span class="p-who R">오른쪽</span><span>공격 → 왼쪽이 6번(식스트) 빠라드</span></div>
   <div class="p-row"><span class="p-who L">왼쪽</span><span>막고 나서 한 박자 쉬었다가(페인트) 리뽀스트</span></div>
   <div class="p-row"><span class="p-who R">오른쪽</span><span>그 사이 팔을 그대로 두고 다시 밀어 넣어 먼저 도착 (르미즈)</span></div>
-  <div class="p-row"><span class="p-who J">심판</span><span class="p-res">"아딱 오른쪽, 빠라드 왼쪽, 르미즈 오른쪽, 뚜슈 오른쪽." → 오른쪽 점수</span></div>
+  <div class="p-row"><span class="p-who J">심판</span><span class="p-res">"아딱[오른손], 빠라드[왼손], 르미즈[오른손], 뚜슈[오른손]" → 오른쪽 점수</span></div>
 </div>`
       },
       {
@@ -409,7 +409,7 @@ const RULES = {
 <div class="phrase">
   <div class="p-row"><span class="p-who L">왼쪽</span><span>원-투(페인트 후 데가제) 복합 공격 시작 — 페인트 중 팔이 살짝 굽음</span></div>
   <div class="p-row"><span class="p-who R">오른쪽</span><span>페인트 순간 팔을 펴 찌름 → 왼쪽의 마지막 데가제보다 확실히 먼저 도착</span></div>
-  <div class="p-row"><span class="p-who J">심판</span><span class="p-res">"아딱 왼쪽 꽁뽀제, 꽁뜨르 아딱 오른쪽 앙 땅(한 템포 앞), 뚜슈 오른쪽." → 오른쪽 점수</span></div>
+  <div class="p-row"><span class="p-who J">심판</span><span class="p-res">"아딱[왼손] 꽁뽀제, 꽁뜨르 아딱[오른손] 앙 땅, 뚜슈[오른손]" → 오른쪽 점수</span></div>
 </div>`
       },
       {
@@ -418,13 +418,13 @@ const RULES = {
           { id: 'zaNL7YqzLR0', title: 'Blade Contact: Beginner Foil Refereeing Exam 3', note: '칼 접촉 판정 시험' },
           { id: 'x2opCqqtG1U', title: 'Foil - Beat Attack vs Parry Riposte', note: '' }
         ],
-        title: '칼 접촉: 바뜨망인가, 빠라드인가',
+        title: '칼 접촉: 빠떼인가, 빠라드인가',
         html: `
 <p>양쪽 불이 켜지기 직전에 <strong>칼이 부딪혔다면</strong> 판정은 "그 접촉이 <strong>누구의 동작</strong>이었나"로 갈립니다.</p>
 <div class="table-wrap"><table>
   <thead><tr><th>접촉의 주체</th><th>이름</th><th>결과</th></tr></thead>
   <tbody>
-    <tr><td>공격하는 쪽이 상대 칼을 치고 들어감</td><td><strong>바뜨망 / 프리즈 드 페르</strong></td><td>공격자 공격권 유지 (특히 상대가 린느일 때 필수)</td></tr>
+    <tr><td>공격하는 쪽이 상대 칼을 치고 들어감</td><td><strong>빠떼 / 프리즈 드 페르</strong></td><td>공격자 공격권 유지 (특히 상대가 린느일 때 필수)</td></tr>
     <tr><td>공격받는 쪽이 상대 칼을 막아냄</td><td><strong>빠라드</strong></td><td>공격권이 막은 쪽으로 이동 → 즉시 리뽀스트 우선</td></tr>
     <tr><td>공격자가 상대 칼을 찾았지만 실패 (상대가 피함)</td><td><strong>데로브망</strong></td><td>공격권이 피한 쪽(린느)으로 넘어감</td></tr>
     <tr><td>서로 칼이 스치기만 함</td><td>접촉 아님</td><td>공격권 변동 없음 — 원래 공격이 계속</td></tr>
@@ -432,7 +432,7 @@ const RULES = {
 </table></div>
 <ul>
   <li>판단 기준은 <strong>누가 칼을 움직여서 상대 칼을 찾았는가</strong>, 그리고 <strong>그 접촉 뒤 누구 칼이 공격선에서 밀려났는가</strong>입니다.</li>
-  <li>공격자가 <strong>바뜨망을 했는데 상대 칼이 밀리지 않은 채</strong> 상대가 바로 찌르면, 그것은 상대의 리뽀스트가 아니라 여전히 꽁딱입니다(공격은 계속 유효). 반대로 상대가 공격자의 바뜨망을 <strong>받아 막으며(빠라드처럼)</strong> 되받았다면 리뽀스트입니다. 이 구분이 상급 판정에서 가장 어렵습니다.</li>
+  <li>공격자가 <strong>빠떼을 했는데 상대 칼이 밀리지 않은 채</strong> 상대가 바로 찌르면, 그것은 상대의 리뽀스트가 아니라 여전히 꽁딱입니다(공격은 계속 유효). 반대로 상대가 공격자의 빠떼을 <strong>받아 막으며(빠라드처럼)</strong> 되받았다면 리뽀스트입니다. 이 구분이 상급 판정에서 가장 어렵습니다.</li>
   <li>뒤로 물러나면서 <strong>상대 칼을 톡톡 치는 것</strong>은 흔히 방어적 준비 동작으로 보며, 이때 상대가 팔을 펴고 들어오면 상대 공격입니다.</li>
 </ul>`
       },
@@ -586,7 +586,7 @@ const RULES = {
 <div class="flow">
   <div class="step"><span class="n">1</span><div><b>공격 시작 전에 린느가 있었나?</b> 있었다면 공격자가 칼을 확실히 쳐냈는가? 아니면 린느 점수.</div></div>
   <div class="step"><span class="n">2</span><div><b>먼저 전진한 쪽의 팔이 펴져 있었나?</b> 굽은 채 전진(준비) 중에 상대가 팔을 폈다면 상대 공격.</div></div>
-  <div class="step"><span class="n">3</span><div><b>칼 접촉이 있었다면 누가 찾았나?</b> 공격자의 바뜨망이면 공격 유지, 방어자의 빠라드면 리뽀스트 우선.</div></div>
+  <div class="step"><span class="n">3</span><div><b>칼 접촉이 있었다면 누가 찾았나?</b> 공격자의 빠떼이면 공격 유지, 방어자의 빠라드면 리뽀스트 우선.</div></div>
   <div class="step"><span class="n">4</span><div><b>공격이 끝났나(팡뜨 착지·빗나감)?</b> 끝났다면 그 뒤의 찌르기는 상대의 새 공격/리뽀스트가 우선. 단 상대가 즉시였을 때만.</div></div>
   <div class="step"><span class="n">5</span><div><b>리뽀스트가 즉시였나?</b> 지연·팔 회수·페인트가 있었다면 르미즈 점수.</div></div>
   <div class="step"><span class="n">6</span><div><b>정말 같은 순간이었나?</b> 두 팔꿈치가 동시에 펴졌다면 시뮬따네. 아니면 늦은 쪽이 꽁딱.</div></div>
@@ -604,7 +604,7 @@ const RULES = {
     <tr><td>아딱 노 / 빠</td><td>Attaque non / pas</td><td>공격 실패(빗나감·짧음)</td></tr>
     <tr><td>아딱 오 프레파라시옹</td><td>Attaque sur la préparation</td><td>상대 준비 동작 중의 공격</td></tr>
     <tr><td>아딱 꽁뽀제</td><td>Attaque composée</td><td>복합 공격(페인트 포함)</td></tr>
-    <tr><td>바뜨망</td><td>Battement</td><td>상대 칼 치기</td></tr>
+    <tr><td>빠떼</td><td>Battement</td><td>상대 칼 치기</td></tr>
     <tr><td>빠라드</td><td>Parade</td><td>막기 (4번 꺄르트, 6번 식스트, 7번 셉띰, 8번 옥따브 등)</td></tr>
     <tr><td>리뽀스트</td><td>Riposte</td><td>막은 뒤 되받아 찌르기</td></tr>
     <tr><td>꽁뜨르 리뽀스트</td><td>Contre-riposte</td><td>리뽀스트를 막고 되받기</td></tr>
