@@ -214,6 +214,7 @@ const RULES = {
         id: 'signals',
         title: '심판처럼 말하기 — 판정 문장과 손 신호',
         html: `
+<div class="callout key"><span class="ct">이 사이트의 표기 방법</span>심판은 <strong>"오른쪽·왼쪽"이라고 말하지 않습니다.</strong> 동작 이름만 말하면서 <strong>그 선수 쪽 손을 듭니다.</strong> 그래서 이 사이트에서는 <code>아딱<b>[오른손]</b></code> 처럼, 말한 단어 뒤에 <strong>어느 손을 들었는지</strong>를 붙여 적습니다. <code>[오른손]</code> = 심판 기준 오른쪽 선수, <code>[왼손]</code> = 왼쪽 선수입니다.</div>
 <p>심판은 "알트!" 뒤에 <strong>① 무슨 일이 있었는지 순서대로 말하고 → ② 결론(뚜슈/무효) → ③ 점수</strong>를 선언합니다. 말과 손 신호를 동시에 씁니다. 동작 이름은 프랑스어 용어(아딱, 빠라드…)를 그대로 쓰고, 방향은 오른쪽/왼쪽으로 말합니다. (국제 대회에서는 드와뜨/고슈)</p>
 <h3>판정 문장의 뼈대</h3>
 <div class="flow">
@@ -251,11 +252,11 @@ const RULES = {
   <tbody>
     <tr><td><strong>앙 가르드 / 프레? / 알레!</strong></td><td>양팔을 낮게 벌림 → 손바닥 위로 → 양손을 안쪽으로 모음</td><td>준비 / 준비됐나 / 시작</td></tr>
     <tr><td><strong>알트</strong></td><td>한 손을 위로 듦</td><td>경기 중단</td></tr>
-    <tr><td><strong>아딱 · 꽁뜨르 아딱 · 르미즈</strong></td><td>공격한 선수 쪽 팔을 상대 방향으로 <strong>수평으로 쭉 폄</strong></td><td>세 동작 모두 같은 신호. 말로 구분</td></tr>
+    <tr><td><strong>아딱 · 꽁뜨르 아딱 · 르미즈</strong><br><small class="fr">아딱[오른손]</small></td><td>공격한 선수 쪽 팔을 상대 방향으로 <strong>수평으로 쭉 폄</strong></td><td>세 동작 모두 같은 신호. 말로 구분</td></tr>
     <tr><td><strong>린느</strong></td><td>린느 선수 쪽 팔을 상대 방향으로 <strong>곧게 뻗어 고정</strong></td><td>포인트 인 라인 인정</td></tr>
-    <tr><td><strong>빠라드 · 꽁뜨르 땅</strong></td><td>막은 선수 쪽 팔을 굽혀 <strong>손을 세워 막는 시늉</strong></td><td>막기 인정</td></tr>
+    <tr><td><strong>빠라드 · 꽁뜨르 땅</strong><br><small class="fr">빠라드[왼손]</small></td><td>막은 선수 쪽 팔을 굽혀 <strong>손을 세워 막는 시늉</strong></td><td>막기 인정</td></tr>
     <tr><td><strong>리뽀스트</strong></td><td>빠라드 신호 뒤 같은 팔을 상대 방향으로 폄(아딱 신호)</td><td>되받기</td></tr>
-    <tr><td><strong>뚜슈</strong></td><td>점수 얻은 선수 쪽 손을 <strong>위로 듦</strong></td><td>유효, 점수</td></tr>
+    <tr><td><strong>뚜슈</strong><br><small class="fr">뚜슈[오른손]</small></td><td>점수 얻은 선수 쪽 손을 <strong>위로 듦</strong></td><td>유효, 점수</td></tr>
     <tr><td><strong>상대에게 점수</strong></td><td>맞은(진) 선수 쪽 팔을 뻗어 가리킴</td><td>그 선수에게 불리한 판정</td></tr>
     <tr><td><strong>농 발라블</strong></td><td>손바닥을 아래로 하고 좌우로 흔듦</td><td>무효면(흰 불)</td></tr>
     <tr><td><strong>노</strong></td><td>손을 흔들어 지움</td><td>공격이 짧거나 빗나감</td></tr>
@@ -595,11 +596,25 @@ const RULES = {
   <li>경기 중 통신 장비 소지, 상대·심판·관중에 대한 <strong>인사 거부</strong>, 도핑</li>
 </ul>
 
-<h3>비전투(논콤바티비티) — P 카드</h3>
-<p>양 선수가 1분 동안 점수 없이 소극적으로만 경기하면 <span class="term">논콤바티비티</span>가 선언됩니다. 개인전에서는 남은 시간을 1분으로 줄이고 마지막 피리어드로 넘어가며, 반복되면 <strong>P 카드</strong>(P-옐로 → P-레드 → P-블랙)가 주어집니다. P 카드는 일반 카드와 합산되지 않습니다.</p>
+<h3>비전투(논콤바티비티) — P 카드 <span class="fr">2026-27 시즌 개정</span></h3>
+<p><strong>1분 동안 점수가 나지 않으면</strong> 심판이 <span class="term">논콤바티비티</span>를 선언합니다. 예전에는 경고 성격의 <strong>P-옐로</strong>가 먼저 있었지만, FIE 2025 총회 결정으로 <strong>P-옐로가 없어지고 처음부터 P-레드</strong>입니다.</p>
+<div class="table-wrap"><table>
+  <thead><tr><th>순서</th><th>카드</th><th>효과</th></tr></thead>
+  <tbody>
+    <tr><td>1분 경과 — 첫 번째</td><td><strong>🟥 P-레드</strong></td><td><strong>양쪽 선수 모두에게 1점씩 실점</strong> (두 선수 점수가 동시에 1점씩 올라감)</td></tr>
+    <tr><td>다시 1분 경과</td><td><strong>⬛ P-블랙</strong></td><td>경기 <strong>즉시 종료</strong>. 그 시점 점수가 높은 쪽이 승리, 동점이면 시드 순</td></tr>
+  </tbody>
+</table></div>
+<ul>
+  <li>1분 타이머는 <strong>득점·무효면 득점·취소된 득점·벌점, 그리고 각 피리어드 시작</strong>마다 다시 시작합니다.</li>
+  <li>P 카드는 <strong>점수와 무관하게 두 선수에게 동시에</strong> 주어집니다. "지고 있는 쪽만 준다"는 예전 방식은 2023년에 없어졌습니다.</li>
+  <li>P 카드는 일반 카드(옐로·레드·블랙)와 <strong>합산되지 않습니다</strong>.</li>
+  <li>개인전 14-14(10점제는 9-9), 단체전 44-44에서는 P 카드를 주지 않습니다.</li>
+</ul>
+<div class="callout warn"><span class="ct">동호인에게 의미</span>거리만 재며 버티는 시간이 길어지면 <strong>바로 실점</strong>합니다. 예전처럼 경고 한 번을 기대할 수 없으니, 1분 안에 한 번은 들어가거나 상대를 끌어내야 합니다.</div>
 
 <div class="callout tip"><span class="ct">동호인이 실제로 조심할 것</span>① 점수를 확인하려고 <strong>"알트" 전에 마스크를 벗는 것</strong>, ② 몸으로 밀고 들어가는 습관, ③ 반사적으로 <strong>손으로 상대 칼을 쳐내는 것</strong>(이건 바로 레드입니다). 셋 다 시합에서 실제로 자주 나오는 카드입니다.</div>
-<p style="font-size:13px;color:var(--muted)">정리 기준: FIE 기술규정 t.170 반칙·벌칙표 (USA Fencing 공식 요약본 2022.8 기준). 세부 조항은 대회 규정을 따릅니다.</p>`
+<p style="font-size:13px;color:var(--muted)">정리 기준: FIE 기술규정 t.170 반칙·벌칙표 + FIE 2025 총회 P카드 개정(2026-27 시즌 시행, USA Fencing 2026.10.1 적용). 세부 조항은 대회 규정을 따릅니다.</p>`
       },
       {
         id: 'adv-checklist',
