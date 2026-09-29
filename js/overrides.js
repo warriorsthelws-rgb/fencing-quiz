@@ -1,8 +1,12 @@
 /* 사이트의 '편집 모드'에서 저장한 수정본. 직접 고쳐도 됩니다.
    rules.<basic|advanced>.<섹션id> = 섹션 본문 HTML (원본 rules-data.js 대신 사용)
-   questions.<문제id> = { level: 1|2|3, explain: "이 문제 전용 해설", comment: "고칠 점 메모", done: true(반영됨) }   (questions.js 재생성해도 유지됨) */
+   questions.<문제id> = { level: 1|2|3, explain: "이 문제 전용 해설" }   (questions.js 재생성해도 유지됨) */
 const OVERRIDES = {
- "rules": {},
+ "rules": {
+  "basic": {
+   "weapons": "\n<p>펜싱은 <span class=\"term\">플러레(Fleuret)</span>, <span class=\"term\">에페(Épée)</span>, <span class=\"term\">사브르(Sabre)</span> 세 종목으로 나뉩니다. 종목마다 <strong>유효면(찌를 수 있는 부위)</strong>과 <strong>공격권(우선권) 규칙의 유무</strong>가 다릅니다.</p>\n<div class=\"table-wrap\"><table>\n  <thead><tr><th>종목</th><th>득점 방식</th><th>유효면</th><th>공격권</th></tr></thead>\n  <tbody>\n    <tr><td><strong>플러레</strong></td><td>찌르기(포인트)만</td><td>몸통 (팔·다리·머리 제외)</td><td><strong>있음</strong></td></tr>\n    <tr><td>에페</td><td>찌르기만</td><td>전신</td><td>없음 (먼저 찌른 쪽 득점, 동시면 둘 다 득점)</td></tr>\n    <tr><td>사브르</td><td>찌르기 + 베기</td><td>허리 위 (머리·팔 포함)</td><td>있음</td></tr>\n  </tbody>\n</table></div>\n<p>이 사이트는 우선 <strong>플러레</strong>만 다룹니다. 플러레와 사브르는 \"누가 먼저 올바르게 공격했는가\"를 심판이 판단하는 <strong>공격권(Right of Way, 우선권)</strong> 종목이라 판정이 어렵고, 그래서 배우는 재미도 있습니다.</p>"
+  }
+ },
  "questions": {
   "qr2017": {
    "level": 2,
