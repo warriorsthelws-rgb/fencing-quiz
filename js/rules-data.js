@@ -314,8 +314,8 @@ const RULES = {
 </ul>
 <h3>린느를 깨는 방법과 데로브망</h3>
 <ul>
-  <li>공격자가 <strong>빠떼(치기)이나 프리즈 드 페르(잡기)</strong>로 상대 칼을 공격선 밖으로 밀어내면 공격권이 공격자에게 넘어옵니다. <strong>살짝 스치는 것으로는 부족</strong>합니다.</li>
-  <li>린느 쪽이 칼을 돌려 상대의 빠떼을 <strong>피하면(데로브망 <span class="fr">Dérobement</span>)</strong> 린느는 그대로 유지되고, 공격자가 그대로 들어가 둘 다 맞으면 린느 쪽 점수입니다.</li>
+  <li>공격자가 <strong>빠떼(치기)나 프리즈 드 페르(잡기)</strong>로 상대 칼을 공격선 밖으로 밀어내면 공격권이 공격자에게 넘어옵니다. <strong>살짝 스치는 것으로는 부족</strong>하고, 아예 칼을 못 찾으면 <strong>서치 노</strong>가 되어 린느가 그대로 살아 있습니다.</li>
+  <li>린느 쪽이 칼을 돌려 상대의 빠떼를 <strong>피하면(데로브망 <span class="fr">Dérobement</span>)</strong> 린느는 그대로 유지되고, 공격자가 그대로 들어가 둘 다 맞으면 린느 쪽 점수입니다.</li>
   <li>칼을 쳐낸 뒤 린느 쪽이 <strong>막지 않고 다시 팔을 펴서</strong> 같이 맞으면, 공격자 점수입니다.</li>
 </ul>
 <div class="phrase">
@@ -432,9 +432,34 @@ const RULES = {
 </table></div>
 <ul>
   <li>판단 기준은 <strong>누가 칼을 움직여서 상대 칼을 찾았는가</strong>, 그리고 <strong>그 접촉 뒤 누구 칼이 공격선에서 밀려났는가</strong>입니다.</li>
-  <li>공격자가 <strong>빠떼을 했는데 상대 칼이 밀리지 않은 채</strong> 상대가 바로 찌르면, 그것은 상대의 리뽀스트가 아니라 여전히 꽁딱입니다(공격은 계속 유효). 반대로 상대가 공격자의 빠떼을 <strong>받아 막으며(빠라드처럼)</strong> 되받았다면 리뽀스트입니다. 이 구분이 상급 판정에서 가장 어렵습니다.</li>
+  <li>공격자가 <strong>빠떼를 했는데 상대 칼이 밀리지 않은 채</strong> 상대가 바로 찌르면, 그것은 상대의 리뽀스트가 아니라 여전히 꽁딱입니다(공격은 계속 유효). 반대로 상대가 공격자의 빠떼를 <strong>받아 막으며(빠라드처럼)</strong> 되받았다면 리뽀스트입니다. 이 구분이 상급 판정에서 가장 어렵습니다.</li>
   <li>뒤로 물러나면서 <strong>상대 칼을 톡톡 치는 것</strong>은 흔히 방어적 준비 동작으로 보며, 이때 상대가 팔을 펴고 들어오면 상대 공격입니다.</li>
 </ul>`
+      },
+      {
+        id: 'search-non',
+        title: '서치 노 — 칼을 찾다 헛돈 공격',
+        html: `
+<p><span class="term">서치 노 <span class="fr">Cherche non</span></span>는 공격하는 쪽이 <strong>상대 칼을 치거나(빠떼) 잡으려(프리즈 드 페르) 했는데 칼을 찾지 못하고 허공을 친 것</strong>을 말합니다. 심판은 그 손을 들며 "서치 노"라고 선언하고, 그 공격이 <strong>칼을 제압하지 못했다</strong>는 뜻으로 씁니다.</p>
+<div class="callout key"><span class="ct">가장 중요한 경우 — 린느</span>상대가 <strong>린느</strong>인 상태에서 공격하려면 <strong>반드시 그 칼을 쳐내야</strong> 합니다. 치려다 빗나가면(서치 노) 린느는 그대로 살아 있으므로, 둘 다 맞아도 <strong>린느 쪽 점수</strong>입니다. 심판: <em>"린느[오른손], 서치 노[왼손], 뚜슈[오른손]"</em></div>
+<h3>서치 노가 나오는 세 가지 장면</h3>
+<div class="flow">
+  <div class="step"><span class="n">1</span><div><b>상대가 칼을 빼서 피함(데로브망)</b> — 린느 쪽이 손목만 돌려 빠떼를 피하면 칼을 못 찾습니다. 린느 우선권 유지.</div></div>
+  <div class="step"><span class="n">2</span><div><b>거리·타이밍이 안 맞아 헛침</b> — 상대 칼이 아직 멀리 있는데 미리 쳐서 허공만 갈랐다면 칼을 제압한 것이 아닙니다.</div></div>
+  <div class="step"><span class="n">3</span><div><b>팔을 굽힌 채 칼만 찾고 있었다</b> — 이건 공격이 아니라 <b>준비 동작(프레파라시옹)</b>입니다. 그 사이 상대가 팔을 펴고 들어오면 상대의 <b>아딱 오 프레파라시옹</b>입니다.</div></div>
+</div>
+<h3>서치 노라고 해서 공격이 항상 죽는 것은 아니다</h3>
+<ul>
+  <li>상대가 <strong>린느가 아니라면</strong>, 빠떼가 빗나갔더라도 <strong>팔을 펴며 포인트로 유효면을 계속 위협하고 있었다면</strong> 공격 자체는 살아 있을 수 있습니다. 이때 심판은 "서치 노"를 붙이더라도 결론은 <em>"아딱[왼손], 뚜슈[왼손]"</em>이 됩니다.</li>
+  <li>반대로 <strong>칼을 찾느라 팔이 굽었거나 포인트가 유효면에서 벗어났다면</strong> 그 순간 위협이 끊긴 것이므로 공격권을 잃습니다.</li>
+  <li>즉 판정의 갈림길은 "칼을 못 찾았다"가 아니라 <strong>"칼을 못 찾은 뒤에도 팔과 포인트가 살아 있었나"</strong>입니다.</li>
+</ul>
+<div class="phrase">
+  <div class="p-row"><span class="p-who R">오른쪽</span><span>팔을 펴고 린느 확립</span></div>
+  <div class="p-row"><span class="p-who L">왼쪽</span><span>빠떼로 칼을 치려 했으나 오른쪽이 칼을 빼 피함(데로브망) → 그대로 팡뜨</span></div>
+  <div class="p-row"><span class="p-who J">심판</span><span class="p-res">"린느[오른손], 서치 노[왼손], 뚜슈[오른손]" → 오른쪽 점수</span></div>
+</div>
+<div class="callout tip"><span class="ct">0.5배속으로 볼 것</span>공격자의 칼이 <strong>상대 칼에 실제로 닿았는지</strong>, 닿았다면 상대 포인트가 유효면에서 <strong>벗어났는지</strong>. 스치기만 했거나 허공을 쳤다면 서치 노입니다.</div>`
       },
       {
         id: 'simul-adv',
@@ -586,7 +611,7 @@ const RULES = {
 <div class="flow">
   <div class="step"><span class="n">1</span><div><b>공격 시작 전에 린느가 있었나?</b> 있었다면 공격자가 칼을 확실히 쳐냈는가? 아니면 린느 점수.</div></div>
   <div class="step"><span class="n">2</span><div><b>먼저 전진한 쪽의 팔이 펴져 있었나?</b> 굽은 채 전진(준비) 중에 상대가 팔을 폈다면 상대 공격.</div></div>
-  <div class="step"><span class="n">3</span><div><b>칼 접촉이 있었다면 누가 찾았나?</b> 공격자의 빠떼이면 공격 유지, 방어자의 빠라드면 리뽀스트 우선.</div></div>
+  <div class="step"><span class="n">3</span><div><b>칼 접촉이 있었다면 누가 찾았나?</b> 공격자의 빠떼면 공격 유지, 방어자의 빠라드면 리뽀스트 우선.</div></div>
   <div class="step"><span class="n">4</span><div><b>공격이 끝났나(팡뜨 착지·빗나감)?</b> 끝났다면 그 뒤의 찌르기는 상대의 새 공격/리뽀스트가 우선. 단 상대가 즉시였을 때만.</div></div>
   <div class="step"><span class="n">5</span><div><b>리뽀스트가 즉시였나?</b> 지연·팔 회수·페인트가 있었다면 르미즈 점수.</div></div>
   <div class="step"><span class="n">6</span><div><b>정말 같은 순간이었나?</b> 두 팔꿈치가 동시에 펴졌다면 시뮬따네. 아니면 늦은 쪽이 꽁딱.</div></div>
@@ -612,6 +637,7 @@ const RULES = {
     <tr><td>꽁뜨르 땅</td><td>Contre-temps</td><td>상대의 꽁딱을 막고 되받기</td></tr>
     <tr><td>린느 / 뽀앙 앙 린느</td><td>Pointe en ligne</td><td>팔을 펴고 포인트를 겨눈 우선권 자세</td></tr>
     <tr><td>데로브망</td><td>Dérobement</td><td>린느 상태에서 상대의 칼 찾기를 피함</td></tr>
+    <tr><td>서치 노</td><td>Cherche non</td><td>칼을 치거나 잡으려다 찾지 못하고 헛돈 것</td></tr>
     <tr><td>프리즈 드 페르</td><td>Prise de fer</td><td>상대 칼을 잡아 옮기기</td></tr>
     <tr><td>르미즈</td><td>Remise</td><td>같은 선에서 다시 밀어 넣기</td></tr>
     <tr><td>르두블망</td><td>Redoublement</td><td>다른 선/팔 회수 후 다시 찌르기</td></tr>
