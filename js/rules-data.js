@@ -472,16 +472,109 @@ const RULES = {
         videos: [
           { id: '11p4BKtdPr4', title: 'Fencers Getting Carded Compilation', note: '카드 사례 모음' }
         ],
-        title: '플레슈·꼬르 아 꼬르·경계선·카드',
+        title: '플레슈와 꼬르 아 꼬르',
         html: `
 <ul>
   <li><span class="term">플레슈 <span class="fr">Flèche</span></span>: 달려 들어가는 공격. 플러레에서 허용되며(사브르는 금지) 찌르기가 끝나면 공격도 끝납니다. 상대를 <strong>지나친 뒤</strong>에는 찌를 수 없고, 상대는 즉시 리뽀스트할 수 있습니다.</li>
-  <li><span class="term">꼬르 아 꼬르 <span class="fr">Corps à corps</span></span>: 몸이 부딪힌 상태. 심판이 "알트"로 멈춥니다. 플러레에서는 <strong>고의로 몸을 부딪히거나 상대를 미는 행위</strong>가 경고(옐로 카드) 대상입니다. 꼬르 아 꼬르 직전에 들어온 유효 찌르기는 인정됩니다.</li>
-  <li><span class="term">피스트 뒤 경계선</span>: 두 발이 모두 뒤 경계선을 완전히 넘으면 <strong>상대 점수</strong>입니다. 옆선을 한 발이라도 넘으면 알트, 넘은 선수가 <strong>1m 뒤로 물러난 위치</strong>에서 재개합니다(패널티). 넘은 뒤에 들어온 찌르기는 무효.</li>
-  <li><span class="term">등 돌리기, 무효면 가리기</span>: 상대에게 등을 보이거나(경고), 무기 잡지 않은 손·팔로 유효면을 가리는 것(경고, 반복 시 상대 점수)은 반칙입니다.</li>
-  <li><span class="term">카드</span>: 옐로(경고) → 같은 경기에서 다시 반칙 시 레드(상대 1점). 블랙 카드는 퇴장. 준비 자세 전 출발(알레 전 출발)도 경고 대상입니다.</li>
+  <li><span class="term">꼬르 아 꼬르 <span class="fr">Corps à corps</span></span>: 몸이 부딪힌 상태. 심판이 "알트"로 멈춥니다. 꼬르 아 꼬르 직전에 들어온 유효 찌르기는 인정됩니다. <strong>찌르기를 피하려고 일부러 몸을 부딪히면 반칙(1군)</strong>이고, 플레슈로 달려들다 자연스럽게 부딪힌 것은 보통 알트로 끝납니다.</li>
 </ul>
-<p>퀴즈에서는 공격권 판정에 집중하지만, 실제 경기 영상에서 "알트" 뒤 카드가 나오는 장면이 있을 수 있습니다.</p>`
+<p>경계선을 넘는 경우와 카드는 다음 두 섹션에서 따로 다룹니다.</p>`
+      },
+      {
+        id: 'piste',
+        title: '라인아웃 — 피스트 경계선을 넘었을 때',
+        html: `
+<p>경기장(<span class="term">피스트 <span class="fr">Piste</span></span>)은 <strong>길이 14m, 폭 1.5~2m</strong>이고 양 끝에 1.5~2m의 연장 구역이 있습니다. 바닥에는 중앙선, 양쪽 <strong>온 가르드 선</strong>(중앙에서 2m), 그리고 뒤 경계선에서 2m 앞의 <strong>경고선</strong>이 그어져 있습니다. 경고선은 "뒤가 2m 남았다"는 것을 물러나는 선수가 알 수 있게 하는 표시입니다.</p>
+
+<div class="piste-fig">
+<svg viewBox="0 0 600 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="펜싱 피스트 규격">
+  <rect x="60" y="40" width="480" height="60" fill="none" stroke="currentColor" stroke-width="2"/>
+  <rect x="20" y="40" width="40" height="60" fill="currentColor" opacity=".12"/>
+  <rect x="540" y="40" width="40" height="60" fill="currentColor" opacity=".12"/>
+  <line x1="300" y1="40" x2="300" y2="100" stroke="currentColor" stroke-width="2"/>
+  <line x1="232" y1="40" x2="232" y2="100" stroke="currentColor" stroke-width="2"/>
+  <line x1="368" y1="40" x2="368" y2="100" stroke="currentColor" stroke-width="2"/>
+  <line x1="128" y1="40" x2="128" y2="100" stroke="#e63946" stroke-width="2" stroke-dasharray="5 4"/>
+  <line x1="472" y1="40" x2="472" y2="100" stroke="#e63946" stroke-width="2" stroke-dasharray="5 4"/>
+  <text x="300" y="118" text-anchor="middle" font-size="11" fill="currentColor">중앙선</text>
+  <text x="232" y="32" text-anchor="middle" font-size="11" fill="currentColor">온 가르드 선 (중앙에서 2m)</text>
+  <text x="128" y="132" text-anchor="middle" font-size="11" fill="#e63946">경고선 (뒤에서 2m)</text>
+  <text x="472" y="132" text-anchor="middle" font-size="11" fill="#e63946">경고선</text>
+  <text x="60" y="32" text-anchor="middle" font-size="11" fill="currentColor">뒤 경계선</text>
+  <text x="540" y="32" text-anchor="middle" font-size="11" fill="currentColor">뒤 경계선</text>
+  <text x="40" y="118" text-anchor="middle" font-size="10" fill="currentColor">연장</text>
+  <text x="560" y="118" text-anchor="middle" font-size="10" fill="currentColor">연장</text>
+  <text x="300" y="14" text-anchor="middle" font-size="12" font-weight="bold" fill="currentColor">길이 14m · 폭 1.5~2m</text>
+</svg>
+</div>
+<h3>뒤 경계선 — 넘으면 상대 점수</h3>
+<div class="callout key"><span class="ct">규정</span><strong>두 발이 모두</strong> 뒤 경계선을 완전히 넘어가면 그 선수에게 <strong>실점</strong>이 선언됩니다(상대 1점). 한 발만 넘은 상태는 반칙이 아니며 계속 펜싱할 수 있습니다.</div>
+<ul>
+  <li>피하려고 계속 물러나기만 하면 결국 점수를 잃는 구조라, <strong>뒤가 좁아지면 먼저 공격하거나 막아야</strong> 합니다.</li>
+  <li>심판은 보통 물러나는 선수가 경고선 근처에 오면 "뒤 2m" 같은 말로 알려 줍니다. 자기 위치는 스스로 감각으로 알아 두는 것이 안전합니다.</li>
+</ul>
+
+<h3>옆선(측면) — 1m 뒤로 물러나 재개</h3>
+<div class="callout key"><span class="ct">규정</span>한 발이라도 옆선을 넘으면 심판이 <strong>"알트"</strong>로 멈추고, 넘은 선수를 <strong>나간 지점에서 1m 뒤</strong>로 물린 뒤 재개합니다. <strong>공격 도중</strong> 나갔다면 공격을 시작했던 위치로 돌아간 뒤 거기서 다시 1m를 물러납니다.</div>
+<ul>
+  <li>나간 선수가 그 과정에서 넣은 찌르기는 <strong>무효</strong>입니다. 반대로 나가기 전에 상대가 넣은 찌르기는 유효합니다.</li>
+  <li>1m를 물러난 결과 뒤 경계선을 넘게 되면 그대로 <strong>실점</strong>입니다.</li>
+  <li>밀려서, 또는 어쩔 수 없이 나간 경우에는 벌점 없이 위치만 조정합니다.</li>
+</ul>
+<div class="callout warn"><span class="ct">카드까지 가는 경우</span>찌르기를 <strong>피하려고</strong> 옆선 밖으로 나가면(특히 플레슈로 달려 나가며 두 발이 모두 나간 경우) 위치 조정으로 끝나지 않고 <strong>1군 반칙</strong>으로 카드를 받습니다(첫 번째는 옐로, 이미 카드가 있으면 레드). 다음 섹션을 보세요.</div>`
+      },
+      {
+        id: 'cards',
+        title: '반칙과 카드 — 경고, 레드, 블랙',
+        html: `
+<p>펜싱의 반칙은 <strong>카드 3장</strong>으로 처리되고, 반칙의 종류(군)에 따라 처음부터 어떤 카드를 받는지가 정해져 있습니다.</p>
+<div class="table-wrap"><table>
+  <thead><tr><th>카드</th><th>효과</th><th>유효 범위</th></tr></thead>
+  <tbody>
+    <tr><td><strong>🟨 옐로 카드 (경고)</strong></td><td>점수 변화 없음. 경고만</td><td>그 경기(부트) 전체. 단체전은 매치 전체</td></tr>
+    <tr><td><strong>🟥 레드 카드</strong></td><td><strong>상대에게 1점</strong></td><td>—</td></tr>
+    <tr><td><strong>⬛ 블랙 카드</strong></td><td>해당 대회에서 <strong>실격·퇴장</strong></td><td>—</td></tr>
+  </tbody>
+</table></div>
+<div class="callout key"><span class="ct">핵심</span><strong>1군 반칙</strong>은 첫 번째가 옐로(경고), 같은 경기에서 <strong>다시 반칙하면 레드(상대 1점)</strong>입니다. 한 번 레드를 받은 뒤에는 1군 반칙을 할 때마다 계속 레드입니다. <strong>2군 반칙</strong>은 경고 없이 <strong>처음부터 레드</strong>입니다.</div>
+
+<h3>1군 — 옐로 → 레드 (동호인이 가장 자주 만나는 것)</h3>
+<ul>
+  <li><strong>찌르기를 피하려는 꼬르 아 꼬르</strong>(몸으로 부딪히기) ✱</li>
+  <li><strong>상대에게 등 돌리기</strong> ✱</li>
+  <li><strong>유효면 가리기·바꾸기</strong> — 무기를 잡지 않은 팔이나 어깨로 몸통을 가리는 행위 ✱</li>
+  <li><strong>찌르기를 피하려고 옆선 밖으로 나가기</strong> ✱</li>
+  <li><strong>심판 허락 없이 피스트 이탈</strong></li>
+  <li><strong>"알트" 전에 마스크 벗기</strong>, 피스트에서 옷 벗기, 밀치기·난폭한 펜싱 ✱</li>
+  <li><strong>경기 지연</strong>(정비·준비를 이유로 시간 끌기)</li>
+  <li><strong>장비 불량</strong> — 작동하지 않거나 규격에 맞지 않는 복장·무기, 예비 무기나 보디코드 미지참</li>
+  <li>칼을 피스트에 대고 펴기, 칼끝을 피스트에 구부리거나 끌기</li>
+  <li><strong>심판 지시 불복종</strong>, 사실 판단에 대한 부당한 항의</li>
+  <li>(사브르) 가드로 득점, 전진 중 발 교차</li>
+</ul>
+<p class="watch">✱ 표시된 반칙은 <strong>그 선수가 얻은 찌르기가 무효</strong>가 됩니다. 즉 반칙으로 점수를 내면 점수도 없어지고 카드까지 받습니다.</p>
+
+<h3>2군 — 경고 없이 바로 레드 (상대 1점)</h3>
+<ul>
+  <li><strong>무기를 잡지 않은 손·팔 사용</strong> — 손으로 상대 칼을 막거나 치우는 행위 ✱</li>
+  <li><strong>위험하거나 난폭한 행위</strong>, 보복성 동작, 가드나 폼멜로 때리기 ✱</li>
+  <li>상대가 아닌 곳(바닥·피스트 등)을 <strong>고의로 찌르기</strong> ✱</li>
+  <li>의사 확인 없이 부상·경련을 주장하며 경기 중단</li>
+  <li>장비 검사 마크 없음, 등 번호·국가 표기 누락</li>
+</ul>
+
+<h3>3·4군 — 블랙 카드(실격)</h3>
+<ul>
+  <li>피스트에서 질서를 어지럽히는 행위, <strong>부정 펜싱</strong>, 비스포츠적 행위</li>
+  <li>승부 조작·담합, 고의적 난폭 행위, 장비 검사 마크 위조</li>
+  <li>경기 중 통신 장비 소지, 상대·심판·관중에 대한 <strong>인사 거부</strong>, 도핑</li>
+</ul>
+
+<h3>비전투(논콤바티비티) — P 카드</h3>
+<p>양 선수가 1분 동안 점수 없이 소극적으로만 경기하면 <span class="term">논콤바티비티</span>가 선언됩니다. 개인전에서는 남은 시간을 1분으로 줄이고 마지막 피리어드로 넘어가며, 반복되면 <strong>P 카드</strong>(P-옐로 → P-레드 → P-블랙)가 주어집니다. P 카드는 일반 카드와 합산되지 않습니다.</p>
+
+<div class="callout tip"><span class="ct">동호인이 실제로 조심할 것</span>① 점수를 확인하려고 <strong>"알트" 전에 마스크를 벗는 것</strong>, ② 몸으로 밀고 들어가는 습관, ③ 반사적으로 <strong>손으로 상대 칼을 쳐내는 것</strong>(이건 바로 레드입니다). 셋 다 시합에서 실제로 자주 나오는 카드입니다.</div>
+<p style="font-size:13px;color:var(--muted)">정리 기준: FIE 기술규정 t.170 반칙·벌칙표 (USA Fencing 공식 요약본 2022.8 기준). 세부 조항은 대회 규정을 따릅니다.</p>`
       },
       {
         id: 'adv-checklist',

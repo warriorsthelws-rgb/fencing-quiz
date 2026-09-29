@@ -455,3 +455,7 @@ tr:last-child td { border-bottom: 0; }
 /* 심판 판정 문장: 동작은 굵게, 방향(괄호)은 연하게 */
 .phrase-text { font-size: 16.5px; font-weight: 800; color: var(--text); line-height: 1.7; }
 .phrase-text .dir { font-weight: 500; color: var(--muted); font-size: 14px; }
+
+/* 피스트 도해 */
+.piste-fig { margin: 12px 0 16px; color: var(--text-2); overflow-x: auto; }
+.piste-fig svg { width: 100%; min-width: 420px; height: auto; }
