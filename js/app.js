@@ -972,6 +972,16 @@
             <button class="btn btn-primary btn-lg" data-start="set">10문제 풀기</button>
             <button class="btn btn-lg" data-start="all">전체 ${n}문제</button>
           </div>
+        </div>
+        <div class="card">
+          <h3 style="font-size:16px">🎬 실제 카드 장면 영상</h3>
+          <p style="color:var(--text-2);font-size:14.5px;margin-bottom:8px">실제 국제대회에서 카드가 나온 장면들입니다. 어떤 상황에서 카드가 나오는지 눈으로 익혀 두면 문제 풀 때 도움이 됩니다.</p>
+          <div class="vids-grid">
+            <figure class="vid"><div class="vid-frame"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/11p4BKtdPr4" title="Fencers Getting Carded Compilation" allow="encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+              <figcaption><a href="https://www.youtube.com/watch?v=11p4BKtdPr4" target="_blank" rel="noopener">선수 카드 모음 (플러레)</a><span>밀치기·등 돌리기·유효면 가리기·심판에게 항의 등</span></figcaption></figure>
+            <figure class="vid"><div class="vid-frame"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/kxb70pG0jfc" title="Fencing coaches getting carded compilation" allow="encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+              <figcaption><a href="https://www.youtube.com/watch?v=kxb70pG0jfc" target="_blank" rel="noopener">코치 카드 모음 (플러레)</a><span>코치가 받은 옐로 카드 4장면</span></figcaption></figure>
+          </div>
         </div>`;
       $app.querySelectorAll('[data-start]').forEach((b) => b.addEventListener('click', () => navigate(`#/cards/play${b.dataset.start === 'all' ? '?all=1' : ''}`)));
     }
