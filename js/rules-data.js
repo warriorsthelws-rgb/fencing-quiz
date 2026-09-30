@@ -552,70 +552,117 @@ const RULES = {
       },
       {
         id: 'cards',
-        title: '반칙과 카드 — 경고, 레드, 블랙',
+        title: '반칙과 카드',
         html: `
-<p>펜싱의 반칙은 <strong>카드 3장</strong>으로 처리되고, 반칙의 종류(군)에 따라 처음부터 어떤 카드를 받는지가 정해져 있습니다.</p>
+<p>반칙은 <strong>네 개의 군(群)</strong>으로 나뉘고, 어느 군이냐에 따라 <strong>처음부터 어떤 카드를 받는지</strong>가 정해져 있습니다. "첫 번째는 무조건 경고"가 아닙니다.</p>
+<div class="table-wrap"><table>
+  <thead><tr><th>군</th><th>1회</th><th>2회</th><th>3회~</th><th>예</th></tr></thead>
+  <tbody>
+    <tr><td><strong>1군</strong></td><td>🟨 옐로</td><td>🟥 레드</td><td>🟥 레드</td><td>꼬르 아 꼬르, 등 돌리기, 유효면 가리기</td></tr>
+    <tr><td><strong>2군</strong></td><td>🟥 레드</td><td>🟥 레드</td><td>🟥 레드</td><td>손으로 칼 막기, 가드로 때리기</td></tr>
+    <tr><td><strong>3군</strong></td><td>🟥 레드</td><td>⬛ 블랙</td><td>—</td><td>피스트에서 질서 문란, 부정 펜싱</td></tr>
+    <tr><td><strong>4군</strong></td><td>⬛ 블랙</td><td>—</td><td>—</td><td>인사 거부, 통신장비, 담합, 도핑</td></tr>
+  </tbody>
+</table></div>
 <div class="table-wrap"><table>
   <thead><tr><th>카드</th><th>효과</th><th>유효 범위</th></tr></thead>
   <tbody>
-    <tr><td><strong>🟨 옐로 카드 (경고)</strong></td><td>점수 변화 없음. 경고만</td><td>그 경기(부트) 전체. 단체전은 매치 전체</td></tr>
-    <tr><td><strong>🟥 레드 카드</strong></td><td><strong>상대에게 1점</strong></td><td>—</td></tr>
-    <tr><td><strong>⬛ 블랙 카드</strong></td><td>해당 대회에서 <strong>실격·퇴장</strong></td><td>—</td></tr>
+    <tr><td><strong>🟨 옐로</strong></td><td>경고. 점수 변화 없음</td><td>그 경기(부트) 전체 · 단체전은 매치 전체</td></tr>
+    <tr><td><strong>🟥 레드</strong></td><td><strong>상대에게 1점</strong></td><td>마지막 점수라면 그대로 패배로 이어짐</td></tr>
+    <tr><td><strong>⬛ 블랙</strong></td><td>대회 실격, 사안에 따라 추가 징계</td><td>—</td></tr>
   </tbody>
 </table></div>
-<div class="callout key"><span class="ct">핵심</span><strong>1군 반칙</strong>은 첫 번째가 옐로(경고), 같은 경기에서 <strong>다시 반칙하면 레드(상대 1점)</strong>입니다. 한 번 레드를 받은 뒤에는 1군 반칙을 할 때마다 계속 레드입니다. <strong>2군 반칙</strong>은 경고 없이 <strong>처음부터 레드</strong>입니다.</div>
+<div class="callout key"><span class="ct">핵심 3가지</span>
+① <strong>1군은 종류가 달라도 누적</strong>됩니다. 마스크를 먼저 벗어 옐로를 받은 뒤 꼬르 아 꼬르를 하면 두 번째 1군이라 레드입니다.<br>
+② <strong>레드를 한 번 받으면 그 뒤로는 계속 레드</strong>입니다. 옐로로 돌아가지 않습니다(t.162.2).<br>
+③ <strong>✱ 표시 반칙은 그 선수가 얻은 찌르기도 무효</strong>입니다. 반칙으로 점수를 내면 점수도 사라지고 카드까지 받습니다.</div>
 
-<h3>1군 — 옐로 → 레드 (동호인이 가장 자주 만나는 것)</h3>
-<ul>
-  <li><strong>찌르기를 피하려는 꼬르 아 꼬르</strong>(몸으로 부딪히기) ✱</li>
-  <li><strong>상대에게 등 돌리기</strong> ✱</li>
-  <li><strong>유효면 가리기·바꾸기</strong> — 무기를 잡지 않은 팔이나 어깨로 몸통을 가리는 행위 ✱</li>
-  <li><strong>찌르기를 피하려고 옆선 밖으로 나가기</strong> ✱</li>
-  <li><strong>심판 허락 없이 피스트 이탈</strong></li>
-  <li><strong>"알트" 전에 마스크 벗기</strong>, 피스트에서 옷 벗기, 밀치기·난폭한 펜싱 ✱</li>
-  <li><strong>경기 지연</strong>(정비·준비를 이유로 시간 끌기)</li>
-  <li><strong>장비 불량</strong> — 작동하지 않거나 규격에 맞지 않는 복장·무기, 예비 무기나 보디코드 미지참</li>
-  <li>칼을 피스트에 대고 펴기, 칼끝을 피스트에 구부리거나 끌기</li>
-  <li><strong>심판 지시 불복종</strong>, 사실 판단에 대한 부당한 항의</li>
-  <li>(사브르) 가드로 득점, 전진 중 발 교차</li>
-</ul>
-<p class="watch">✱ 표시된 반칙은 <strong>그 선수가 얻은 찌르기가 무효</strong>가 됩니다. 즉 반칙으로 점수를 내면 점수도 없어지고 카드까지 받습니다.</p>
+<h3>1군 — 첫 번째 옐로, 두 번째부터 레드</h3>
+<div class="table-wrap"><table>
+  <thead><tr><th>반칙</th><th>조항</th><th>득점</th></tr></thead>
+  <tbody>
+    <tr><td>찌르기를 피하려는 <strong>꼬르 아 꼬르</strong>(몸 부딪히기)</td><td>t.25.2</td><td>✱ 무효</td></tr>
+    <tr><td><strong>등 돌리기</strong></td><td>t.27.2</td><td>✱ 무효</td></tr>
+    <tr><td><strong>유효면 가리기·바꾸기</strong> (몸·어깨로)</td><td>t.29.2 · t.79</td><td>✱ 무효</td></tr>
+    <tr><td>찌르기를 피하려고 <strong>옆선 밖으로</strong> 나가기</td><td>t.35.3</td><td>✱ 무효</td></tr>
+    <tr><td>전기 장비를 손으로 <strong>잡기</strong></td><td>t.29.3</td><td>✱ 무효</td></tr>
+    <tr><td>밀치기 · 난폭한 펜싱 · <strong>"알트" 전 마스크 벗기</strong> · 피스트에서 옷 벗기</td><td>t.116 · t.125</td><td>✱ 무효</td></tr>
+    <tr><td>넘어지는 중·후의 타격, 비정상적 펜싱 동작</td><td>t.121.2</td><td>✱ 무효</td></tr>
+    <tr><td>심판 허락 없이 <strong>피스트 이탈</strong></td><td>t.23.6</td><td>—</td></tr>
+    <tr><td>정당한 이유 없이 <strong>경기 중단·지연</strong></td><td>t.43.2</td><td>—</td></tr>
+    <tr><td><strong>피스트에 나올 때</strong> 장비가 규격 미달·미작동, 예비 무기/보디코드 없음, 라메가 유효면을 다 못 덮음, 언더플라스트론 미착용</td><td>t.71</td><td>—</td></tr>
+    <tr><td>앙 가르드 자세에서 <strong>칼 휨이 허용치 초과</strong></td><td>t.72</td><td>—</td></tr>
+    <tr><td>칼을 피스트에 대고 펴기, 칼끝을 전도성 피스트에 끌기</td><td>t.76.2</td><td>—</td></tr>
+    <tr><td>심판 <strong>지시 불복종</strong>, 사실 판단에 대한 부당한 항의</td><td>t.108 · t.172</td><td>—</td></tr>
+    <tr><td>(사브르) <strong>가드로 득점</strong>, 전진 중 발 교차</td><td>t.96.3 · t.101.5</td><td>✱ 무효</td></tr>
+  </tbody>
+</table></div>
 
-<h3>2군 — 경고 없이 바로 레드 (상대 1점)</h3>
-<ul>
-  <li><strong>무기를 잡지 않은 손·팔 사용</strong> — 손으로 상대 칼을 막거나 치우는 행위 ✱</li>
-  <li><strong>위험하거나 난폭한 행위</strong>, 보복성 동작, 가드나 폼멜로 때리기 ✱</li>
-  <li>상대가 아닌 곳(바닥·피스트 등)을 <strong>고의로 찌르기</strong> ✱</li>
-  <li>의사 확인 없이 부상·경련을 주장하며 경기 중단</li>
-  <li>장비 검사 마크 없음, 등 번호·국가 표기 누락</li>
-</ul>
+<h3>2군 — 경고 없이 바로 레드</h3>
+<div class="table-wrap"><table>
+  <thead><tr><th>반칙</th><th>조항</th><th>득점</th></tr></thead>
+  <tbody>
+    <tr><td><strong>무기를 잡지 않은 손·팔 사용</strong> (칼 쳐내기, 몸 가리기)</td><td>t.29.1 · t.30</td><td>✱ 무효</td></tr>
+    <tr><td><strong>위험·난폭·보복 행위</strong>, 가드나 폼멜로 때리기</td><td>t.121.2 · t.147</td><td>✱ 무효</td></tr>
+    <tr><td>상대가 아닌 곳을 <strong>고의로 찌르기</strong></td><td>t.55.2</td><td>✱ 무효</td></tr>
+    <tr><td><strong>장비 검사 마크 없음</strong> (마지막 득점도 취소)</td><td>t.73.1.a</td><td>✱ 무효</td></tr>
+    <tr><td>의사가 확인하지 않은 부상·경련으로 경기 중단</td><td>t.45.3</td><td>—</td></tr>
+    <tr><td>등 번호·국가 표기 누락</td><td>t.74</td><td>—</td></tr>
+  </tbody>
+</table></div>
 
-<h3>3·4군 — 블랙 카드(실격)</h3>
-<ul>
-  <li>피스트에서 질서를 어지럽히는 행위, <strong>부정 펜싱</strong>, 비스포츠적 행위</li>
-  <li>승부 조작·담합, 고의적 난폭 행위, 장비 검사 마크 위조</li>
-  <li>경기 중 통신 장비 소지, 상대·심판·관중에 대한 <strong>인사 거부</strong>, 도핑</li>
-</ul>
+<h3>3·4군 — 레드 또는 블랙</h3>
+<div class="table-wrap"><table>
+  <thead><tr><th>반칙</th><th>처리</th></tr></thead>
+  <tbody>
+    <tr><td>피스트에서 <strong>질서 문란</strong> (고함, 장비 집어던지기)</td><td>3군 — 🟥 레드 → 재범 ⬛ 블랙 (심각하면 즉시 블랙)</td></tr>
+    <tr><td><strong>부정 펜싱</strong>, 비스포츠적 행위</td><td>3군 — 🟥 레드</td></tr>
+    <tr><td><strong>인사 거부</strong>(경기 시작·종료 시 상대·심판·관중)</td><td>4군 — ⬛ 블랙</td></tr>
+    <tr><td>경기 중 <strong>통신 장비</strong> 소지</td><td>4군 — ⬛ 블랙</td></tr>
+    <tr><td>검사 마크 <strong>위조·장비 변조</strong>, 담합·승부 조작, 고의적 난폭 행위, 도핑</td><td>4군 — ⬛ 블랙</td></tr>
+  </tbody>
+</table></div>
 
-<h3>비전투(논콤바티비티) — P 카드 <span class="fr">2026-27 시즌 개정</span></h3>
-<p><strong>1분 동안 점수가 나지 않으면</strong> 심판이 <span class="term">논콤바티비티</span>를 선언합니다. 예전에는 경고 성격의 <strong>P-옐로</strong>가 먼저 있었지만, FIE 2025 총회 결정으로 <strong>P-옐로가 없어지고 처음부터 P-레드</strong>입니다.</p>
+<h3>자주 틀리는 부분 — 부연 설명</h3>
+<div class="callout tip"><span class="ct">🔧 장비 — "어떻게든 시작만 하면 된다"가 맞습니다</span>
+<strong>경기 중에 생긴 고장은 벌칙이 없습니다.</strong> 라메에 구멍이 나서 유효타가 무효로 뜨거나, 무기·보디코드가 중간에 죽거나, 포인트 스프링이 약해진 경우는 <strong>경고도 벌점도 없고, 그 고장난 장비로 얻은 찌르기도 인정</strong>됩니다(t.72).<br><br>
+반대로 <strong>피스트에 나오는 시점</strong>에 문제가 있으면 1군 옐로입니다(t.71). 심판의 사전 점검 — 웨이트(무게 추), 슈트 게이지, 라메 커버 확인 — 에서 걸리면 여기에 해당합니다. 예비 무기·보디코드를 안 가져온 것도 같습니다.<br><br>
+단, <strong>검사 마크가 아예 없는 장비</strong>는 차원이 다릅니다. 2군이라 바로 레드이고 <strong>마지막 득점까지 취소</strong>됩니다(t.73.1.a). 마크를 위조했다면 블랙입니다.</div>
+
+<div class="callout tip"><span class="ct">🗡️ 가드로 마스크를 때렸을 때</span>
+<strong>가드나 폼멜로 때리는 것은 2군이라 첫 번째부터 레드</strong>입니다(t.121.2, t.147). 고의적인 난폭 행위로 판단되면 4군 <strong>블랙</strong>까지 갑니다.<br><br>
+사브르의 <strong>"가드로 득점"은 다른 조항</strong>입니다. t.96.3은 가드로 낸 점수를 <strong>무효로 하고 1군(첫 번째 옐로)</strong>으로 처리합니다. 즉 <strong>때린 것</strong>(난폭 → 레드)과 <strong>가드로 점수를 낸 것</strong>(1군 → 옐로)은 다른 반칙입니다. 블레이드가 먼저 닿고 가드가 따라 닿은 경우를 따로 정한 조항은 없고, 심판이 "가드로 득점했는가 / 난폭했는가"로 판단합니다.</div>
+
+<div class="callout tip"><span class="ct">🛡️ 유효면을 가렸는데 내가 그 자리를 찔렀다면</span>
+상대가 팔·어깨로 몸통을 가려서 <strong>내 유효타가 무효면(흰 불)으로 기록되면</strong>, 규정은 <strong>그 찌르기를 유효로 인정</strong>합니다(t.79.1.b). 상대는 1군 카드를 받고, 나는 점수를 얻습니다.<br>
+또 비정상적인 자세로 무효면을 유효면 자리에 갖다 댄 경우에도 그 찌르기는 유효로 셉니다(t.79.1.c).</div>
+
+<div class="callout tip"><span class="ct">🔄 상대가 등을 돌렸을 때</span>
+등을 돌린 <strong>그 선수의 찌르기만</strong> 무효입니다(t.27.2). <strong>내가 넣은 찌르기는 그대로 인정</strong>되므로, 상대는 카드를 받고 나는 점수를 얻습니다. 다만 심판이 이미 "알트"를 불렀다면 그 뒤의 찌르기는 무효입니다.</div>
+
+<div class="callout warn"><span class="ct">동호인이 실제로 가장 많이 받는 카드</span>① "알트" 전에 <strong>마스크 벗기</strong>, ② 몸으로 <strong>밀고 들어가는</strong> 습관, ③ 반사적으로 <strong>손으로 상대 칼을 쳐내기</strong>(이건 경고 없이 바로 레드입니다).</div>
+<p style="font-size:13px;color:var(--muted)">정리 기준: FIE 기술규정 t.170 반칙·벌칙표 및 관련 조항(t.25~t.35, t.71~t.73, t.79, t.96, t.121, t.158~t.170). 세부 적용은 대회 규정을 따릅니다.</p>`
+      },
+      {
+        id: 'pcard',
+        title: '비전투(논콤바티비티)와 P 카드',
+        html: `
+<p>카드에는 반칙과 별개로 <strong>소극적인 경기에만 주는 P 카드</strong>가 따로 있습니다. 일반 카드(옐로·레드·블랙)와 <strong>합산되지 않습니다.</strong></p>
+<div class="callout key"><span class="ct">2026-27 시즌 개정 — P-옐로 폐지</span>예전에는 경고 성격의 <strong>P-옐로</strong>가 먼저 있었지만, FIE 2025 총회 결정으로 <strong>없어지고 처음부터 P-레드</strong>입니다. (USA Fencing은 2026년 10월 1일부터 적용)</div>
 <div class="table-wrap"><table>
   <thead><tr><th>순서</th><th>카드</th><th>효과</th></tr></thead>
   <tbody>
-    <tr><td>1분 경과 — 첫 번째</td><td><strong>🟥 P-레드</strong></td><td><strong>양쪽 선수 모두에게 1점씩 실점</strong> (두 선수 점수가 동시에 1점씩 올라감)</td></tr>
+    <tr><td>1분 경과 — <strong>첫 번째</strong></td><td><strong>🟥 P-레드</strong></td><td><strong>양쪽 선수 모두에게 1점씩 실점</strong> (두 선수 점수가 동시에 1점씩 올라감)</td></tr>
     <tr><td>다시 1분 경과</td><td><strong>⬛ P-블랙</strong></td><td>경기 <strong>즉시 종료</strong>. 그 시점 점수가 높은 쪽이 승리, 동점이면 시드 순</td></tr>
   </tbody>
 </table></div>
+<h3>어떻게 세나</h3>
 <ul>
-  <li>1분 타이머는 <strong>득점·무효면 득점·취소된 득점·벌점, 그리고 각 피리어드 시작</strong>마다 다시 시작합니다.</li>
-  <li>P 카드는 <strong>점수와 무관하게 두 선수에게 동시에</strong> 주어집니다. "지고 있는 쪽만 준다"는 예전 방식은 2023년에 없어졌습니다.</li>
-  <li>P 카드는 일반 카드(옐로·레드·블랙)와 <strong>합산되지 않습니다</strong>.</li>
+  <li><strong>1분 동안 점수가 나지 않으면</strong> 선언됩니다. 타이머는 <strong>득점·무효면 득점·취소된 득점·벌점, 각 피리어드 시작</strong>마다 다시 시작합니다.</li>
+  <li>점수와 <strong>무관하게 두 선수에게 동시에</strong> 줍니다. "지고 있는 쪽만 준다"는 방식은 2023년에 없어졌습니다.</li>
   <li>개인전 14-14(10점제는 9-9), 단체전 44-44에서는 P 카드를 주지 않습니다.</li>
 </ul>
-<div class="callout warn"><span class="ct">동호인에게 의미</span>거리만 재며 버티는 시간이 길어지면 <strong>바로 실점</strong>합니다. 예전처럼 경고 한 번을 기대할 수 없으니, 1분 안에 한 번은 들어가거나 상대를 끌어내야 합니다.</div>
-
-<div class="callout tip"><span class="ct">동호인이 실제로 조심할 것</span>① 점수를 확인하려고 <strong>"알트" 전에 마스크를 벗는 것</strong>, ② 몸으로 밀고 들어가는 습관, ③ 반사적으로 <strong>손으로 상대 칼을 쳐내는 것</strong>(이건 바로 레드입니다). 셋 다 시합에서 실제로 자주 나오는 카드입니다.</div>
-<p style="font-size:13px;color:var(--muted)">정리 기준: FIE 기술규정 t.170 반칙·벌칙표 + FIE 2025 총회 P카드 개정(2026-27 시즌 시행, USA Fencing 2026.10.1 적용). 세부 조항은 대회 규정을 따릅니다.</p>`
+<div class="callout warn"><span class="ct">동호인에게 의미</span>거리만 재며 버티는 시간이 길어지면 <strong>바로 실점</strong>합니다. 예전처럼 경고 한 번을 기대할 수 없으니 1분 안에 한 번은 들어가거나 상대를 끌어내야 합니다.</div>`
       },
       {
         id: 'adv-checklist',
@@ -633,6 +680,78 @@ const RULES = {
   <div class="step"><span class="n">6</span><div><b>정말 같은 순간이었나?</b> 두 팔꿈치가 동시에 펴졌다면 시뮬따네. 아니면 늦은 쪽이 꽁딱.</div></div>
 </div>
 <p>영상 퀴즈에서 헷갈리면 <strong>0.5배속</strong>으로 두 선수의 팔꿈치와 칼 접촉만 따로 보세요. 준비됐다면 <a href="#/quiz">퀴즈 중급·상급</a>으로!</p>`
+      },
+      {
+        id: 'faq',
+        title: '자주 묻는 질문 (FAQ)',
+        html: `
+<p>클럽과 커뮤니티에서 반복해서 나오는 질문들을 규정 조항과 함께 정리했습니다.</p>
+
+<h3>공격권 판정</h3>
+<div class="faq">
+  <details><summary>내가 먼저 찔렀는데 왜 상대 점수인가요?</summary>
+    <p>플러레는 <strong>먼저 닿은 쪽</strong>이 아니라 <strong>먼저 올바르게 공격을 시작한 쪽</strong>이 점수입니다. 상대가 팔을 펴고 포인트로 위협하며 들어오는 중이었다면, 내가 막지 않고 같이 찌른 것은 꽁딱이라 우선권이 없습니다. "먼저 닿은 쪽이 이긴다"는 건 에페입니다.</p></details>
+  <details><summary>팔을 폈는데 왜 공격으로 안 쳐주나요?</summary>
+    <p>공격은 <strong>팔이 펴지기 시작하면서 포인트가 유효면을 위협</strong>해야 하고, 그것이 <strong>팡뜨(런지)나 플레슈보다 먼저</strong> 나와야 합니다. 발이 먼저 나가고 팔이 따라오면 그 사이는 준비 동작이라, 그때 상대가 팔을 펴고 들어오면 상대의 공격이 됩니다.</p></details>
+  <details><summary>분명히 막았는데 왜 상대 점수인가요?</summary>
+    <p>두 가지 경우입니다. ① <strong>말빠레</strong> — 칼은 닿았지만 상대 칼을 공격선 밖으로 밀어내지 못했다면 빠라드로 인정되지 않습니다. ② <strong>늦은 리뽀스트</strong> — 막은 뒤 머뭇거리거나 팔을 접었다 폈다면 그 사이 상대의 르미즈가 우선합니다. 리뽀스트는 즉시, 한 템포로 해야 합니다.</p></details>
+  <details><summary>양쪽 불이 켜졌는데 아무도 점수를 못 받는 건 왜인가요?</summary>
+    <p><strong>시뮬따네</strong>입니다. 두 선수가 같은 순간에 공격을 시작해 어느 쪽의 잘못도 가릴 수 없을 때만 선언하고, 점수 없이 제자리에서 재개합니다. 심판은 가능한 한 어느 한쪽의 실수를 찾으려 하므로 시뮬따네는 마지막 선택지입니다.</p></details>
+  <details><summary>흰 불이 켜진 다음에 들어간 찌르기는요?</summary>
+    <p>무효입니다. 무효면(팔·다리·마스크)을 찌르면 흰 불이 켜지면서 <strong>그 순간 동작이 멈춥니다.</strong> 그 뒤에 아무리 좋은 찌르기가 들어가도 점수가 되지 않습니다.</p></details>
+  <details><summary>상대가 계속 도망만 갑니다.</summary>
+    <p>규정이 두 가지로 막고 있습니다. ① 두 발이 <strong>뒤 경계선</strong>을 완전히 넘으면 실점입니다. ② <strong>1분 동안 점수가 없으면</strong> 논콤바티비티로 양쪽 모두 P-레드(각각 1점 실점)를 받습니다. 다만 ②는 나에게도 똑같이 적용되니, 버티기만 하는 건 서로 손해입니다.</p></details>
+</div>
+
+<h3>카드와 점수</h3>
+<div class="faq">
+  <details><summary>상대가 등을 돌렸는데 그 사이 내가 찌르면 어떻게 되나요?</summary>
+    <p><strong>상대는 카드(1군 — 첫 번째면 옐로), 나는 점수</strong>입니다. t.27.2는 등을 돌린 <strong>그 선수의 찌르기만</strong> 무효로 한다고 정하고 있어서, 내 찌르기는 그대로 인정됩니다. 단 심판이 이미 "알트"를 불렀다면 그 뒤의 찌르기는 무효입니다.</p></details>
+  <details><summary>상대가 유효면을 가렸는데 하필 내가 그 자리를 찔렀으면?</summary>
+    <p>규정이 정확히 이 경우를 다룹니다. 상대가 가리는 바람에 <strong>제대로 들어간 찌르기가 무효로 기록되면, 그 찌르기는 유효로 인정</strong>됩니다(t.79.1.b). 상대는 1군 카드를 받고 나는 점수를 얻습니다. 비정상적인 자세로 무효면을 갖다 댄 경우도 유효로 셉니다(t.79.1.c).</p></details>
+  <details><summary>이미 레드카드가 있는데 또 레드를 받으면, 점수만 주나요 카드도 받나요?</summary>
+    <p><strong>둘 다입니다.</strong> 레드 카드를 다시 받고, 상대에게 1점이 또 갑니다. t.162.2는 "레드 카드 다음에는 레드 카드나 블랙 카드만 올 수 있다"고 정합니다. 즉 레드를 한 번 받으면 그 뒤로는 경고로 돌아가지 않고 반칙할 때마다 계속 실점합니다.</p></details>
+  <details><summary>레드카드 점수 말고, 상대가 카드도 받고 내가 점수도 얻는 경우가 있나요?</summary>
+    <p>있습니다. 대표적으로 셋입니다.</p>
+    <ul>
+      <li><strong>등 돌리기</strong> — 상대 카드 + 내 찌르기 인정 (t.27.2)</li>
+      <li><strong>유효면 가리기</strong> — 상대 카드 + 가려서 무효로 뜬 내 찌르기를 유효로 인정 (t.79.1.b)</li>
+      <li><strong>손으로 칼 막기</strong> — 상대는 2군 레드(=내 1점)인데, 같은 국면에서 내 유효타가 있었다면 <strong>그 점수까지 합쳐 한 번에 2점</strong>이 됩니다</li>
+    </ul></details>
+  <details><summary>그러면 단체전 9번째 바우트가 41-38로 시작할 수도 있나요?</summary>
+    <p><strong>가능합니다.</strong> 규정에 명시된 예외입니다 — t.41.1: "<em>선수가 릴레이의 마지막 유효타를 넣으면서 동시에 페널티 점수까지 받은 경우에는 두 점수를 모두 인정하며, 이때 릴레이는 예외적으로 5·10·15… 를 넘겨 끝날 수 있다</em>". 8번째 바우트가 40점에서 끝나야 하는데 마지막 순간에 유효타 + 페널티 점수가 겹치면 41이 되고, 9번째 바우트는 41-38에서 시작합니다.</p></details>
+  <details><summary>"알트" 전에 마스크를 벗으면 정말 카드인가요?</summary>
+    <p>네. 1군 반칙이라 첫 번째는 옐로입니다(t.125). 안전 문제라 국제 대회에서는 예외 없이 줍니다. 점수 확인은 <strong>알트를 듣고 나서</strong> 하세요.</p></details>
+</div>
+
+<h3>장비</h3>
+<div class="faq">
+  <details><summary>경기 중에 칼이나 보디코드가 고장 나면 카드인가요?</summary>
+    <p><strong>아닙니다.</strong> 경기 중 조건 때문에 생길 수 있는 고장(라메 구멍, 무기·보디코드 작동 불능, 포인트 스프링 약화 등)은 경고도 벌점도 없고, <strong>고장난 장비로 얻은 찌르기도 인정</strong>됩니다(t.72). 예비 장비로 바꾸고 계속하면 됩니다.</p></details>
+  <details><summary>그럼 사전 점검(웨이트·게이지)에서 걸리면요?</summary>
+    <p>그건 다릅니다. <strong>피스트에 나오는 시점</strong>에 규격 미달·미작동이거나, 예비 무기·보디코드가 없거나, 라메가 유효면을 다 못 덮거나, 언더플라스트론을 안 입었으면 <strong>1군 — 첫 번째 옐로</strong>입니다(t.71). 즉 "일단 시작만 하면 된다"가 규정상으로도 맞는 말입니다.</p></details>
+  <details><summary>검사 마크가 없는 장비를 쓰면요?</summary>
+    <p>이건 훨씬 무겁습니다. <strong>2군이라 바로 레드</strong>이고, <strong>마지막 득점도 취소</strong>됩니다(t.73.1.a). 마크를 위조하거나 장비를 변조했다면 <strong>블랙</strong>입니다.</p></details>
+  <details><summary>무기를 꼭 두 자루 가져가야 하나요?</summary>
+    <p>규정상 그렇습니다. 규격에 맞는 <strong>예비 무기와 예비 보디코드</strong>가 없으면 1군 반칙입니다(t.71). 동호인 시합에서도 심판이 확인하는 경우가 많습니다.</p></details>
+  <details><summary>가드로 상대 마스크를 때리면 무슨 카드인가요?</summary>
+    <p><strong>2군이라 첫 번째부터 레드</strong>입니다(가드·폼멜로 때리기, t.121.2·t.147). 고의적인 난폭 행위로 보이면 <strong>블랙</strong>까지 갑니다. 참고로 사브르에서 <strong>가드로 점수를 낸 것</strong>은 다른 조항이라 그 점수를 무효로 하고 1군(첫 번째 옐로)으로 처리합니다(t.96.3).</p></details>
+</div>
+
+<h3>경기 운영</h3>
+<div class="faq">
+  <details><summary>뒤로 밀리면 무조건 실점인가요?</summary>
+    <p><strong>두 발이 모두</strong> 뒤 경계선을 완전히 넘어야 실점입니다. 한 발만 넘은 상태는 반칙이 아니고 계속 펜싱할 수 있습니다. 뒤 경계선 2m 앞의 경고선은 위치를 알려 주는 표시일 뿐, 넘어도 아무 일도 없습니다.</p></details>
+  <details><summary>옆선을 넘으면요?</summary>
+    <p>한 발이라도 넘으면 "알트" 후 <strong>나간 지점에서 1m 뒤</strong>로 물러나 재개합니다. 공격 도중이었다면 공격을 시작한 위치로 돌아간 뒤 거기서 1m를 더 물러납니다. 나간 선수의 찌르기는 무효입니다. 단 <strong>찌르기를 피하려고</strong> 나갔다면 위치 조정이 아니라 <strong>1군 카드</strong>입니다.</p></details>
+  <details><summary>플레슈로 지나쳐 버리면 어떻게 되나요?</summary>
+    <p>완전히 지나친 순간 심판이 "알트"를 부르고 원래 위치로 되돌립니다. <strong>지나가면서 즉시 들어간 찌르기는 유효</strong>하지만, <strong>지나친 뒤에 돌아서 찌른 것은 무효</strong>입니다(t.28). 상대가 돌아서면서 즉시 찌른 것은 유효합니다.</p></details>
+  <details><summary>몸이 부딪히면 무조건 카드인가요?</summary>
+    <p>아닙니다. 플레슈로 달려들다 자연스럽게 부딪힌 것은 "알트"로 끝납니다. 부딪히기 직전에 들어간 유효타도 인정됩니다. <strong>찌르기를 피하려고</strong> 또는 <strong>고의로 밀면서</strong> 부딪혔을 때만 1군 반칙입니다(t.25.2).</p></details>
+  <details><summary>심판 판정에 항의할 수 있나요?</summary>
+    <p><strong>사실 판단</strong>(누가 먼저 공격했는지, 어디에 닿았는지)에는 항의할 수 없습니다. 반복하면 1군 옐로입니다. <strong>규정 적용</strong>이 잘못됐다고 볼 때만 정식으로 이의를 제기할 수 있고, 이건 선수의 권리입니다.</p></details>
+</div>
+<div class="callout tip"><span class="ct">더 궁금한 게 있다면</span>클럽에서 자주 나오는 질문을 알려 주시면 이 목록에 계속 추가합니다. 답은 FIE 기술규정 조항으로 확인해서 적습니다.</div>`
       },
       {
         id: 'glossary',

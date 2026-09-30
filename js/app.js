@@ -110,6 +110,7 @@
     else if (path === '/quiz/row') renderWeaponSelect();
     else if (path === '/cards') CardQuiz.renderIntro();
     else if (path === '/cards/play') CardQuiz.enterView(params);
+    else if (path === '/cards/video') CardQuiz.enterVideo(params);
     else if (path === '/cards/result') CardQuiz.renderResult();
     else if (path === '/quiz/level') renderLevelSelect(params);
     else if (path === '/quiz/play') Quiz.enterView(params);
@@ -261,10 +262,10 @@
           <div class="c-desc">실제 경기 영상을 보고 누구의 점수인지, 왜 그런지 판정합니다.</div>
         </button>
         <button class="choice" data-go="#/cards">
-          <span class="c-tag">${CARD_QUESTIONS.length}문제</span>
+          <span class="c-tag">${CARD_QUESTIONS.length + (typeof CARD_VIDEO_QUESTIONS !== 'undefined' ? CARD_VIDEO_QUESTIONS.length : 0)}문제</span>
           <div class="c-ico">🟨</div>
           <div class="c-title">경고·카드 판정</div>
-          <div class="c-desc">상황을 읽고 경고 아님 / 옐로 / 레드 / 블랙 중에 고릅니다. 이유는 고르지 않아도 됩니다.</div>
+          <div class="c-desc">경고 아님 / 옐로 / 레드 / 블랙 중에 고릅니다. 이유는 고르지 않아도 됩니다. 영상 문제와 상황 문제가 있습니다.</div>
         </button>
       </div>`;
     $app.querySelectorAll('[data-go]').forEach((b) => b.addEventListener('click', () => navigate(b.dataset.go)));
@@ -951,6 +952,7 @@
       black: { label: '블랙 카드', ico: '⬛', cls: 'cq-black', desc: '대회 실격' },
     };
     const ORDER = ['none', 'yellow', 'red', 'black'];
+    const VQ = (typeof CARD_VIDEO_QUESTIONS !== 'undefined') ? CARD_VIDEO_QUESTIONS : [];
     const GROUP = { 0: '반칙 아님', 1: '1군 (첫 번째 옐로 → 이후 레드)', 2: '2군 (바로 레드)', 3: '3군 (레드 → 재범 블랙)', 4: '4군 (바로 블랙)' };
     let session = null;
 
@@ -971,6 +973,7 @@
           <div class="btn-row">
             <button class="btn btn-primary btn-lg" data-start="set">10문제 풀기</button>
             <button class="btn btn-lg" data-start="all">전체 ${n}문제</button>
+            ${VQ.length ? `<a class="btn btn-lg" href="#/cards/video">🎬 영상 문제 ${VQ.length}개</a>` : ''}
           </div>
         </div>
         <div class="card">
@@ -1091,7 +1094,69 @@
       session = null;
     }
 
-    return { renderIntro, enterView, renderResult };
+    /* ----- 영상 문제 ----- */
+    let vs = null;  // { list, index, answers }
+
+    function enterVideo(params) {
+      if (!VQ.length) { navigate('#/cards'); return; }
+      if (params.r || !vs || vs.index >= vs.list.length) vs = { list: shuffle(VQ.slice()), index: 0, answers: [] };
+      showVideo();
+    }
+
+    function clipHTML(item, k) {
+      return `<div class="video-wrap"><iframe id="cv-frame" src="https://www.youtube-nocookie.com/embed/${esc(item.video)}?start=${Math.floor(item.start)}&end=${Math.ceil(item.end)}&autoplay=1&rel=0&modestbranding=1&playsinline=1&_=${k}" allow="autoplay; encrypted-media" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>`;
+    }
+
+    function showVideo() {
+      const item = vs.list[vs.index];
+      $app.innerHTML = `
+        <div class="quiz-head">
+          <div class="q-no">영상 ${vs.index + 1} / ${vs.list.length}</div>
+          <div class="q-meta">${esc(item.event || '경고·카드 판정')}</div>
+        </div>
+        <div class="progress"><i style="width:${(vs.index / vs.list.length) * 100}%"></i></div>
+        <div class="card" style="padding:12px">
+          <div id="cv-clip">${clipHTML(item, Date.now())}</div>
+          <div class="replay-bar"><button class="btn" id="cv-replay">↻ 다시 보기</button><a class="btn" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=${esc(item.video)}&t=${Math.floor(item.start)}">유튜브 ↗</a></div>
+        </div>
+        <div class="card" id="cv-panel">
+          <h3 style="font-size:17px">심판은 어떤 처리를 할까요?</h3>
+          <div class="cq-grid">
+            ${ORDER.map((k) => `<button class="cq-btn ${CARDS[k].cls}" data-ans="${k}"><b>${CARDS[k].ico} ${CARDS[k].label}</b><small>${CARDS[k].desc}</small></button>`).join('')}
+          </div>
+        </div>
+        <div id="cv-result"></div>
+        <div class="next-bar" id="cv-next"></div>`;
+      document.getElementById('cv-replay').addEventListener('click', () => {
+        document.getElementById('cv-clip').innerHTML = clipHTML(item, Date.now());
+      });
+      $app.querySelectorAll('[data-ans]').forEach((b) => b.addEventListener('click', () => answerVideo(b.dataset.ans)));
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+
+    function answerVideo(pick) {
+      const item = vs.list[vs.index];
+      const ok = pick === item.answer;
+      if (!vs.answers.some((a) => a.id === item.id)) vs.answers.push({ id: item.id, pick, ok });
+      document.getElementById('cv-panel').innerHTML = `<h3 style="font-size:17px">내 판정</h3><div class="cq-grid one"><span class="cq-btn ${CARDS[pick].cls}" style="cursor:default"><b>${CARDS[pick].ico} ${CARDS[pick].label}</b></span></div>`;
+      document.getElementById('cv-result').innerHTML = `
+        <div class="result ${ok ? 'ok' : 'ng'}">
+          <div class="r-title">${ok ? '정답입니다! 🎉' : '틀렸습니다ㅜㅜ'}</div>
+          <div class="r-answer">심판 판정: <span class="chip">${CARDS[item.answer].ico} ${CARDS[item.answer].label}</span>${item.offence ? `<span class="chip">${esc(item.offence)}</span>` : ''}</div>
+          ${item.explain ? `<div class="explain"><h4>📖 이 장면</h4><p>${esc(item.explain)}</p></div>` : ''}
+          <div class="r-foot"><a href="#/rules/advanced?s=cards">카드 규칙 설명 →</a></div>
+        </div>`;
+      const last = vs.index >= vs.list.length - 1;
+      const nb = document.getElementById('cv-next');
+      nb.innerHTML = `<button class="btn btn-dark btn-lg" id="cv-go">${last ? '처음부터 🏁' : '다음 영상 →'}</button><a class="btn btn-lg" href="#/cards">경고 퀴즈 홈</a>`;
+      nb.querySelector('#cv-go').addEventListener('click', () => {
+        if (last) { navigate(`#/cards/video?r=${Date.now()}`); return; }
+        vs.index++; showVideo();
+      });
+      document.getElementById('cv-result').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    return { renderIntro, enterView, renderResult, enterVideo };
   })();
 
   /* ---------- 시작 ---------- */

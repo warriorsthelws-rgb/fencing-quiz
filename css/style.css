@@ -477,3 +477,14 @@ tr:last-child td { border-bottom: 0; }
 .cq-legend { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
 .cq-chip { font-size: 13px; font-weight: 800; padding: 5px 10px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface-2); }
 @media (min-width: 768px) { .cq-grid { grid-template-columns: repeat(4, 1fr); } }
+
+/* FAQ 아코디언 */
+.faq { margin: 10px 0 18px; }
+.faq details { border: 1px solid var(--line); border-radius: 12px; margin-bottom: 8px; background: var(--surface-2); overflow: hidden; }
+.faq summary { cursor: pointer; padding: 12px 14px; font-weight: 800; font-size: 15px; color: var(--text); list-style: none; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::before { content: '＋ '; color: var(--accent); font-weight: 900; }
+.faq details[open] summary::before { content: '－ '; }
+.faq details[open] summary { border-bottom: 1px solid var(--line); }
+.faq details > p, .faq details > ul { margin: 10px 14px; font-size: 14.5px; color: var(--text-2); }
+.faq details > ul { padding-left: 1.5em; }
