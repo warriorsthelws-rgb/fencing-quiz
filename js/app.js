@@ -106,7 +106,11 @@
 
     if (path === '/') renderHome();
     else if (path.startsWith('/rules')) renderRules(path.split('/')[2] || 'basic', params);
-    else if (path === '/quiz') renderWeaponSelect();
+    else if (path === '/quiz') renderQuizPicker();
+    else if (path === '/quiz/row') renderWeaponSelect();
+    else if (path === '/cards') CardQuiz.renderIntro();
+    else if (path === '/cards/play') CardQuiz.enterView(params);
+    else if (path === '/cards/result') CardQuiz.renderResult();
     else if (path === '/quiz/level') renderLevelSelect(params);
     else if (path === '/quiz/play') Quiz.enterView(params);
     else if (path === '/quiz/result') Quiz.renderResult();
@@ -245,10 +249,31 @@
     }
   }
 
+  /* ---------- 퀴즈 종류 선택 ---------- */
+  function renderQuizPicker() {
+    $app.innerHTML = `
+      <h1 style="font-size:24px">어떤 퀴즈를 풀까요?</h1>
+      <div class="choice-grid two">
+        <button class="choice" data-go="#/quiz/row">
+          <span class="c-tag">${QUESTIONS.length}문제</span>
+          <div class="c-ico">🤺</div>
+          <div class="c-title">공격권 판정</div>
+          <div class="c-desc">실제 경기 영상을 보고 누구의 점수인지, 왜 그런지 판정합니다.</div>
+        </button>
+        <button class="choice" data-go="#/cards">
+          <span class="c-tag">${CARD_QUESTIONS.length}문제</span>
+          <div class="c-ico">🟨</div>
+          <div class="c-title">경고·카드 판정</div>
+          <div class="c-desc">상황을 읽고 경고 아님 / 옐로 / 레드 / 블랙 중에 고릅니다. 이유는 고르지 않아도 됩니다.</div>
+        </button>
+      </div>`;
+    $app.querySelectorAll('[data-go]').forEach((b) => b.addEventListener('click', () => navigate(b.dataset.go)));
+  }
+
   /* ---------- 퀴즈: 종목 선택 ---------- */
   function renderWeaponSelect() {
     $app.innerHTML = `
-      <div class="stepper"><span class="on">① 종목</span> › <span>② 난이도</span> › <span>③ 퀴즈</span></div>
+      <div class="stepper"><a href="#/quiz" style="color:var(--info)">← 퀴즈 종류</a> › <span class="on">① 종목</span> › <span>② 난이도</span> › <span>③ 퀴즈</span></div>
       <h1 style="font-size:24px">어떤 종목을 연습할까요?</h1>
       <p style="color:var(--text-2)">지금은 플러레만 준비되어 있어요. 에페·사브르는 곧 추가됩니다.</p>
       <div class="choice-grid">
@@ -911,6 +936,152 @@
     }
 
     return { enterView, leaveView, renderResult };
+  })();
+
+
+  /* =====================================================
+     경고·카드 판정 퀴즈 (상황 판단, 영상 없음)
+     ===================================================== */
+  const CardQuiz = (() => {
+    const SET = 10;
+    const CARDS = {
+      none: { label: '경고 아님', ico: '⬜', cls: 'cq-none', desc: '반칙이 아니거나 카드가 아닌 처리' },
+      yellow: { label: '옐로 카드', ico: '🟨', cls: 'cq-yellow', desc: '경고 (점수 변화 없음)' },
+      red: { label: '레드 카드', ico: '🟥', cls: 'cq-red', desc: '상대에게 1점' },
+      black: { label: '블랙 카드', ico: '⬛', cls: 'cq-black', desc: '대회 실격' },
+    };
+    const ORDER = ['none', 'yellow', 'red', 'black'];
+    const GROUP = { 0: '반칙 아님', 1: '1군 (첫 번째 옐로 → 이후 레드)', 2: '2군 (바로 레드)', 3: '3군 (레드 → 재범 블랙)', 4: '4군 (바로 블랙)' };
+    let session = null;
+
+    const seenKey = 'fq_card_seen';
+    const loadSeen = () => { try { return new Set(JSON.parse(localStorage.getItem(seenKey) || '[]')); } catch (e) { return new Set(); } };
+    const markSeen = (id) => { try { const s = loadSeen(); s.add(id); localStorage.setItem(seenKey, JSON.stringify([...s])); } catch (e) { /* noop */ } };
+
+    function renderIntro() {
+      const n = CARD_QUESTIONS.length;
+      const byAns = ORDER.map((k) => CARD_QUESTIONS.filter((q) => q.answer === k).length);
+      $app.innerHTML = `
+        <div class="stepper"><a href="#/quiz" style="color:var(--info)">← 퀴즈 종류</a> › <span class="on">경고·카드 판정</span></div>
+        <div class="card">
+          <h1 style="font-size:23px">🟨 경고·카드 판정 퀴즈</h1>
+          <p style="color:var(--text-2)">플러레 경기에서 실제로 나오는 상황을 읽고, 심판이 어떤 처리를 하는지 고르세요. <strong>이유는 고르지 않아도 됩니다.</strong></p>
+          <div class="cq-legend">${ORDER.map((k) => `<span class="cq-chip ${CARDS[k].cls}">${CARDS[k].ico} ${CARDS[k].label}</span>`).join('')}</div>
+          <p style="font-size:13.5px;color:var(--muted)">전체 ${n}문제 — 경고 아님 ${byAns[0]} · 옐로 ${byAns[1]} · 레드 ${byAns[2]} · 블랙 ${byAns[3]}. 정답 기준은 FIE 기술규정 t.170 반칙·벌칙표입니다.</p>
+          <div class="btn-row">
+            <button class="btn btn-primary btn-lg" data-start="set">10문제 풀기</button>
+            <button class="btn btn-lg" data-start="all">전체 ${n}문제</button>
+          </div>
+        </div>`;
+      $app.querySelectorAll('[data-start]').forEach((b) => b.addEventListener('click', () => navigate(`#/cards/play${b.dataset.start === 'all' ? '?all=1' : ''}`)));
+    }
+
+    function start(all) {
+      let list;
+      if (all) list = CARD_QUESTIONS.slice();
+      else {
+        const seen = loadSeen();
+        // 답 종류가 골고루 나오도록 섞고, 안 본 문제 먼저
+        const groups = {};
+        shuffle(CARD_QUESTIONS).forEach((q) => { (groups[q.answer] = groups[q.answer] || []).push(q); });
+        Object.values(groups).forEach((g) => g.sort((a, b) => (seen.has(a.id) ? 1 : 0) - (seen.has(b.id) ? 1 : 0)));
+        const keys = shuffle(Object.keys(groups)); list = [];
+        while (list.length < SET && keys.some((k) => groups[k].length)) keys.forEach((k) => { if (list.length < SET && groups[k].length) list.push(groups[k].shift()); });
+        list = shuffle(list);
+      }
+      session = { all, list, index: 0, answers: [] };
+    }
+
+    function enterView(params) {
+      const all = params.all === '1';
+      if (!session || session.all !== all || session.index >= session.list.length) start(all);
+      show();
+    }
+
+    function show() {
+      const item = session.list[session.index];
+      $app.innerHTML = `
+        <div class="quiz-head">
+          <div class="q-no">문제 ${session.index + 1} / ${session.list.length}</div>
+          <div class="q-meta">경고·카드 판정</div>
+        </div>
+        <div class="progress"><i style="width:${(session.index / session.list.length) * 100}%"></i></div>
+        <div class="card cq-scene"><p>${esc(item.scene)}</p></div>
+        <div class="card" id="cq-panel">
+          <h3 style="font-size:17px">심판은 어떤 처리를 할까요?</h3>
+          <div class="cq-grid">
+            ${ORDER.map((k) => `<button class="cq-btn ${CARDS[k].cls}" data-ans="${k}"><b>${CARDS[k].ico} ${CARDS[k].label}</b><small>${CARDS[k].desc}</small></button>`).join('')}
+          </div>
+        </div>
+        <div id="cq-result"></div>
+        <div class="next-bar" id="cq-next"></div>`;
+      $app.querySelectorAll('[data-ans]').forEach((b) => b.addEventListener('click', () => answer(b.dataset.ans)));
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+
+    function answer(pick) {
+      const item = session.list[session.index];
+      const ok = pick === item.answer;
+      if (!session.answers.some((a) => a.id === item.id)) session.answers.push({ id: item.id, pick, ok });
+      markSeen(item.id);
+      const panel = document.getElementById('cq-panel');
+      panel.innerHTML = `<h3 style="font-size:17px">내 판정</h3><div class="cq-grid one"><span class="cq-btn ${CARDS[pick].cls}" style="cursor:default"><b>${CARDS[pick].ico} ${CARDS[pick].label}</b></span></div>`;
+      document.getElementById('cq-result').innerHTML = `
+        <div class="result ${ok ? 'ok' : 'ng'}">
+          <div class="r-title">${ok ? '정답입니다! 🎉' : '틀렸습니다ㅜㅜ'}</div>
+          <div class="r-answer">정답: <span class="chip">${CARDS[item.answer].ico} ${CARDS[item.answer].label}</span><span class="chip">${esc(item.offence)}</span></div>
+          <div class="explain">
+            <h4>📖 왜 이렇게 처리할까?</h4>
+            <p>${item.explain}</p>
+            ${item.annul ? '<p class="watch"><strong>✱ 득점 무효</strong> — 이 반칙을 한 선수가 그 과정에서 얻은 찌르기는 취소됩니다.</p>' : ''}
+          </div>
+          <div class="r-foot">
+            <span>${GROUP[item.group]}</span>
+            <span>FIE ${esc(item.article)}</span>
+            <a href="#/rules/advanced?s=cards">카드 규칙 설명 →</a>
+          </div>
+        </div>`;
+      const last = session.index >= session.list.length - 1;
+      const nb = document.getElementById('cq-next');
+      nb.innerHTML = `<button class="btn btn-dark btn-lg" id="cq-go">${last ? '결과 보기 🏁' : '다음 문제 →'}</button>`;
+      nb.querySelector('#cq-go').addEventListener('click', () => {
+        if (last) { navigate('#/cards/result'); return; }
+        session.index++; show();
+      });
+      document.getElementById('cq-result').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function renderResult() {
+      if (!session || !session.answers.length) { navigate('#/cards'); return; }
+      const n = session.list.length, ok = session.answers.filter((a) => a.ok).length;
+      const pct = Math.round((ok / n) * 100);
+      const msg = pct === 100 ? '완벽해요! 규정집을 외우셨군요 🏆' : pct >= 80 ? '훌륭해요! 시합에서 당황할 일 없겠어요 👏' : pct >= 50 ? '좋아요. 틀린 문제의 해설을 다시 읽어 보세요 📖' : '카드 규칙을 한 번 정리하고 다시 도전! 💪';
+      const byId = Object.fromEntries(CARD_QUESTIONS.map((q) => [q.id, q]));
+      $app.innerHTML = `
+        <div class="card score-hero">
+          <div style="font-size:13px;color:var(--muted);font-weight:700">경고·카드 판정</div>
+          <div class="big">${ok}<small> / ${n}</small></div>
+          <div class="msg">${msg}</div>
+          <div class="btn-row" style="justify-content:center;margin-top:18px">
+            <a class="btn btn-primary btn-lg" href="#/cards/play?r=${Date.now()}">다시 풀기</a>
+            <a class="btn btn-lg" href="#/rules/advanced?s=cards">카드 규칙 보기</a>
+          </div>
+        </div>
+        <div class="card">
+          <h3 style="font-size:17px">문제별 결과</h3>
+          <ul class="review-list">
+            ${session.answers.map((a, i) => {
+              const q = byId[a.id];
+              return `<li><span class="mark ${a.ok ? 'ok' : 'ng'}">${a.ok ? '✓' : '✗'}</span>
+                <div><div><strong>${i + 1}.</strong> ${esc(q.offence)} — ${CARDS[q.answer].ico} ${CARDS[q.answer].label}</div>
+                ${a.ok ? '' : `<div style="font-size:12.5px;color:var(--muted)">내 답: ${CARDS[a.pick].label}</div>`}</div></li>`;
+            }).join('')}
+          </ul>
+        </div>`;
+      session = null;
+    }
+
+    return { renderIntro, enterView, renderResult };
   })();
 
   /* ---------- 시작 ---------- */
