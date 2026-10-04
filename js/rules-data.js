@@ -771,6 +771,9 @@ const RULES = {
     <tr><td>꽁뜨르 아딱 (꽁딱)</td><td>Contre-attaque</td><td>상대 공격 중 막지 않고 찌르기(반격)</td></tr>
     <tr><td>꽁뜨르 땅</td><td>Contre-temps</td><td>상대의 꽁딱을 막고 되받기</td></tr>
     <tr><td>린느 / 뽀앙 앙 린느</td><td>Pointe en ligne</td><td>팔을 펴고 포인트를 겨눈 우선권 자세</td></tr>
+    <tr><td>아딱 오 페르</td><td>Attaque au fer</td><td>상대 칼에 작용하며 들어가는 공격(빠떼·프레시옹·프리즈 드 페르)</td></tr>
+    <tr><td>빽런지</td><td>—</td><td>뒤로 빠지면서 찌르는 꽁딱. 거리를 벌려 상대 포인트만 짧게 만든다</td></tr>
+    <tr><td>딱킹</td><td>Ducking</td><td>몸을 낮춰 상대 포인트 아래로 피하며 찌르기. 등을 보이면 반칙</td></tr>
     <tr><td>데로브망</td><td>Dérobement</td><td>린느 상태에서 상대의 칼 찾기를 피함</td></tr>
     <tr><td>서치 노</td><td>Cherche non</td><td>칼을 치거나 잡으려다 찾지 못하고 헛돈 것</td></tr>
     <tr><td>프리즈 드 페르</td><td>Prise de fer</td><td>상대 칼을 잡아 옮기기</td></tr>

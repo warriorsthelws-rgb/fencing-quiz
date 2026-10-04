@@ -178,12 +178,29 @@ def main():
         lt = lights.get(f"qr{rec['id']}") or {}
         lights_lr = {"L": lt.get("L"), "R": lt.get("R")} if lt.get("L") and lt.get("R") else None
         two_lights = bool(lights_lr and lights_lr["L"] != "off" and lights_lr["R"] != "off")
+        # 불 감지 검증: 득점한 쪽 불이 꺼져 있으면 감지 오류 → 불 정보를 쓰지 않음
+        if lights_lr:
+            if side == "S":
+                ok_lights = lights_lr["L"] != "off" and lights_lr["R"] != "off"
+            else:
+                ok_lights = lights_lr["L" if side == "L" else "R"] != "off"
+            if not ok_lights:
+                print("lights inconsistent -> dropped", rec["id"], side, lights_lr)
+                lights_lr = {"L": None, "R": None}
+                two_lights = False
+
         if lights_lr is None:
             if "--candidates" not in sys.argv:
                 print("skip (lights unknown)", rec["id"], rec["verified"])
                 continue
             # 후보 모드: 불 정보가 없어도 포함 (detect_lights.py 입력용)
             lights_lr = {"L": None, "R": None}
+        elif lights_lr["L"] is None:
+            # 불 확인 불가: 해석이 갈린 클립은 제외하고, 남은 것도 상급(양쪽 불 전용)에는 넣지 않음
+            if (agree or 0) < 60:
+                dropped_single += 1
+                continue
+            level = min(level, 2)
         elif lights_lr["L"] == "off" and lights_lr["R"] == "off":
             print("skip (no lights detected)", rec["id"], rec["verified"])
             continue
