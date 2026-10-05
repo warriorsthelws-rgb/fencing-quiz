@@ -116,6 +116,7 @@ const RULES = {
   <div class="p-row"><span class="p-who R">오른쪽</span><span>막지 않고 그대로 팔을 펴서 같이 찌름 (꽁딱)</span></div>
   <div class="p-row"><span class="p-who J">심판</span><span class="p-res">"아딱[왼손], 꽁뜨르 아딱[오른손] 노, 아딱 뚜슈[왼손]" → 왼쪽 점수</span></div>
 </div>
+<div class="callout key"><span class="ct">공격은 시작만으로 유지되지 않습니다</span>먼저 나갔더라도 중간에 <strong>멈추거나 뒤로 물러나면 그 순간 공격이 끊기고</strong> 우선권은 사라집니다. 그 뒤 상대가 팔을 펴고 들어오면 상대의 공격입니다. 또 포인트가 유효면에 닿을 때까지 <strong>동작을 끝까지 해야</strong> 점수가 됩니다 — 양쪽 다 불이 안 들어온 상황에서 끝까지 밀어 넣은 쪽이 점수를 가져가는 장면이 자주 나옵니다.</div>
 <p>공격의 종류: <span class="term">직접 공격</span>(그대로 찌르기), <span class="term">데가제</span>(상대 칼 밑으로 돌려 찌르기), <span class="term">꾸뻬</span>(상대 칼 위로 넘겨 찌르기), <span class="term">복합 공격</span>(페인트 후 찌르기), <span class="term">빠떼 아딱</span>(상대 칼을 치고 찌르기) 등이 있지만, 판정에서 중요한 것은 종류보다 <strong>"누가 먼저 올바르게 시작했나"</strong>입니다.</p>`
       },
       {
@@ -128,7 +129,9 @@ const RULES = {
         html: `
 <p><span class="term">빠라드 <span class="fr">Parade</span></span>는 상대의 공격을 칼로 막아 <strong>공격선에서 벗어나게</strong> 하는 동작입니다. 빠라드에 성공하면 <strong>공격권이 넘어옵니다.</strong> 그 직후에 하는 찌르기가 <span class="term">리뽀스트 <span class="fr">Riposte</span></span>입니다.</p>
 <ul>
-  <li>리뽀스트는 <strong>즉시</strong> 해야 우선권을 확실히 가집니다. 막고 나서 머뭇거리면 상대가 다시 찌르는 <strong>르미즈</strong>에 점수를 뺏길 수 있습니다. (심화 편 참고)</li>
+  <li>리뽀스트의 기준은 <strong>속도가 아니라 동작이 끊겼는지</strong>입니다. 조금 느려도 막은 뒤 <strong>한 번에</strong> 찔렀다면 리뽀스트로 인정되고, 팔을 접었다 펴거나 페인트를 섞거나 한 박자 쉬면 그때부터 상대의 <strong>르미즈</strong>에 점수를 뺏길 수 있습니다. (심화 편 참고)</li>
+  <li>빠라드는 <strong>크기가 아니라 결과</strong>로 판단합니다. 아주 작은 동작이어도 상대 칼이 공격선 밖으로 밀려났다면 빠라드이고, 크게 휘둘렀어도 상대 칼이 그대로 들어오면 말빠레입니다.</li>
+  <li>반대로 막기에 실패한 뒤 <strong>다시 막지 않고 찌르기만</strong> 반복하면 그것은 리뽀스트가 아니라 르미즈입니다.</li>
   <li>리뽀스트를 다시 막고 되받으면 <span class="term">꽁뜨르 리뽀스트</span>가 됩니다. 이렇게 공격권은 막을 때마다 계속 넘어갑니다.</li>
   <li>칼이 <strong>살짝 스치기만 한 것</strong>은 빠라드로 보지 않습니다. 상대 칼을 실제로 공격선에서 밀어내야 합니다.</li>
 </ul>
@@ -160,6 +163,19 @@ const RULES = {
   <div class="p-row"><span class="p-who R">오른쪽</span><span>뒤로 빠지며 팔만 펴서 찌름 (꽁딱) — 양쪽 불</span></div>
   <div class="p-row"><span class="p-who J">심판</span><span class="p-res">"아딱[왼손], 꽁뜨르 아딱[오른손] 노, 아딱 뚜슈[왼손]" → 왼쪽 점수</span></div>
 </div>
+<h3>꽁딱의 여러 형태</h3>
+<p>꽁딱은 "그냥 같이 찌르는 것"이 아니라, <strong>상대 포인트는 빗나가게 하면서 내 포인트만 닿게 만드는</strong> 기술입니다. 자주 쓰이는 형태가 몇 가지 있습니다.</p>
+<div class="table-wrap"><table>
+  <thead><tr><th>형태</th><th>동작</th><th>노리는 것</th></tr></thead>
+  <tbody>
+    <tr><td><strong>붙는 꽁딱</strong></td><td>상대에게 몸을 붙이면서 짧게 찌름</td><td>거리를 좁혀 상대가 팔을 다 펴기 전에 먼저 닿게</td></tr>
+    <tr><td><strong>빽런지</strong></td><td>뒤로 빠지면서 팔만 뻗어 찌름</td><td>거리를 벌려 상대 포인트는 짧아지게, 내 것만 닿게</td></tr>
+    <tr><td><strong>딱킹</strong> <span class="fr">Ducking</span></td><td>몸을 낮춰 앉으면서 상대 포인트 아래로 피하며 찌름</td><td>높이 차이로 상대 포인트를 흘려보냄</td></tr>
+  </tbody>
+</table></div>
+<div class="callout key"><span class="ct">꽁딱의 핵심은 커버</span>어떤 형태든 <strong>상대 칼이 오는 방향을 내 칼로 덮으면서</strong> 찔러야 합니다. 커버가 안 되면 상대 포인트도 같이 들어가 양쪽 불이 되고, 그러면 공격권이 있는 상대 점수입니다.</div>
+<div class="callout warn"><span class="ct">딱킹 주의</span>몸을 낮추는 것 자체는 허용되고, 무기를 잡지 않은 손이나 뒷무릎이 피스트에 닿아도 괜찮습니다(t.27.1). 다만 고개를 숙여 <strong>등이 상대를 향하면 1군 반칙</strong>이니 시선은 상대를 향해야 합니다.</div>
+
 <div class="callout warn"><span class="ct">초보자가 가장 많이 틀리는 판정</span>"내가 먼저 맞췄는데 왜 상대 점수?" — 플러레에서는 <strong>먼저 닿은 것</strong>이 아니라 <strong>먼저 올바르게 공격을 시작한 것</strong>이 기준입니다. 이것이 에페와 가장 다른 점입니다.</div>`
       },
       {

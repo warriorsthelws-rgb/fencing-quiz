@@ -11,6 +11,8 @@
 
   /* ---------- 유틸 ---------- */
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  // 해설에는 강조 태그만 허용 (나머지는 이스케이프)
+  const escRich = (t) => esc(t).replace(/&lt;(\/?(?:strong|b|em|br))&gt;/g, '<$1>');
   const el = (html) => { const t = document.createElement('template'); t.innerHTML = html.trim(); return t.content.firstElementChild; };
   const shuffle = (arr) => { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
   const SIDE_KO = { L: '왼쪽', R: '오른쪽', S: '무효(시뮬따네)' };
@@ -66,6 +68,18 @@
     const btn = document.getElementById('edit-save'); if (btn) { btn.disabled = true; btn.textContent = '저장 중…'; }
     try {
       const cur = await fetch(api, { headers }).then((r) => (r.ok ? r.json() : null));
+      // 다른 기기·세션에서 저장한 내용을 덮어쓰지 않도록, 원격 최신본과 항목 단위로 병합
+      if (cur && cur.content) {
+        try {
+          const remoteTxt = decodeURIComponent(escape(atob(cur.content.replace(/\n/g, ''))));
+          const remote = new Function(`${remoteTxt}; return OVERRIDES;`)();
+          const merged = { rules: Object.assign({}, remote.rules), questions: Object.assign({}, remote.questions) };
+          Object.keys(OV.rules || {}).forEach((k) => { merged.rules[k] = Object.assign({}, remote.rules && remote.rules[k], OV.rules[k]); });
+          Object.keys(OV.questions || {}).forEach((k) => { merged.questions[k] = Object.assign({}, remote.questions && remote.questions[k], OV.questions[k]); });
+          OV.rules = merged.rules; OV.questions = merged.questions;
+          applyQuestionOverrides();
+        } catch (e) { /* 병합 실패 시 현재 내용 그대로 저장 */ }
+      }
       const content = "/* 사이트의 '편집 모드'에서 저장한 수정본. 직접 고쳐도 됩니다.\n" +
         '   rules.<basic|advanced>.<섹션id> = 섹션 본문 HTML (원본 rules-data.js 대신 사용)\n' +
         '   questions.<문제id> = { level: 1|2|3, explain: "이 문제 전용 해설" }   (questions.js 재생성해도 유지됨) */\n' +
@@ -772,11 +786,17 @@
       const apply = res.querySelector('#eq-apply');
       if (!apply) return;
       apply.addEventListener('click', () => {
-        const o = { level: Number(res.querySelector('#eq-level').value) };
-        const ex = res.querySelector('#eq-explain').value.trim(); if (ex) o.explain = ex;
-        const cm = res.querySelector('#eq-comment').value.trim(); if (cm) o.comment = cm;
-        OV.questions[item.id] = o; item.level = o.level; item.explain = ex || undefined; item.comment = cm || undefined;
+        const prev = OV.questions[item.id] || {};
+        const ex = res.querySelector('#eq-explain').value.trim();
+        const cm = res.querySelector('#eq-comment').value.trim();
+        const o = Object.assign({}, prev, { level: Number(res.querySelector('#eq-level').value) });
+        if (ex) o.explain = ex; else delete o.explain;
+        if (cm) o.comment = cm; else delete o.comment;
+        if (cm && cm !== prev.comment) delete o.done;   // 새 메모 → 다시 검토 대상
+        OV.questions[item.id] = o;
+        item.level = o.level; item.explain = o.explain; item.comment = o.comment;
         markDirty();
+        dropFromSessionIfLevelChanged(item);
         const y = window.scrollY; rerender(); window.scrollTo({ top: y, behavior: 'instant' });
         const a2 = res.querySelector('#eq-apply'); if (a2) a2.textContent = '적용됨 ✓ (저장은 하단 바)';
       });
@@ -785,6 +805,14 @@
     // "아딱 [오른손], 뚜슈 [오른손]." → 아딱[오른손] 형태로 다듬고 손 표시를 따로 꾸밈
     function phraseHTML(item) {
       return '"' + esc(refPhrase(item)).replace(/\s+(\[(?:오른손|왼손)\])/g, '<span class="dir">$1</span>') + '"';
+    }
+
+    // 난이도를 바꾸면 지금 풀고 있는 세트에서 (아직 안 푼 뒷부분이라면) 빼 줍니다
+    function dropFromSessionIfLevelChanged(item) {
+      if (!session || item.level === session.level) return;
+      for (let i = session.list.length - 1; i > session.index; i--) {
+        if (session.list[i].id === item.id) session.list.splice(i, 1);
+      }
     }
 
     function refPhrase(item) {
@@ -849,9 +877,9 @@
       const sit = situationFor(item);
       const explainBlock = sit
         ? `<div class="explain">
-            <h4>📖 이 장면: ${esc(fillTpl(sit.title, item))}</h4>
-            <p>${esc(explainText(item))}</p>
-            <p class="watch"><strong>🔍 0.5배속으로 볼 것</strong> — ${esc(fillTpl(sit.watch, item))}</p>
+            <h4>📖 이 장면: ${escRich(fillTpl(sit.title, item))}</h4>
+            <p>${escRich(explainText(item))}</p>
+            <p class="watch"><strong>🔍 0.5배속으로 볼 것</strong> — ${escRich(fillTpl(sit.watch, item))}</p>
             <p style="margin-top:6px"><a href="${info.link}" style="color:var(--info);font-weight:700">${info.ko} 규칙 설명 보기 →</a></p>
           </div>`
         : `<div class="explain">
