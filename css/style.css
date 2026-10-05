@@ -294,6 +294,31 @@ tr:last-child td { border-bottom: 0; }
 }
 .video-wrap iframe, .video-wrap #yt-player { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 .video-shield { position: absolute; inset: 0; background: transparent; }  /* 재생 중 클릭 차단 */
+.zoom-btn {
+  position: absolute; right: 8px; bottom: 8px; z-index: 5; width: 40px; height: 40px; border: 0; border-radius: 10px;
+  background: rgba(0,0,0,.55); color: #fff; font-size: 18px; line-height: 1; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.play-hint { color: var(--accent); font-weight: 800; }
+
+/* 크게 보기: 영상 카드를 화면에 꽉 채우고, 세로 화면에서는 가로로 눕혀 3배 넓게 */
+body.video-zoomed { overflow: hidden; }
+body.video-zoomed .quiz-video-card {
+  position: fixed; inset: 0; z-index: 300; margin: 0; padding: 0; border: 0; border-radius: 0; background: #000;
+  display: flex; align-items: center; justify-content: center;
+}
+body.video-zoomed .quiz-video-card .side-label,
+body.video-zoomed .quiz-video-card .replay-bar { display: none; }
+body.video-zoomed .video-wrap {
+  flex: none; width: min(100vw, 177.7vh); border-radius: 0; box-shadow: none;
+}
+@media (orientation: portrait) {
+  body.video-zoomed .video-wrap {
+    width: min(100vh, 177.7vw);
+    width: min(100dvh, 177.7vw);
+    transform: rotate(90deg);
+  }
+}
 .video-cover {
   position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
   background: linear-gradient(160deg, rgba(20, 24, 36, .96), rgba(40, 48, 72, .96)); color: #fff; text-align: center; padding: 16px;

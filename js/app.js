@@ -426,7 +426,8 @@
     function leaveView() {
       if (player) { try { player.destroy(); } catch (e) { /* noop */ } }
       player = null; playerReady = false; pendingCreate = null; q = null;
-      clearTimeout(ytFailedTimer); clearInterval(endTimer); clearTimeout(preTimer);
+      clearTimeout(ytFailedTimer); clearInterval(endTimer); clearTimeout(preTimer); clearTimeout(startTimer);
+      setZoom(false);
     }
 
     function buildSkeleton() {
@@ -444,6 +445,7 @@
             <div id="yt-player"></div>
             <div class="video-shield" id="video-shield"></div>
             <div class="video-cover" id="video-cover"></div>
+            <button class="zoom-btn" id="zoom-btn" aria-label="크게 보기">⛶</button>
           </div>
           <div class="side-label"><span class="L">◀ 왼쪽 선수 (빨간 불)</span><span class="R">오른쪽 선수 (초록 불) ▶</span></div>
           <div class="replay-bar" id="replay-bar"></div>
@@ -452,6 +454,14 @@
         <div class="card answer-panel" id="answer-panel"></div>
         <div id="result-area"></div>
         <div class="next-bar" id="next-bar"></div>`;
+      document.getElementById('zoom-btn').addEventListener('click', () => setZoom(!document.body.classList.contains('video-zoomed')));
+    }
+
+    // 모바일에서 영상을 화면 가득(가로로 눕혀) 보기 — iframe 을 옮기지 않으므로 재생이 끊기지 않습니다
+    function setZoom(on) {
+      document.body.classList.toggle('video-zoomed', on);
+      const b = document.getElementById('zoom-btn');
+      if (b) { b.textContent = on ? '✕' : '⛶'; b.setAttribute('aria-label', on ? '원래 크기로' : '크게 보기'); }
     }
 
     function current() { return session.list[session.index]; }
@@ -459,7 +469,9 @@
     function showQuestion() {
       const item = current();
       clearInterval(endTimer); clearTimeout(preTimer);
-      q = { played: false, started: false, side: null, done: false, rate: 1, replays: 0, wantPlay: null, buffered: false, prebuffering: false };
+      q = { played: false, started: false, side: null, done: false, rate: 1, replays: 0, wantPlay: null, buffered: false, prebuffering: false, userPlay: false };
+      clearTimeout(startTimer);
+      document.getElementById('video-shield').style.display = nativePlayOnly ? 'none' : '';
       desiredRate = 1;
 
       document.getElementById('q-no').textContent = `문제 ${session.index + 1} / ${session.list.length}`;
@@ -544,6 +556,7 @@
 
     function finishClip() {
       if (!q || !q.started) return;
+      setZoom(false);
       q.started = false;
       q.played = true;
       renderCover('ended');
@@ -555,8 +568,13 @@
       if (window.DEBUG_YT) (window.__ytlog = window.__ytlog || []).push([Date.now() % 100000, e.data, session && session.index]);
       if (!q) return;
       const S = window.YT.PlayerState;
-      if (e.data === S.PLAYING && q.prebuffering) { endPrebuffer(); return; }  // 자동 재생이 됐으면 바로 멈춰 둠
+      // 사용자가 누르지 않았는데 재생되면 사전 버퍼용 자동 재생이므로 멈춰 두고 커버를 유지합니다.
+      // (느린 회선에서 사전 버퍼 타이머가 먼저 끝나면 뒤늦게 PLAYING 이 와서 커버만 사라지는 문제가 있었습니다)
+      if (e.data === S.PLAYING && !q.userPlay) { endPrebuffer(); return; }
       if (e.data === S.PLAYING) {
+        clearTimeout(startTimer);
+        const hint = document.querySelector('.play-hint');
+        if (hint) hint.remove();
         q.started = true;
         hideCover();
         watchEnd();
@@ -576,6 +594,20 @@
       renderCover('error', e && e.data);
     }
 
+    // 카카오톡·인스타 등 인앱 브라우저는 바깥에서 보낸 재생 명령을 막기도 합니다.
+    // 눌러도 시작되지 않으면 덮개를 걷어 유튜브 자체 재생 버튼을 직접 누를 수 있게 합니다.
+    let startTimer = null;
+    let nativePlayOnly = false;
+    function onPlayStalled() {
+      if (!q || q.started) return;
+      nativePlayOnly = true;
+      hideCover();
+      const shield = document.getElementById('video-shield');
+      if (shield) shield.style.display = 'none';
+      const bar = document.getElementById('replay-bar');
+      if (bar && !bar.querySelector('.play-hint')) bar.insertAdjacentHTML('afterbegin', '<span class="play-hint">▶ 영상 위의 재생 버튼을 직접 눌러 주세요</span>');
+    }
+
     function playClip(rate) {
       const item = current();
       if (!player || !playerReady) {
@@ -586,12 +618,17 @@
         return;
       }
       if (q.prebuffering) { q.wantPlay = rate; return; }  // 버퍼링 끝나는 즉시 재생
+      q.userPlay = true;
+      clearTimeout(startTimer);
+      startTimer = setTimeout(onPlayStalled, 4000);
       desiredRate = rate;
       q.rate = rate;
       if (q.played) q.replays++;
       hideCover();
       try {
-        player.unMute();
+        // 음소거를 유지합니다 — 소리가 있는 재생은 브라우저가 "사용자가 직접 누름"을 iframe 안에서
+        // 확인해야 허용하는데, 인앱 브라우저·iOS 에서는 그 신호가 전달되지 않아 재생이 막혔습니다.
+        player.mute();
         player.setPlaybackRate(rate);
         if (q.buffered) { player.seekTo(item.video.start, true); player.playVideo(); }
         else player.loadVideoById({ videoId: item.video.id, startSeconds: item.video.start, endSeconds: item.video.end });
