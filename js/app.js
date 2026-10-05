@@ -269,17 +269,17 @@
     $app.innerHTML = `
       <h1 style="font-size:24px">어떤 퀴즈를 풀까요?</h1>
       <div class="choice-grid two">
-        <button class="choice" data-go="#/quiz/row">
+        <button class="choice" data-go="#/quiz/level?w=foil">
           <span class="c-tag">${QUESTIONS.length}문제</span>
           <div class="c-ico">🤺</div>
           <div class="c-title">공격권 판정</div>
-          <div class="c-desc">실제 경기 영상을 보고 누구의 점수인지, 왜 그런지 판정합니다.</div>
+          <div class="c-desc">실제 경기 영상을 보고 누구의 점수인지, 왜 그런지 판정합니다. (플러레)</div>
         </button>
-        <button class="choice" data-go="#/cards">
-          <span class="c-tag">${CARD_QUESTIONS.length + (typeof CARD_VIDEO_QUESTIONS !== 'undefined' ? CARD_VIDEO_QUESTIONS.length : 0)}문제</span>
+        <button class="choice" disabled>
+          <span class="c-tag">준비 중</span>
           <div class="c-ico">🟨</div>
           <div class="c-title">경고·카드 판정</div>
-          <div class="c-desc">경고 아님 / 옐로 / 레드 / 블랙 중에 고릅니다. 이유는 고르지 않아도 됩니다. 영상 문제와 상황 문제가 있습니다.</div>
+          <div class="c-desc">경고 아님 / 옐로 / 레드 / 블랙을 고르는 퀴즈입니다. 문제를 더 다듬는 중이에요.</div>
         </button>
       </div>`;
     $app.querySelectorAll('[data-go]').forEach((b) => b.addEventListener('click', () => navigate(b.dataset.go)));
@@ -319,7 +319,7 @@
     const w = params.w || 'foil';
     const counts = [1, 2, 3].map((l) => QUESTIONS.filter((q) => q.weapon === w && q.level === l).length);
     $app.innerHTML = `
-      <div class="stepper"><span>① 플러레</span> › <span class="on">② 난이도</span> › <span>③ 퀴즈</span></div>
+      <div class="stepper"><a href="#/quiz" style="color:var(--info)">← 퀴즈 종류</a> › <span class="on">① 난이도</span> › <span>② 퀴즈</span></div>
       <h1 style="font-size:24px">난이도를 골라 주세요</h1>
       <p style="color:var(--text-2)">한 세트는 최대 10문제. 문제는 매번 무작위로 섞입니다.</p>
       <div class="choice-grid">
@@ -337,7 +337,7 @@
           ${[1, 2, 3].map((l) => `<a class="btn" href="#/quiz/play?w=${w}&lv=${l}&all=1">${LEVELS[l].name} 전체 ${counts[l - 1]}문제</a>`).join('')}
         </div>
       </div>
-      <p style="margin-top:16px;font-size:13.5px;color:var(--muted)">정답은 <strong>실제 경기에서 심판이 내린 판정</strong>입니다. 초급은 아딱·꽁딱·빠라드 리뽀스트·르미즈가 골고루 나오는 명확한 장면 100개, <strong>상급은 양쪽 불(색불 또는 흰불)이 모두 켜져 심판이 공격권을 판정해야 했던 장면만</strong> 나옵니다. 난이도는 판정과 커뮤니티 투표의 일치율, 동작의 종류로 나눴고, 상급에는 심판 판정에 동의하지 않는 사람이 더 많은 장면도 있어요.</p>`;
+      <p style="margin-top:16px;font-size:13.5px;color:var(--muted)">정답은 <strong>실제 경기에서 심판이 내린 판정</strong>입니다. 초급은 아딱·꽁딱·빠라드 리뽀스트·르미즈가 골고루 나오는 명확한 장면, <strong>상급은 양쪽 불(색불 또는 흰불)이 모두 켜져 심판이 공격권을 판정해야 했던 장면만</strong> 나옵니다. 난이도는 판정과 커뮤니티 투표의 일치율, 동작의 종류로 나눴고, 상급에는 심판 판정에 동의하지 않는 사람이 더 많은 장면도 있어요.</p>`;
     $app.querySelectorAll('[data-level]').forEach((b) => b.addEventListener('click', () => {
       const lv = Number(b.dataset.level);
       if (lv === 1) { navigate(`#/quiz/play?w=${w}&lv=1`); return; }
